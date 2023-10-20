@@ -1,0 +1,10 @@
+#app {
+
+  @apply flex h-screen w-screen
+
+} 
+
+/* Main window */
+#app>main {
+  @apply w-full
+}
