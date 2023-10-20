@@ -1,7 +1,7 @@
 <template>
   <div>
     <VitePwaManifest />
-    <NuxtWelcome />
+    <NuxtPage />
   </div>
 </template>
 <script setup lang="ts">

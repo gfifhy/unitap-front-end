@@ -4,6 +4,8 @@ export default defineNuxtConfig({
   modules: [
     '@vite-pwa/nuxt',
   ],
+
+
   pwa: {
     manifest: {
       name: 'Unitap',
