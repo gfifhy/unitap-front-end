@@ -5,13 +5,13 @@ export function doRequest<T>(
   options: UseFetchOptions<T> = {}
 ) {
 
-  const { apiProtocol, apiHost, appProtocol, appHost } = config()
+  const $cfg = useAppConfig()
 
   const token = useCookie('XSRF-TOKEN')
 
   let headers: any = {
     accept: "application/json",
-    referer: (appProtocol + appHost.slice(0, -1)) as string
+    referer: ($cfg.app.protocol + $cfg.app.host.slice(0, -1)) as string
   }
 
   if (token.value) {
@@ -25,7 +25,7 @@ export function doRequest<T>(
     }
   }
   
-  return useFetch(apiProtocol + apiHost + path,
+  return useFetch($cfg.api.protocol + $cfg.api.host + path,
     {
       credentials: "include",
       watch: false,

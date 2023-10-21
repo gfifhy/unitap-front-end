@@ -1,5 +1,9 @@
 <script setup lang="ts">
 
+definePageMeta({ 
+  middleware: 'signed-in',
+})
+
 import type { 
   FormError
 } from '@nuxt/ui/dist/runtime/types'

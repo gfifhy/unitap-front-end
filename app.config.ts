@@ -1,8 +1,16 @@
 export default defineAppConfig({
+  api: {
+    protocol: 'http://',
+    host: '127.0.0.1:8000/'
+  },
+  app: {
+    protocol: 'http://',
+    host: '127.0.0.1:5173/'
+  },
   ui: {
     primary: 'blue',
     gray: 'cool'
-  }
+  },
 })
 
 

@@ -2,14 +2,12 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   const user = useAuthStore();
 
-  const egg = async () => {
-    user.fetchState()
-      .then(d => { if(!d.value) navigateTo('/about', { replace: true }) })
-      .catch(e => {
-        console.error("An error occurred:", e);
-      });
+  if (!user.isLoggedIn) {
+    if (process.server) {
+      navigateTo('/about', { replace: true })
+    } else {
+      return navigateTo('/about', { replace: true })
+    }
   }
-
-  egg();
 
 })
