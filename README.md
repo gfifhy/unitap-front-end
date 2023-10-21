@@ -1,6 +1,6 @@
 ```bash
-pnpm install
+npm install
 
-pnpm dev
+npm dev
 ```
 

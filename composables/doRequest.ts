@@ -1,17 +1,17 @@
 import type { UseFetchOptions } from 'nuxt/app'
 
-export function authUserCookie<T>(
+export function doRequest<T>(
   path: string,
   options: UseFetchOptions<T> = {}
 ) {
 
-  const { apiProtocol, apiHost, appProtocol, appHost } = config()
+  const $cfg = useAppConfig()
 
   const token = useCookie('XSRF-TOKEN')
 
   let headers: any = {
     accept: "application/json",
-    referer: (appProtocol + appHost.slice(0, -1)) as string
+    referer: ($cfg.app.protocol + $cfg.app.host.slice(0, -1)) as string
   }
 
   if (token.value) {
@@ -24,18 +24,8 @@ export function authUserCookie<T>(
       ...useRequestHeaders(["cookie"]),
     }
   }
-
-  console.log({
-      credentials: "include",
-      watch: false,
-      ...options,
-      headers: {
-        ...headers,
-        ...options?.headers
-      }
-    })
   
-  return useFetch(apiProtocol + apiHost + path,
+  return useFetch($cfg.api.protocol + $cfg.api.host + path,
     {
       credentials: "include",
       watch: false,
