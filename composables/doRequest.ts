@@ -1,6 +1,6 @@
 import type { UseFetchOptions } from 'nuxt/app'
 
-export function authUserCookie<T>(
+export function doRequest<T>(
   path: string,
   options: UseFetchOptions<T> = {}
 ) {
@@ -24,16 +24,6 @@ export function authUserCookie<T>(
       ...useRequestHeaders(["cookie"]),
     }
   }
-
-  console.log({
-      credentials: "include",
-      watch: false,
-      ...options,
-      headers: {
-        ...headers,
-        ...options?.headers
-      }
-    })
   
   return useFetch(apiProtocol + apiHost + path,
     {

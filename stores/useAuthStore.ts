@@ -23,17 +23,21 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const isLoggedIn = computed(() => !!user.value)
 
-  
   async function fetchUser() {
-    const { data } = await authUserCookie("api/user")
+    const { data } = await doRequest("api/user")
     user.value = data.value as User
   }
 
+  async function fetchState() {
+    await fetchUser()
+    return isLoggedIn
+  } 
+
   async function register(id: Identity) {
 
-    await authUserCookie("sanctum/csrf-cookie")
+    await doRequest("sanctum/csrf-cookie")
 
-    const register = await authUserCookie("register",
+    const register = await doRequest("register",
       {
         method: "POST",
         body: id,
@@ -47,9 +51,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login(cred: Credentials) {
 
-    await authUserCookie("sanctum/csrf-cookie")
+    await doRequest("sanctum/csrf-cookie")
 
-    const login = await authUserCookie("login",
+    const login = await doRequest("login",
       {
         method: "POST",
         body: cred,
@@ -62,11 +66,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
-    await authUserCookie("logout", {method: 'POST'})
+    await doRequest("logout", {method: 'POST'})
     user.value = null;
     navigateTo('/login')
   }
 
-  return { user, isLoggedIn, fetchUser, register, login, logout }
+  return { user, isLoggedIn, fetchState, fetchUser, register, login, logout }
 
 })

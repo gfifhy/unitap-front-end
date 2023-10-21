@@ -2,8 +2,7 @@
 const route = useRoute()
 
 definePageMeta({ 
-  layout: 'default',
-  middleware: 'member',
+  middleware: 'signed-out',
 })
 
 </script>
