@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     await authUserCookie("sanctum/csrf-cookie")
 
-    const register = await authUserCookie("register",
+    const register = await authUserCookie("api/register",
       {
         method: "POST",
         body: id,
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     await authUserCookie("sanctum/csrf-cookie")
 
-    const login = await authUserCookie("login",
+    const login = await authUserCookie("api/login",
       {
         method: "POST",
         body: cred,
