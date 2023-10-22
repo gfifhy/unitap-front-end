@@ -107,7 +107,7 @@ const account = useAuthStore()
 }
 
 aside > div {
-  @apply bg-gray-200 rounded-xl p-4 min-w-[340px];
+  @apply bg-[var(--l30)] rounded-xl p-4 min-w-[340px];
 
   ::before {
     @apply m-0
