@@ -69,8 +69,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout() {
     await doRequest("api/logout", {method: 'POST'})
-    user.value = null;
+    user.value = null
     navigateTo('/login')
+    this.$nuxt.refresh()
   }
 
   return { user, isLoggedIn, fetchUser, register, login, logout }

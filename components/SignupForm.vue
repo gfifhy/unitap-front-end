@@ -37,6 +37,7 @@ async function submit(e: FormSubmitEvent<any>) {
   //if(!error.value) { navigateTo("/") } else { console.log(error) }
 
 }
+
 </script>
 
 <template>
