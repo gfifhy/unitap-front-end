@@ -42,7 +42,8 @@ async function submit(e: FormSubmitEvent<any>) {
 
 <template>
 
-  <UForm :validate="validate" :state="f" @submit="submit">
+  <UForm class="user" :validate="validate" :state="f" @submit="submit">
+    
     <FormInput placeholder="Samuelo Buelo"
       label="Name" type="text" name="name"
       icon="i-heroicons-identification-20-solid"
@@ -76,23 +77,3 @@ async function submit(e: FormSubmitEvent<any>) {
   </UForm>
 
 </template>
-
-<style scoped>
-
-form {
-  > footer {
-    @apply flex justify-between;
-    > button:last-child {
-      width: 140px
-    }
-  }
-  > div {
-    @apply mt-2 mb-2;
-  }
-}
-
-footer {
-  @apply flex p-3
-}
-
-</style>

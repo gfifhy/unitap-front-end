@@ -36,7 +36,7 @@ definePageMeta({
 
 #double {
 
-  @apply flex flex-row h-full;
+  @apply flex flex-row h-full items-center;
 
   padding-left: var(--login-p);
   padding-right: var(--login-p);

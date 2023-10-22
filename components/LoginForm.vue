@@ -39,11 +39,8 @@ async function submit() {
 
 <template>
 
-<UForm
-    :validate="validate"
-    :state="f"
-    @submit="submit"
-  >
+  <UForm class="user" :validate="validate" :state="f" @submit="submit">
+
     <FormInput type="text" name="username" placeholder="Username"
       icon="i-heroicons-user-20-solid"
       :modelValue="f.email"
@@ -68,20 +65,5 @@ async function submit() {
     </footer>
 
   </UForm>
+  
 </template>
-
-<style scoped>
-
-form {
-  > footer {
-    @apply flex justify-between;
-    > button:last-child {
-      width: 140px
-    }
-  }
-  > div {
-    @apply mt-2 mb-2;
-  }
-}
-
-</style>

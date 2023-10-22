@@ -97,7 +97,7 @@ const account = useAuthStore()
 
 #double {
 
-  @apply flex h-full;
+  @apply flex justify-center h-full;
 
   flex-direction: var(--article-split-dir);
 
