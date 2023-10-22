@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-definePageMeta({ 
+definePageMeta({
   middleware: 'signed-in',
 })
 
@@ -53,7 +53,7 @@ h1 {
 section {
 
   @apply flex w-full rounded-xl overflow-hidden;
-  
+
   max-height: var(--login-img-mh);
 
   > img {
