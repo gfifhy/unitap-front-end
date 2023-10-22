@@ -42,7 +42,7 @@ async function submit() {
 <UForm
     :validate="validate"
     :state="f"
-    @submit.prevent="submit"
+    @submit="submit"
   >
     <FormInput type="text" name="username" placeholder="Username"
       icon="i-heroicons-user-20-solid"

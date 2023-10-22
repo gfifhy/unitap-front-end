@@ -42,25 +42,21 @@ async function submit(e: FormSubmitEvent<any>) {
 <template>
 
   <UForm :validate="validate" :state="f" @submit="submit">
-
-    <UFormGroup size="xl" label="Name">
-      <FormInput type="text" name="name" placeholder="Samuelo Buelo"
-        icon="i-heroicons-identification-20-solid"
-        :modelValue="f.email"/>
-    </UFormGroup>
-
-    <UFormGroup size="xl" label="E-mail address">
-      <FormInput type="text" name="email" placeholder="samuelo@example.com"
-        icon="i-heroicons-at-symbol-20-solid"
-        :modelValue="f.email"/>
-    </UFormGroup>
-
-    <UFormGroup size="xl" label="Password" hint="at least 8 characters">
-      <FormInput type="password" name="password" placeholder="a-z, A-Z, 0-9, !@#$~"
-        icon="i-heroicons-key-20-solid"
-        :modelValue="f.email"/>
-    </UFormGroup>
-
+    <FormInput placeholder="Samuelo Buelo"
+      label="Name" type="text" name="name"
+      icon="i-heroicons-identification-20-solid"
+      :modelValue="f.email"
+    />
+    <FormInput placeholder="samuelo@example.com"
+      label="E-mail address" type="text" name="email"
+      icon="i-heroicons-at-symbol-20-solid"
+      :modelValue="f.email"
+    />
+    <FormInput placeholder="a-z, A-Z, 0-9, !@#$~" hint="at least 8 characters"
+      label="Password" type="password" name="password"
+      icon="i-heroicons-key-20-solid"
+      :modelValue="f.email"
+    />
     <FormInput type="password" name="password_confirmation" placeholder="Retype password"
       icon="i-heroicons-hashtag-20-solid"
       :modelValue="f.email"
