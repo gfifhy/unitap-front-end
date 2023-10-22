@@ -1,0 +1,250 @@
+:root {
+  --c-primary: #4f46e5;
+  --c-secondary: #dc2626;
+  --c-tertiary: #fbbf24;
+  --c-quaternary: #0047f6;
+  --c-quinary: #2980b9;
+  --c-senary: unset;
+  --c-octonary: unset;
+  --c-nonary: unset;
+
+  --typeface-ui: 'Tilt Neon';
+  --typeface-text: 'Gabarito';
+  --typeface-para: 'Averia Serif Libre';
+}
+
+.dark:root {
+  --c-quaternary: #8F91F3;
+  --logo-f: saturate(.3) hue-rotate(9deg) brightness(2);
+  --foreground-l: #000c/*#0008*/;
+  --foreground-r: #000e/*#000b*/;
+  /*--d00: transparent; // darkness 0 */
+  --d10: #0001;
+  --d30: #0003;
+  --d40: #0004;
+  --d50: #0005;
+  --d60: #0006;
+  --da0: #000a;
+  /*--l00: transparent; // luminance 0 */
+  --l08: #ffffff08; 
+  --l10: #fff1; 
+  --l20: #fff2; 
+  --l30: #fff3; 
+  --l40: #fff4;
+  --l50: #fff5;
+  --l60: #fff6;
+  --l80: #fff8;
+  --la0: #fffa;
+}
+
+.light:root {
+  --foreground-l: #fffd/*#fff8*/;
+  --foreground-r: #ffff/*#fffb*/;
+  --d10: #fff1;
+  --d30: #fff3;
+  --d40: #fff4;
+  --d50: #fff5;
+  --d60: #fff6;
+  --da0: #fffa;
+  --l08: #00000008; 
+  --l10: #0001;
+  --l20: #0002;
+  --l30: #0003;
+  --l40: #0004;
+  --l50: #0005;
+  --l60: #0006;
+  --l80: #0008;
+  --la0: #000a;
+}
+
+@media only screen and (min-width: 1011px) { /* desktop (> 813 w) */
+  :root {
+    --app-dir: row;
+    --topnav-h: 2.2em;
+    --topnav-p: 2.1em;
+    --sidenav-dir: column;
+    --sidenav-h: 100vh;
+    --sidenav-w: 56px;
+    --login-form-w: 690px;
+    --login-img-mh: 75vh;
+    --brand-side: none;
+    --article-p: 3em;
+    --sz-h1: 4.5rem;
+    --article-split-dir: row;
+  }
+}
+
+@media only screen and (max-width: 1010px) { /* tablets (< 812 w) */
+  :root {
+    --app-dir: column;
+    --topnav-h: 3em;
+    --sidenav-dir: row;
+    --sidenav-h: 3.2em;
+    --login-layout: column;
+    --login-form-w: 620px;
+    --login-img-mh: 260px;
+    --brand-top: none;
+    --login-p: 3em;
+    --article-p: 1.7em;
+    --sz-h1: 4rem;
+    --article-split-dir: column;
+  }
+
+}
+
+@media only screen and (max-width: 660px) { /* phones (< 660 w) */
+  :root {
+    --login-form-w: 100%;
+    --login-img-mh: 120px;
+    --login-p: 1em;
+    --sz-h1: 3.2rem;
+  }
+}
+
+/**
+ * Main
+ * -------------------------------------------------------------------------- */
+
+html {
+  font-family: var(--typeface-ui), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+hr {
+  @apply h-[5px] my-[0.5em] border-t;
+  border-top-color: var(--l20);
+}
+
+h1 {
+
+  @apply py-2 my-2 text-[length:var(--sz-h1)] leading-none;
+
+  > .grade {
+
+    background: linear-gradient(40deg, 
+      var(--c-primary) 30%, 
+      var(--c-secondary) 60%,
+      var(--c-tertiary)
+    );
+
+    @apply bg-clip-text text-transparent font-bold;
+    text-fill-color: transparent;
+
+  }
+
+} 
+
+h2,h3,h4 { @apply flex items-center py-2 my-2 }
+h2 { @apply text-4xl } h3 { @apply text-2xl } h4 { @apply text-lg }
+
+article[id] {
+  @apply px-[var(--article-p)] antialiased;
+  -webkit-text-size-adjust: 100%;
+  font-synthesis: style;
+  text-rendering: optimizeLegibility;
+  font-family: var(--typeface-text);
+  
+  ul {
+    font-family: var(--typeface-para);
+    padding-left: 40px !important;
+    list-style: disc !important;
+    + p {
+      @apply py-2 my-2;
+    }
+  }
+  hr {
+    @apply h-[5px] my-[0.5em] py-[0.5em] border-b;
+    border-top: unset;
+    border-bottom-color: var(--l20);
+  }
+}
+
+p {
+  
+  @apply ml-[-2em] pl-[2em] text-lg;
+  font-family: var(--typeface-para);
+  
+  &::before{
+    @apply ml-[2em];
+    content: '';
+  }
+
+}
+
+/**
+ * Layout Overrides
+ * -------------------------------------------------------------------------- */
+
+div#double[id="double"] {
+  flex-direction: var(--login-layout);
+
+  > aside {
+    width: var(--login-form-w);
+  }
+}
+
+/**
+ * Elements
+ * -------------------------------------------------------------------------- */
+
+
+
+
+/**
+ * Animation
+ * -------------------------------------------------------------------------- */
+
+@keyframes colored {
+    0%{background-position:43% 0%}
+    50%{background-position:58% 100%}
+    100%{background-position:43% 0%}
+}
+
+/**
+ * Font
+ * -------------------------------------------------------------------------- */
+
+/* latin-ext */
+@font-face {
+  font-family: 'Tilt Neon';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/tiltneon/v10/E21L_d7gguXdwD9LEFY2WCeElCNtd-eBqpHp1TzrkJSmwpj5ndxquUK0UOeVJw.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Tilt Neon';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/tiltneon/v10/E21L_d7gguXdwD9LEFY2WCeElCNtd-eBqpHp1TzrkJSmwpj5ndxquUK6UOc.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Gabarito';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gabarito/v1/QGYtz_0dZAGKJJ4t3HtoW4U.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Gabarito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gabarito/v1/QGYtz_0dZAGKJJ4t3HtoW4U.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: 'Averia Serif Libre';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/averiaseriflibre/v18/neIVzD2ms4wxr6GvjeD0X88SHPyX2xYGCSmaxq0r.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

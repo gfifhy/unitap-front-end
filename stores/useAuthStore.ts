@@ -28,16 +28,11 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = data.value as User
   }
 
-  async function fetchState() {
-    await fetchUser()
-    return isLoggedIn
-  } 
-
   async function register(id: Identity) {
 
     await doRequest("sanctum/csrf-cookie")
 
-    const register = await doRequest("register",
+    const register = await doRequest("api/register",
       {
         method: "POST",
         body: id,
@@ -53,10 +48,17 @@ export const useAuthStore = defineStore('auth', () => {
 
     await doRequest("sanctum/csrf-cookie")
 
-    const login = await doRequest("login",
+    const ass = await doRequest("api/roles")
+    console.log(ass.data._rawValue)
+
+    const login = await doRequest("api/admin/login",
       {
         method: "POST",
-        body: cred,
+        body: {
+          email: cred.email as string,
+          password: cred.password as string,
+          role_id: "5762ddd2-dad9-4729-b77a-7b06ea14eb3e",
+        }
       })
 
     await fetchUser();
@@ -66,11 +68,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
-    await doRequest("logout", {method: 'POST'})
+    await doRequest("api/logout", {method: 'POST'})
     user.value = null;
     navigateTo('/login')
   }
 
-  return { user, isLoggedIn, fetchState, fetchUser, register, login, logout }
+  return { user, isLoggedIn, fetchUser, register, login, logout }
 
 })

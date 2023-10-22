@@ -1,11 +1,10 @@
 <template>
   <div id="app">
 
-    <nav>
-      <Navigation />
-    </nav>
+    <SideNav />
 
     <main>
+      <TopNav />
       <NuxtPage />
     </main>
 
@@ -17,24 +16,16 @@
 
 #app {
 
-  @apply flex-row
+  @apply flex h-screen w-screen overflow-hidden;
+  
+  flex-direction: var(--app-dir);
 
-} #app.guest {
+} 
 
-    @apply flex-col
+main {
 
-  } 
+  @apply flex flex-col w-full overflow-auto
 
-nav {
-
-  @apply flex justify-between flex-col w-16 h-screen;
-
-  align-items: center;
-
-} .guest nav {
-
-    @apply  flex-row h-16 w-full;
-
-  }
+}
 
 </style>

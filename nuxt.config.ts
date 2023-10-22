@@ -11,12 +11,18 @@ export default defineNuxtConfig({
     // },
   },
   devtools: { enabled: true },
-  css: ['~/styles.css', '~/styles.less'],
+  css: ['~/tailwind.css',],
   components: [{ path: '~/components', pathPrefix: false }],
   modules: [
-    '@pinia/nuxt',
+    '@nuxt/image',
     '@nuxt/ui',
+    '@pinia/nuxt',
   ],
+  postcss: {
+    plugins: {
+      'postcss-nesting': { },
+    },
+  },
   ui: {
     global: true,
     icons: ['mdi', 'simple-icons'],    

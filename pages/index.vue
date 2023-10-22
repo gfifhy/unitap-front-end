@@ -10,10 +10,8 @@ const route = useRoute()
 </script>
 
 <template>
-    <NuxtLink to="/about">About</NuxtLink>
-    <NuxtLink to="/register">Register</NuxtLink>
-    <h1>dasbnoard</h1>
-    
-    <p>Current route: {{ route.path }}</p>
+  <h1>dasbnoard</h1>
+  
+  <p>Current route: {{ route.path }}</p>
 
 </template>

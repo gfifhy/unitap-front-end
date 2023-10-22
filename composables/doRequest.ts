@@ -11,6 +11,7 @@ export function doRequest<T>(
 
   let headers: any = {
     accept: "application/json",
+    "content-type": "application/json",
     referer: ($cfg.app.protocol + $cfg.app.host.slice(0, -1)) as string
   }
 

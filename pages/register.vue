@@ -1,90 +1,64 @@
 <script setup lang="ts">
 
-import type {
-  FormError
-} from '@nuxt/ui/dist/runtime/types'
-
-const f = ref({
-  name: '',
-  email: '',
-  password: '',
-  password_confirmation: '',
+definePageMeta({ 
+  middleware: 'signed-in',
 })
 
-const validate = (state: any): FormError[] => {
-  const errors = []
-  if (!state.name)
-    errors.push({ path: 'name', message: 'Required' })
-  if (!state.email)
-    errors.push({ path: 'email', message: 'Required' })
-  if (!state.password)
-    errors.push({ path: 'password', message: 'Required' })
-  if (!state.password_confirmation)
-    errors.push({ path: 'password_confirmation', message: 'Required' })
-  return errors
-}
-
-async function webauth() {
-  console.log('ass');
-}
-
-async function submit() {
-
-  const { error } = await useAuthStore().register(f.value)
-
-  if(!error.value) { navigateTo("/") } else { console.log(error) }
-
-}
 </script>
 
-<template>
-  <header>
-    <p>Login</p>
-  </header>
+<template><div id='signup'>
 
-  <UForm :validate="validate" :state="f" @submit.prevent="submit">
+<div id="double">
 
-    <UInput type="text" v-model="f.name"
-      name="name" placeholder="Name"
-      icon="i-heroicons-identification-20-solid" size="lg" color="white" :ui="{ icon: { trailing: { pointer: '' } } }">
-      <template #trailing>
-        <UButton v-show="f.name !== ''" @click="f.name = ''"
-          icon="i-heroicons-x-mark-20-solid" color="gray" variant="link" :padded="false" tabindex="-1" />
-      </template>
-    </UInput>
+  <section>
+    <NuxtImg src="/sex.jpg" />
+  </section>
 
-    <UInput type="text" v-model="f.email"
-      name="email" placeholder="E-mail address"
-      icon="i-heroicons-at-symbol-20-solid" size="lg" color="white" :ui="{ icon: { trailing: { pointer: '' } } }">
-      <template #trailing>
-        <UButton v-show="f.email !== ''" @click="f.email = ''"
-          icon="i-heroicons-x-mark-20-solid" color="gray" variant="link" :padded="false" tabindex="-1" />
-      </template>
-    </UInput>
+  <aside>
 
-    <UInput type="password" v-model="f.password"
-      name="password" placeholder="Password"
-      icon="i-heroicons-key-20-solid" size="lg" color="white" :ui="{ icon: { trailing: { pointer: '' } } }">
-      <template #trailing>
-        <UButton v-show="f.password !== ''" @click="f.password = ''"
-          icon="i-heroicons-x-mark-20-solid" color="gray" variant="link" :padded="false" tabindex="-1" />
-      </template>
-    </UInput>
+    <h1>Sign-up</h1>
 
-    <UInput type="password" v-model="f.password_confirmation"
-      name="password_confirmation" placeholder="Retype password"
-      icon="i-heroicons-hashtag-20-solid" size="lg" color="white" :ui="{ icon: { trailing: { pointer: '' } } }">
-      <template #trailing>
-        <UButton v-show="f.password_confirmation !== ''" @click="f.password_confirmation = ''"
-          icon="i-heroicons-x-mark-20-solid" color="gray" variant="link" :padded="false" tabindex="-1" />
-      </template>
-    </UInput>
-    
-    <UButton icon="i-heroicons-finger-print" @click="webauth">Set Passkey</UButton>
+    <!--UDivider /--> <hr>
 
-    <UFormGroup>
-      <UButton type="submit">Register</UButton>
-    </UFormGroup>
+    <SignupForm />
 
-  </UForm>
-</template>
+  </aside>
+
+</div>
+
+</div></template>
+
+<style scoped>
+
+#signup {
+  @apply mt-auto mb-auto
+}
+
+#double {
+
+  @apply flex flex-row h-full;
+
+  padding-left: var(--login-p);
+  padding-right: var(--login-p);
+
+  > aside {
+    @apply flex flex-col justify-center h-full pl-10 pr-10;
+  }
+}
+
+h1 {
+  @apply text-5xl pb-4
+}
+
+section {
+
+  @apply flex w-full rounded-xl overflow-hidden;
+  
+  max-height: var(--login-img-mh);
+
+  > img {
+    @apply h-full w-full object-cover
+  }
+}
+
+</style>
