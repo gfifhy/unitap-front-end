@@ -18,13 +18,9 @@ const validate = (state: any): FormError[] => {
   return errors
 }
 
-async function webauth() {
-  console.log('ass');
-  
-}
-async function submit() {
+const account = useAuthStore()
 
-  const account = useAuthStore()
+async function submit() {
 
   if (account.isLoggedIn) return
 
@@ -35,6 +31,11 @@ async function submit() {
   
 }
 
+async function webauth() {
+  const {data} = await account.wLogin()
+  if (error.value) { console.error(error); }
+}
+
 </script>
 
 <template>
@@ -43,11 +44,11 @@ async function submit() {
 
     <FormInput type="text" name="username" placeholder="Username"
       icon="i-heroicons-user-20-solid"
-      :modelValue="f.email"
+      v-model="f.email"
     />
     <FormInput type="password" name="password" placeholder="Password"
       icon="i-heroicons-key-20-solid"
-      :modelValue="f.password"
+      v-model="f.password"
     />
     <section class='misc text-right'>
       <NuxtLink to="/">recover account</NuxtLink>

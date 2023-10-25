@@ -5,10 +5,6 @@ export default defineNuxtConfig({
   devServer: {
     host: "127.0.0.1",
     port: 5173,
-    // https: {
-    //   key: fs.readFileSync("C:/A/laragon-portable/www/localhost.key").toString(),
-    //   cert: fs.readFileSync("C:/A/laragon-portable/www/localhost.crt").toString(),
-    // },
   },
   devtools: { enabled: true },
   css: ['~/tailwind.css',],

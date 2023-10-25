@@ -1,11 +1,11 @@
 export default defineAppConfig({
   api: {
-    protocol: 'http://',
-    host: '127.0.0.1:8000/'
+    protocol: 'https://',
+    host: 'api.unitap.dev/'
   },
   app: {
-    protocol: 'http://',
-    host: '127.0.0.1:5173/'
+    protocol: 'https://',
+    host: 'unitap.dev/'
   },
   ui: {
     primary: 'blue',

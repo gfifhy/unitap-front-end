@@ -12,6 +12,7 @@ export default {
   methods: {
     updateText(e){
       this.$emit('update:modelValue', e.currentTarget.value)
+      console.log(e.currentTarget.value)
     }
   }
 };

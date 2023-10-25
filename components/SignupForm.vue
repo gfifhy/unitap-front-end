@@ -47,21 +47,21 @@ async function submit(e: FormSubmitEvent<any>) {
     <FormInput placeholder="Samuelo Buelo"
       label="Name" type="text" name="name"
       icon="i-heroicons-identification-20-solid"
-      :modelValue="f.email"
+      v-model="f.name"
     />
     <FormInput placeholder="samuelo@example.com"
       label="E-mail address" type="text" name="email"
       icon="i-heroicons-at-symbol-20-solid"
-      :modelValue="f.email"
+      v-model="f.email"
     />
     <FormInput placeholder="a-z, A-Z, 0-9, !@#$~" hint="at least 8 characters"
       label="Password" type="password" name="password"
       icon="i-heroicons-key-20-solid"
-      :modelValue="f.email"
+      v-model="f.password"
     />
     <FormInput type="password" name="password_confirmation" placeholder="Retype password"
       icon="i-heroicons-hashtag-20-solid"
-      :modelValue="f.email"
+      v-model="f.password_confirmation"
     />
 
     <footer>

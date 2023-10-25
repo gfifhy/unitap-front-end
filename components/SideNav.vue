@@ -17,17 +17,25 @@ async function logout() {
   await account.logout()
 }
 
+async function webauth() {
+  const {error} = await account.wRegister();
+  if (error.value) { console.warn(error); }
+}
+
 </script>
 
 <template>
 <nav>
   <header>
     <Logo />
-    <section class='promimal'><Brand /></section>
+    <section class='proximal'><Brand /></section>
   </header>
   
   <section v-if="online">
-    <UButton>1</UButton>
+    <UButton 
+      icon="i-heroicons-finger-print" 
+      @click="webauth" 
+    />
     <UButton>2</UButton>
     <UButton>3</UButton>
     <UButton>4</UButton>
