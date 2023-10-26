@@ -24,6 +24,7 @@ declare global {
   const definePayloadReducer: typeof import('../../node_modules/nuxt/dist/app')['definePayloadReducer']
   const definePayloadReviver: typeof import('../../node_modules/nuxt/dist/app')['definePayloadReviver']
   const defineSlots: typeof import('../../node_modules/vue')['defineSlots']
+  const doRequest: typeof import('../../composables/doRequest')['doRequest']
   const effect: typeof import('../../node_modules/vue')['effect']
   const effectScope: typeof import('../../node_modules/vue')['effectScope']
   const getAppManifest: typeof import('../../node_modules/nuxt/dist/app')['getAppManifest']
@@ -164,6 +165,7 @@ declare module 'vue' {
     readonly definePayloadReducer: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['definePayloadReducer']>
     readonly definePayloadReviver: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['definePayloadReviver']>
     readonly defineSlots: UnwrapRef<typeof import('../../node_modules/vue')['defineSlots']>
+    readonly doRequest: UnwrapRef<typeof import('../../composables/doRequest')['doRequest']>
     readonly effect: UnwrapRef<typeof import('../../node_modules/vue')['effect']>
     readonly effectScope: UnwrapRef<typeof import('../../node_modules/vue')['effectScope']>
     readonly getAppManifest: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['getAppManifest']>
@@ -298,6 +300,7 @@ declare module '@vue/runtime-core' {
     readonly definePayloadReducer: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['definePayloadReducer']>
     readonly definePayloadReviver: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['definePayloadReviver']>
     readonly defineSlots: UnwrapRef<typeof import('../../node_modules/vue')['defineSlots']>
+    readonly doRequest: UnwrapRef<typeof import('../../composables/doRequest')['doRequest']>
     readonly effect: UnwrapRef<typeof import('../../node_modules/vue')['effect']>
     readonly effectScope: UnwrapRef<typeof import('../../node_modules/vue')['effectScope']>
     readonly getAppManifest: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app')['getAppManifest']>
