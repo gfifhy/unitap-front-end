@@ -1,14 +1,14 @@
 import { defineStore } from "pinia"
 
-type User = {
-  id: string
-  name: string
-  email: string
-}
+import { 
+  startRegistration,
+  startAuthentication
+} from '@simplewebauthn/browser'
 
 type Credentials = {
   email: string
   password: string
+  role_id: string
 }
 
 type Identity = {
@@ -20,19 +20,19 @@ type Identity = {
 
 export const useAuthStore = defineStore('auth', () => {
 
-  const user = ref<User | null>(null)
+  const user = ref(null)
   const isLoggedIn = computed(() => !!user.value)
 
   async function fetchUser() {
-    const { data } = await doRequest("api/user")
-    user.value = data.value as User
+    const { data } = await doRequest("api/profile")
+    user.value = data.value?.user
   }
 
   async function register(id: Identity) {
 
     await doRequest("sanctum/csrf-cookie")
 
-    const register = await doRequest("api/register",
+    const req = await doRequest("api/register",
       {
         method: "POST",
         body: id,
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     await fetchUser();
 
-    return register
+    return req
 
   }
 
@@ -51,7 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
     const ass = await doRequest("api/roles")
     console.log(ass.data._rawValue)
 
-    const login = await doRequest("api/admin/login",
+    const req = await doRequest("api/admin/login",
       {
         method: "POST",
         body: {
@@ -63,16 +63,81 @@ export const useAuthStore = defineStore('auth', () => {
 
     await fetchUser();
 
-    return login
+    return req
 
   }
 
   async function logout() {
     await doRequest("api/logout", {method: 'POST'})
-    user.value = null;
+    user.value = null
     navigateTo('/login')
+    this.$nuxt.refresh()
   }
 
-  return { user, isLoggedIn, fetchUser, register, login, logout }
+/*
+
+WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
+WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
+WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
+WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
+
+*/
+
+  async function wLogin() { // not tested 
+
+    const {data} = await doRequest("api/webauth/login/options")
+
+    let assResp;
+
+    try {
+      assResp = await startAuthentication(JSON.parse(JSON.stringify(data.value)));
+    } catch (error) {
+      console.error(error)
+    }
+
+    const req = await doRequest("api/webauth/login",
+      {
+        method: "POST",
+        body: assResp,
+      })
+
+    await fetchUser();
+
+    return req
+
+  }
+
+  async function wRegister() {
+
+    const {data} = await doRequest("api/webauth/register/options")
+
+    let attResp;
+
+    try {
+      attResp = await startRegistration(JSON.parse(JSON.stringify(data.value)));
+    } catch (error) {
+      if (error.name === 'InvalidStateError') {
+        console.log('Error: Authenticator was probably already registered by user')
+      } else {
+        console.log(error)
+      }
+    }
+
+    const req = await doRequest("api/webauth/register",
+      {
+        method: "POST",
+        body: attResp,
+      })
+
+    return req
+
+  }
+
+  return { 
+    user, isLoggedIn, 
+    fetchUser,
+    register, login, logout,
+    wRegister, wLogin
+  }
 
 })

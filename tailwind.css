@@ -136,25 +136,32 @@ h1 {
 h2,h3,h4 { @apply flex items-center py-2 my-2 }
 h2 { @apply text-4xl } h3 { @apply text-2xl } h4 { @apply text-lg }
 
-article[id] {
-  @apply px-[var(--article-p)] antialiased;
-  -webkit-text-size-adjust: 100%;
-  font-synthesis: style;
-  text-rendering: optimizeLegibility;
-  font-family: var(--typeface-text);
-  
-  ul {
-    font-family: var(--typeface-para);
-    padding-left: 40px !important;
-    list-style: disc !important;
-    + p {
-      @apply py-2 my-2;
-    }
+article {
+
+  &:not([id]) {
+    @apply max-w-4xl
   }
-  hr {
-    @apply h-[5px] my-[0.5em] py-[0.5em] border-b;
-    border-top: unset;
-    border-bottom-color: var(--l20);
+
+  &[id] {
+    @apply px-[var(--article-p)] antialiased;
+    -webkit-text-size-adjust: 100%;
+    font-synthesis: style;
+    text-rendering: optimizeLegibility;
+    font-family: var(--typeface-text);
+    
+    ul {
+      font-family: var(--typeface-para);
+      padding-left: 40px !important;
+      list-style: disc !important;
+      + p {
+        @apply py-2 my-2;
+      }
+    }
+    hr {
+      @apply h-[5px] my-[0.5em] py-[0.5em] border-b;
+      border-top: unset;
+      border-bottom-color: var(--l20);
+    }
   }
 }
 
@@ -186,7 +193,19 @@ div#double[id="double"] {
  * Elements
  * -------------------------------------------------------------------------- */
 
+form.user { /* signup/login form */
 
+  > footer {
+    @apply flex justify-between p-3;
+    > button:last-child {
+      width: 140px
+    }
+  }
+  > div {
+    @apply mt-2 mb-2;
+  }
+
+}
 
 
 /**

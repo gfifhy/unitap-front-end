@@ -37,29 +37,31 @@ async function submit(e: FormSubmitEvent<any>) {
   //if(!error.value) { navigateTo("/") } else { console.log(error) }
 
 }
+
 </script>
 
 <template>
 
-  <UForm :validate="validate" :state="f" @submit="submit">
+  <UForm class="user" :validate="validate" :state="f" @submit="submit">
+    
     <FormInput placeholder="Samuelo Buelo"
       label="Name" type="text" name="name"
       icon="i-heroicons-identification-20-solid"
-      :modelValue="f.email"
+      v-model="f.name"
     />
     <FormInput placeholder="samuelo@example.com"
       label="E-mail address" type="text" name="email"
       icon="i-heroicons-at-symbol-20-solid"
-      :modelValue="f.email"
+      v-model="f.email"
     />
     <FormInput placeholder="a-z, A-Z, 0-9, !@#$~" hint="at least 8 characters"
       label="Password" type="password" name="password"
       icon="i-heroicons-key-20-solid"
-      :modelValue="f.email"
+      v-model="f.password"
     />
     <FormInput type="password" name="password_confirmation" placeholder="Retype password"
       icon="i-heroicons-hashtag-20-solid"
-      :modelValue="f.email"
+      v-model="f.password_confirmation"
     />
 
     <footer>
@@ -75,23 +77,3 @@ async function submit(e: FormSubmitEvent<any>) {
   </UForm>
 
 </template>
-
-<style scoped>
-
-form {
-  > footer {
-    @apply flex justify-between;
-    > button:last-child {
-      width: 140px
-    }
-  }
-  > div {
-    @apply mt-2 mb-2;
-  }
-}
-
-footer {
-  @apply flex p-3
-}
-
-</style>

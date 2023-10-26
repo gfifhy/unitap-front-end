@@ -11,7 +11,7 @@ div {
   background-size: 1000% 1000%;
   background-position: 43% 0%;
 
-  @apply flex h-full items-center bg-clip-text text-transparent pl-1;
+  @apply flex h-full items-center bg-clip-text text-transparent pl-1 select-none;
   @apply transition ease-in-out duration-300;
 
   > span {

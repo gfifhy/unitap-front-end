@@ -11,8 +11,8 @@ export default {
   },
   methods: {
     updateText(e){
-      console.log(e)
       this.$emit('update:modelValue', e.currentTarget.value)
+      console.log(e.currentTarget.value)
     }
   }
 };
@@ -21,7 +21,7 @@ export default {
 <template>
 
   <FormLabel :hint="hint" :label="label" />
-  
+
   <UInput v-model="val" @input="updateText" :value="modelValue"
     :type="type" :name="name" :placeholder="placeholder"
     :icon="icon" 

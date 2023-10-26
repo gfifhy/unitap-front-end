@@ -97,7 +97,7 @@ const account = useAuthStore()
 
 #double {
 
-  @apply flex h-full;
+  @apply flex justify-center h-full;
 
   flex-direction: var(--article-split-dir);
 
@@ -107,7 +107,7 @@ const account = useAuthStore()
 }
 
 aside > div {
-  @apply bg-gray-200 rounded-xl p-4 min-w-[340px];
+  @apply bg-[var(--l30)] rounded-xl p-4 min-w-[340px];
 
   ::before {
     @apply m-0
