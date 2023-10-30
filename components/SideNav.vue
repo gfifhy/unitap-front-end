@@ -18,8 +18,10 @@ async function logout() {
 }
 
 async function webauth() {
-  const {error} = await account.wRegister();
-  if (error.value) { console.warn(error); }
+  const res = await account.wRegister();
+  console.log(res)
+  if (res) { console.warn(res); }
+  else { navigateTo('/') }
 }
 
 </script>
