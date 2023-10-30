@@ -1,10 +1,5 @@
 import { defineStore } from "pinia"
-
-import { 
-  startRegistration,
-  startAuthentication
-} from '@simplewebauthn/browser'
-
+import WebAuthn from "~/composables/webauthn"
 type Credentials = {
   email: string
   password: string
@@ -83,61 +78,56 @@ WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
 
 */
 
-  async function wLogin() { // not tested 
-
-    const {data} = await doRequest("api/webauth/login/options")
-
-    let assResp;
-
-    try {
-      assResp = await startAuthentication(JSON.parse(JSON.stringify(data.value)));
-    } catch (error) {
-      console.error(error)
-    }
-
-    const req = await doRequest("api/webauth/login",
-      {
-        method: "POST",
-        body: assResp,
+  async function wRegister() {
+    await new WebAuthn().register()
+      .then(response => {
+        alert('Registration successful!'); // replace with modal
+        return response
       })
+      .catch(error => {
+        alert('Something went wrong, try again!');
+        return error
+      });
+  }
 
-    await fetchUser();
+  async function wLogin(email: string) { 
+
+    let req;
+
+    await new WebAuthn().login({
+      email: null,
+    }, {
+      remember: null,
+    }).then(response => 
+      alert('Authentication successful!') // replace with modal
+    ).catch(error => {
+      alert('Something went wrong, try again!')
+      return error
+    })
+
+    await fetchUser()
 
     return req
 
   }
 
-  async function wRegister() {
+  async function wUnRegister() {
+/*
+    console.log(user)
 
-    const {data} = await doRequest("api/webauth/register/options")
-
-    let attResp;
-
-    try {
-      attResp = await startRegistration(JSON.parse(JSON.stringify(data.value)));
-    } catch (error) {
-      if (error.name === 'InvalidStateError') {
-        console.log('Error: Authenticator was probably already registered by user')
-      } else {
-        console.log(error)
-      }
-    }
-
-    const req = await doRequest("api/webauth/register",
-      {
-        method: "POST",
-        body: attResp,
-      })
+    const req = await doRequest("webauth/keys/" + user?.value.id,
+      { method: "DELETE" }
+    )
 
     return req
-
+*/
   }
 
   return { 
     user, isLoggedIn, 
     fetchUser,
     register, login, logout,
-    wRegister, wLogin
+    wRegister, wLogin, wUnRegister
   }
 
 })

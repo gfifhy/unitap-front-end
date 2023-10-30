@@ -32,8 +32,9 @@ async function submit() {
 }
 
 async function webauth() {
-  const {data} = await account.wLogin()
-  if (error.value) { console.error(error); }
+  const res = await account.wLogin(f.value.email)
+  if (res) { console.error(res); }
+  else { navigateTo('/') }
 }
 
 </script>
