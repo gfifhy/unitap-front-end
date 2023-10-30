@@ -10,9 +10,8 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/ui": "npm:@nuxt/ui-edge@latest",
     "@nuxt/devtools": "latest",
-    "@vite-pwa/nuxt": "^0.1.1",
+    "@nuxt/ui": "npm:@nuxt/ui-edge@latest",
     "nuxt": "^3.7.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
@@ -23,7 +22,6 @@
     "@nuxt/image": "^1.0.0",
     "@nuxt/ui": "^2.9.0",
     "@pinia/nuxt": "^0.5.0",
-    "@simplewebauthn/browser": "^8.3.1",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "laravel-vite-plugin": "^0.8.1",
     "pinia": "^2.1.7"
