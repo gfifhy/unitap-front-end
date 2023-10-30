@@ -144,6 +144,7 @@ declare global {
   const watchEffect: typeof import('../../node_modules/vue')['watchEffect']
   const watchPostEffect: typeof import('../../node_modules/vue')['watchPostEffect']
   const watchSyncEffect: typeof import('../../node_modules/vue')['watchSyncEffect']
+  const webauthn: typeof import('../../composables/webauthn')['default']
   const withCtx: typeof import('../../node_modules/vue')['withCtx']
   const withDirectives: typeof import('../../node_modules/vue')['withDirectives']
   const withKeys: typeof import('../../node_modules/vue')['withKeys']
@@ -303,6 +304,7 @@ declare module 'vue' {
     readonly watchEffect: UnwrapRef<typeof import('../../node_modules/vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('../../node_modules/vue')['watchPostEffect']>
     readonly watchSyncEffect: UnwrapRef<typeof import('../../node_modules/vue')['watchSyncEffect']>
+    readonly webauthn: UnwrapRef<typeof import('../../composables/webauthn')['default']>
     readonly withCtx: UnwrapRef<typeof import('../../node_modules/vue')['withCtx']>
     readonly withDirectives: UnwrapRef<typeof import('../../node_modules/vue')['withDirectives']>
     readonly withKeys: UnwrapRef<typeof import('../../node_modules/vue')['withKeys']>
@@ -456,6 +458,7 @@ declare module '@vue/runtime-core' {
     readonly watchEffect: UnwrapRef<typeof import('../../node_modules/vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('../../node_modules/vue')['watchPostEffect']>
     readonly watchSyncEffect: UnwrapRef<typeof import('../../node_modules/vue')['watchSyncEffect']>
+    readonly webauthn: UnwrapRef<typeof import('../../composables/webauthn')['default']>
     readonly withCtx: UnwrapRef<typeof import('../../node_modules/vue')['withCtx']>
     readonly withDirectives: UnwrapRef<typeof import('../../node_modules/vue')['withDirectives']>
     readonly withKeys: UnwrapRef<typeof import('../../node_modules/vue')['withKeys']>
