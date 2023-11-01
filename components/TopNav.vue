@@ -12,6 +12,12 @@ const online = computed(() => account.isLoggedIn)
   </section>
 
   <section class='central' v-if="online">
+    <UInput
+      icon="i-heroicons-magnifying-glass-20-solid"
+      size="md"
+      :trailing="false"
+      placeholder="Search..."
+    />
     <div>welcome back, {{account.user.first_name +' '+ account.user.last_name }}</div>
   </section>
 
@@ -27,8 +33,7 @@ const online = computed(() => account.isLoggedIn)
   </section>
 
   <section class='terminal' v-if="online">
-    <UButton>1</UButton>
-    <UButton>2</UButton>
+
   </section>
 
 </nav>
@@ -91,6 +96,9 @@ button {
 
 .central {
   @apply w-full h-full justify-start items-center p-4;
+  > div {
+    @apply m-2
+  }
 }
 
 .proximal {

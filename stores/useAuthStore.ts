@@ -19,22 +19,21 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoggedIn = computed(() => !!user.value)
 
   async function fetchUser() {
+    
     const { data } = await doRequest("api/profile")
     user.value = data.value?.user
+
   }
 
   async function register(id: Identity) {
 
     await doRequest("sanctum/csrf-cookie")
-
     const req = await doRequest("api/register",
       {
         method: "POST",
         body: id,
       })
-
     await fetchUser();
-
     return req
 
   }
@@ -42,10 +41,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function login(cred: Credentials) {
 
     await doRequest("sanctum/csrf-cookie")
-
     const ass = await doRequest("api/roles")
-    console.log(ass.data._rawValue)
-
     const req = await doRequest("api/admin/login",
       {
         method: "POST",
@@ -55,30 +51,21 @@ export const useAuthStore = defineStore('auth', () => {
           role_id: "5762ddd2-dad9-4729-b77a-7b06ea14eb3e",
         }
       })
-
     await fetchUser();
-
     return req
 
   }
 
   async function logout() {
+
     await doRequest("api/logout", {method: 'POST'})
     user.value = null
     navigateTo('/login')
-    this.$nuxt.refresh()
+
   }
 
-/*
-
-WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
-WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
-WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
-WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
-
-*/
-
   async function wRegister() {
+
     await new WebAuthn().register()
       .then(response => {
         alert('Registration successful!'); // replace with modal
@@ -88,25 +75,22 @@ WebAuthn functiosanoangaignaognaghaj;lgagjalkjgajgjajg'jga'gksakgsalg
         alert('Something went wrong, try again!');
         return error
       });
+
   }
 
   async function wLogin(email: string) { 
 
     let req;
-
     await new WebAuthn().login({
       email: null,
     }, {
       remember: null,
-    }).then(response => 
-      alert('Authentication successful!') // replace with modal
-    ).catch(error => {
-      alert('Something went wrong, try again!')
-      return error
+    }).then(r => {
+      return
+    }).catch(e => {
+      throw new Error(e)
     })
-
     await fetchUser()
-
     return req
 
   }

@@ -1,21 +1,20 @@
 :root {
-  --c-primary: #4f46e5;
-  --c-secondary: #dc2626;
-  --c-tertiary: #fbbf24;
+  --c-primary: #5bbb71;
+  --c-secondary: #fbbf24;
+  --c-tertiary: #1cd2f4;
   --c-quaternary: #0047f6;
   --c-quinary: #2980b9;
   --c-senary: unset;
   --c-octonary: unset;
   --c-nonary: unset;
 
-  --typeface-ui: 'Tilt Neon';
-  --typeface-text: 'Gabarito';
-  --typeface-para: 'Averia Serif Libre';
+  --typeface-ui: 'Lexend Deca', sans-serif;
+  --typeface-text: 'Lexend Deca', sans-serif;
+  --typeface-para: 'Lexend Deca', sans-serif;
 }
 
 .dark:root {
   --c-quaternary: #8F91F3;
-  --logo-f: saturate(.3) hue-rotate(9deg) brightness(2);
   --foreground-l: #000c/*#0008*/;
   --foreground-r: #000e/*#000b*/;
   /*--d00: transparent; // darkness 0 */
@@ -24,6 +23,7 @@
   --d40: #0004;
   --d50: #0005;
   --d60: #0006;
+  --d80: #0008;
   --da0: #000a;
   /*--l00: transparent; // luminance 0 */
   --l08: #ffffff08; 
@@ -45,6 +45,7 @@
   --d40: #fff4;
   --d50: #fff5;
   --d60: #fff6;
+  --d80: #fff8;
   --da0: #fffa;
   --l08: #00000008; 
   --l10: #0001;
@@ -79,7 +80,7 @@
     --app-dir: column;
     --topnav-h: 3em;
     --sidenav-dir: row;
-    --sidenav-h: 3.2em;
+    --sidenav-h: 4em;
     --login-layout: column;
     --login-form-w: 620px;
     --login-img-mh: 260px;
@@ -208,6 +209,8 @@ form.user { /* signup/login form */
 }
 
 
+
+
 /**
  * Animation
  * -------------------------------------------------------------------------- */
@@ -222,48 +225,4 @@ form.user { /* signup/login form */
  * Font
  * -------------------------------------------------------------------------- */
 
-/* latin-ext */
-@font-face {
-  font-family: 'Tilt Neon';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/tiltneon/v10/E21L_d7gguXdwD9LEFY2WCeElCNtd-eBqpHp1TzrkJSmwpj5ndxquUK0UOeVJw.woff2) format('woff2');
-  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Tilt Neon';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/tiltneon/v10/E21L_d7gguXdwD9LEFY2WCeElCNtd-eBqpHp1TzrkJSmwpj5ndxquUK6UOc.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* latin */
-@font-face {
-  font-family: 'Gabarito';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/gabarito/v1/QGYtz_0dZAGKJJ4t3HtoW4U.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* latin */
-@font-face {
-  font-family: 'Gabarito';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/gabarito/v1/QGYtz_0dZAGKJJ4t3HtoW4U.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* latin */
-@font-face {
-  font-family: 'Averia Serif Libre';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/averiaseriflibre/v18/neIVzD2ms4wxr6GvjeD0X88SHPyX2xYGCSmaxq0r.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');

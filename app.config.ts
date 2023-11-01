@@ -8,8 +8,8 @@ export default defineAppConfig({
     host: 'unitap.dev/'
   },
   ui: {
-    primary: 'blue',
-    gray: 'cool'
+    primary: 'green',
+    gray: 'neutral'
   },
 })
 

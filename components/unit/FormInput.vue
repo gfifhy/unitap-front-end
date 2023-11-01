@@ -12,7 +12,6 @@ export default {
   methods: {
     updateText(e){
       this.$emit('update:modelValue', e.currentTarget.value)
-      console.log(e.currentTarget.value)
     }
   }
 };
@@ -25,7 +24,7 @@ export default {
   <UInput v-model="val" @input="updateText" :value="modelValue"
     :type="type" :name="name" :placeholder="placeholder"
     :icon="icon" 
-    size="lg" color="white" 
+    size="xl" color="white" 
     :ui="{ icon: { trailing: { pointer: '' } } }">
 
     <template #trailing>

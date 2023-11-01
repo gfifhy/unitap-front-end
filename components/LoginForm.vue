@@ -18,6 +18,10 @@ const validate = (state: any): FormError[] => {
   return errors
 }
 
+const toast = useToast()
+
+const waLoading = useState('waLoading', () => false)
+
 const account = useAuthStore()
 
 async function submit() {
@@ -32,9 +36,27 @@ async function submit() {
 }
 
 async function webauth() {
-  const res = await account.wLogin(f.value.email)
-  if (res) { console.error(res); }
-  else { navigateTo('/') }
+
+  waLoading.value = true
+
+  try {
+    const res: string = await account.wLogin(f.value.email)
+    toast.add({ 
+      icon: 'i-heroicons-check-circle-20-solid',
+      title: 'Successfully logged in.', 
+      timeout: 3000,
+    })
+    navigateTo('/')
+  } catch (e) {
+    toast.add({ 
+      icon: 'i-heroicons-information-circle-20-solid',
+      title: 'Operation (probably) cancelled.', 
+      description: e,
+    })
+    console.error(e)
+  }
+
+  waLoading.value = false
 }
 
 </script>
@@ -53,7 +75,6 @@ async function webauth() {
     />
     <section class='misc text-right'>
       <NuxtLink to="/">recover account</NuxtLink>
-      <!--UDivider /--> <hr>
     </section>
 
     <footer>
@@ -62,6 +83,7 @@ async function webauth() {
         variant="ghost"
         icon="i-heroicons-finger-print" 
         @click="webauth" 
+        :loading="waLoading"
       />
       <ColoredButton label="login" type="submit"/>
     </footer>

@@ -7,7 +7,7 @@
 <style scoped>
 div {
 
-  background: linear-gradient(0deg, var(--c-tertiary), var(--c-secondary), var(--c-primary), var(--c-quinary), var(--c-quaternary));
+  background: linear-gradient(0deg, var(--c-tertiary), var(--c-secondary), var(--c-quinary), var(--c-quaternary), var(--c-primary));
   background-size: 1000% 1000%;
   background-position: 43% 0%;
 

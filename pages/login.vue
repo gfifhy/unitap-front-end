@@ -18,7 +18,7 @@ definePageMeta({
 
     <h1>welcome!</h1>
 
-    <!--UDivider /--> <hr>
+    <UDivider />
 
     <LoginForm />
 

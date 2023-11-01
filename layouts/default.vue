@@ -8,6 +8,8 @@
       <NuxtPage />
     </main>
 
+    <UNotifications />
+
   </div>
 </template>
 
