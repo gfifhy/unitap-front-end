@@ -16,7 +16,7 @@ definePageMeta({
 
   <aside>
 
-    <h1>welcome!</h1>
+    <h1>login</h1>
 
     <UDivider />
 

@@ -19,9 +19,6 @@ async function logout() {
 }
 
 async function webauth() {
-  console.log("asgsagsaklgjsakg")
-}
-async function webautha() {
   const res = await account.wRegister();
   console.log(res)
   if (res) { console.warn(res); }
