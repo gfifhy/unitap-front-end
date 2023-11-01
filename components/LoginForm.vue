@@ -43,27 +43,27 @@ async function webauth() {
 
   <UForm class="user" :validate="validate" :state="f" @submit="submit">
 
-    <FormInput type="text" name="username" placeholder="Username"
+    <FormInput type="text" name="username" placeholder="Email"
       icon="i-heroicons-user-20-solid"
-      v-model="f.email"
+      v-model="f.email"  label="Email"
     />
     <FormInput type="password" name="password" placeholder="Password"
       icon="i-heroicons-key-20-solid"
-      v-model="f.password"
+      v-model="f.password" label="Password"
     />
-    <section class='misc text-right'>
-      <NuxtLink to="/">recover account</NuxtLink>
+    <section class='misc'>
+      <ColoredButton label="Login" type="submit" class="mt-4 mb-6 w-full"/>
       <!--UDivider /--> <hr>
     </section>
 
     <footer>
-      <UButton 
+      <UButton
         label="use passkey"
         variant="ghost"
-        icon="i-heroicons-finger-print" 
-        @click="webauth" 
+        icon="i-heroicons-finger-print"
+        @click="webauth"
       />
-      <ColoredButton label="login" type="submit"/>
+
     </footer>
 
   </UForm>

@@ -23,7 +23,6 @@
 } 
 
 main {
-
   @apply flex flex-col w-full overflow-auto
 
 }

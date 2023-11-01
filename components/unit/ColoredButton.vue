@@ -22,7 +22,7 @@ export default {
 
 button { /* Major execution button */
   --t: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  @apply w-48 h-auto p-0 border-0 rounded-xl relative inline-block no-underline text-[inherit] cursor-pointer align-middle;
+  @apply  h-auto p-0 border-0 rounded-xl relative inline-block no-underline text-[inherit] cursor-pointer align-middle;
   outline: none;
   background-color: var(--l08);
   font-family: inherit;

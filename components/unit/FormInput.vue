@@ -18,14 +18,14 @@ export default {
 };
 </script>
 
-<template>
+<template >
 
-  <FormLabel :hint="hint" :label="label" />
+  <FormLabel :hint="hint" :label="label"  />
 
   <UInput v-model="val" @input="updateText" :value="modelValue"
     :type="type" :name="name" :placeholder="placeholder"
     :icon="icon" 
-    size="lg" color="white" 
+    size="xl" color="white"
     :ui="{ icon: { trailing: { pointer: '' } } }">
 
     <template #trailing>

@@ -15,13 +15,8 @@ definePageMeta({
   </section>
 
   <aside>
-
-    <h1>welcome!</h1>
-
-    <!--UDivider /--> <hr>
-
+    <h2 class="mb-5">Login</h2>
     <LoginForm />
-
   </aside>
 
 </div>
