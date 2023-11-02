@@ -19,19 +19,29 @@ const validate = (state: any): FormError[] => {
 }
 
 const toast = useToast()
+const account = useAuthStore()
 
 const waLoading = useState('waLoading', () => false)
-
-const account = useAuthStore()
+const loading = useState('loading', () => false)
 
 async function submit() {
 
-  if (account.isLoggedIn) return
+  loading.value = true
 
-  const {error} = await account.login(f.value)
+  if (account.isLoggedIn) { navigateTo('/'); return } 
 
-  if (error.value) { console.warn(error); }
-  else { navigateTo('/') }
+  try {
+    const {error} = await account.login(f.value)
+    navigateTo('/')
+  } catch (e) {
+    toast.add({
+      icon: 'i-heroicons-shield-exclamation-solid',
+      title: e.message
+    })
+    console.error(e.stack);
+  }
+
+  loading.value = false
   
 }
 
@@ -40,7 +50,7 @@ async function webauth() {
   waLoading.value = true
 
   try {
-    const res: string = await account.wLogin(f.value.email)
+    const res: String = await account.wLogin(f.value.email)
     toast.add({ 
       icon: 'i-heroicons-check-circle-20-solid',
       title: 'Successfully logged in.', 
@@ -51,9 +61,9 @@ async function webauth() {
     toast.add({ 
       icon: 'i-heroicons-information-circle-20-solid',
       title: 'Operation (probably) cancelled.', 
-      description: e,
+      description: e.message,
     })
-    console.error(e)
+    console.error(e.stack)
   }
 
   waLoading.value = false
@@ -85,7 +95,7 @@ async function webauth() {
         @click="webauth" 
         :loading="waLoading"
       />
-      <ColoredButton label="login" type="submit"/>
+      <ColoredButton label="login" type="submit" :disabled="loading"/>
     </footer>
 
   </UForm>

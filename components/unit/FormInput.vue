@@ -21,7 +21,7 @@ export default {
 
   <FormLabel :hint="hint" :label="label" />
 
-  <UInput v-model="val" @input="updateText" :value="modelValue"
+  <UInput @input="updateText" :value="modelValue"
     :type="type" :name="name" :placeholder="placeholder"
     :icon="icon" 
     size="xl" color="white" 

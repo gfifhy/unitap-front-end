@@ -46,11 +46,15 @@ export const useAuthStore = defineStore('auth', () => {
       {
         method: "POST",
         body: {
-          email: cred.email as string,
-          password: cred.password as string,
+          email: cred.email.toString(),
+          password: cred.password.toString(),
           role_id: "5762ddd2-dad9-4729-b77a-7b06ea14eb3e",
         }
       })
+    if (req.error.value) {
+      throw new Error("Incorrect username or password.")
+      return
+    }
     await fetchUser();
     return req
 

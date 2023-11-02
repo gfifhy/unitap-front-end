@@ -15,7 +15,7 @@ const online = computed(() => account.isLoggedIn)
 
 async function logout() {
   await account.logout()
-  this.$nuxt.refresh()
+  await refreshNuxtData()
 }
 
 async function webauth() {

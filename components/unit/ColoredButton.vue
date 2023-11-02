@@ -1,10 +1,7 @@
 <script>
 export default {
   props: {
-    label: {
-      type: String,
-      default: '',
-    },
+    label: String,
   }
 };
 </script>
@@ -24,6 +21,7 @@ button { /* Major execution button */
   --t: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
   @apply w-48 h-auto p-0 border-0 rounded-xl relative inline-block no-underline text-[inherit] cursor-pointer align-middle;
   outline: none;
+  transition: .4s;
   background-color: var(--l08);
   font-family: inherit;
 
@@ -77,6 +75,12 @@ button { /* Major execution button */
     .button-text {
       color: var(--c-arr);
     }
+  }
+
+  &[disabled] {
+    opacity: .2;
+    cursor: default;
+    pointer-events: none;
   }
   
 }

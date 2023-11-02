@@ -171,19 +171,21 @@ article {
       border-bottom-color: var(--l20);
     }
   }
-}
 
-p {
-  
-  @apply ml-[-2em] pl-[2em] text-lg;
-  font-family: var(--typeface-para);
-  
-  &::before{
-    @apply ml-[2em];
-    content: '';
+  p {
+    
+    @apply ml-[-2em] pl-[2em] text-lg;
+    font-family: var(--typeface-para);
+    
+    &::before{
+      @apply ml-[2em];
+      content: '';
+    }
+
   }
-
+  
 }
+
 
 /**
  * Layout Overrides

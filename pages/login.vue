@@ -6,6 +6,7 @@ definePageMeta({
 
 </script>
 
+
 <template><div id='login'>
 
 <div id="double">
@@ -15,18 +16,15 @@ definePageMeta({
   </section>
 
   <aside>
-
     <h1>login</h1>
-
     <UDivider />
-
     <LoginForm />
-
   </aside>
 
 </div>
 
 </div></template>
+
 
 <style scoped>
 
