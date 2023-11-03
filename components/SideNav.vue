@@ -11,16 +11,19 @@ const isDark = computed({
 })
 
 const account = useAuthStore()
+const toast = useToast()
 const online = computed(() => account.isLoggedIn)
 
 async function logout() {
   await account.logout()
-  await refreshNuxtData()
+  toast.add({
+    icon: 'i-heroicons-shield-check-solid',
+    title: 'Successfully logged out!'
+  })
 }
 
 async function webauth() {
   const res = await account.wRegister();
-  console.log(res)
   if (res) { console.warn(res); }
   else { navigateTo('/') }
 }

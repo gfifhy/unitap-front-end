@@ -103,7 +103,7 @@ const history = [
 
     <div class="account-info">
       <h4>Account</h4>
-      <UTable :rows="account_info" :label="false" />
+      <UTable :rows="account_info" />
     </div>
 
     <div class="stats">
@@ -160,6 +160,10 @@ const history = [
     }
   }
 
+}
+
+#board {
+  @apply max-w-7xl mx-auto
 }
 
 .account-info {

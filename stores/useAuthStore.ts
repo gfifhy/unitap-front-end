@@ -41,29 +41,28 @@ export const useAuthStore = defineStore('auth', () => {
   async function login(cred: Credentials) {
 
     await doRequest("sanctum/csrf-cookie")
-    const ass = await doRequest("api/roles")
-    const req = await doRequest("api/admin/login",
+    const req = await doRequest("api/login",
       {
         method: "POST",
         body: {
           email: cred.email.toString(),
-          password: cred.password.toString(),
-          role_id: "5762ddd2-dad9-4729-b77a-7b06ea14eb3e",
+          password: cred.password.toString()
         }
       })
     if (req.error.value) {
       throw new Error("Incorrect username or password.")
       return
     }
-    await fetchUser();
+    user.value = req.data._rawValue
     return req
 
   }
 
   async function logout() {
 
-    await doRequest("api/logout", {method: 'POST'})
     user.value = null
+    await doRequest("api/logout", {method: 'POST'})
+    await refreshNuxtData()
     navigateTo('/login')
 
   }
@@ -84,18 +83,20 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function wLogin(email: string) { 
 
-    let req;
     await new WebAuthn().login({
       email: null,
     }, {
       remember: null,
-    }).then(r => {
+    }).then(req => {
+      if (req.error.value) {
+        throw new Error(req.error.value.data.message)
+      } else {
+        user.value = req.data._rawValue
+      }
       return
     }).catch(e => {
       throw new Error(e)
     })
-    await fetchUser()
-    return req
 
   }
 
