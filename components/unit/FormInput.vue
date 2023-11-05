@@ -7,7 +7,8 @@ export default {
     label: String,
     placeholder: String,
     hint: String,
-    icon: String
+    icon: String,
+    disabled: Boolean,
   },
   methods: {
     updateText(e){
@@ -23,7 +24,7 @@ export default {
 
   <UInput @input="updateText" :value="modelValue"
     :type="type" :name="name" :placeholder="placeholder"
-    :icon="icon" 
+    :icon="icon" :disabled="disabled"
     size="xl" color="white" 
     :ui="{ icon: { trailing: { pointer: '' } } }">
 

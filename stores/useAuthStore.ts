@@ -16,12 +16,14 @@ type Identity = {
 export const useAuthStore = defineStore('auth', () => {
 
   const user = ref(null)
+  const identity = ref(null)
   const isLoggedIn = computed(() => !!user.value)
 
   async function fetchUser() {
     
     const { data } = await doRequest("api/profile")
     user.value = data.value?.user
+    identity.value = data.value?.user_data
 
   }
 
@@ -62,7 +64,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     user.value = null
     await doRequest("api/logout", {method: 'POST'})
-    await refreshNuxtData()
     navigateTo('/login')
 
   }
@@ -98,6 +99,8 @@ export const useAuthStore = defineStore('auth', () => {
       throw new Error(e)
     })
 
+    navigateTo('/')
+
   }
 
   async function wUnRegister() {
@@ -113,7 +116,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return { 
-    user, isLoggedIn, 
+    user, identity, isLoggedIn, 
     fetchUser,
     register, login, logout,
     wRegister, wLogin, wUnRegister

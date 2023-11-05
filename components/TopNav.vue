@@ -1,11 +1,22 @@
 <script setup>
+
 const account = useAuthStore()
-const online = computed(() => account.isLoggedIn)
+const user = useUsersStore()
+const online = useState('online', () => false)
+
+onMounted(() => {
+  online.value = computed(() => account.isLoggedIn)
+});
+
+const test = async () => {
+  const a = await user.getViolations()
+  console.log(a)
+}
+
 </script>
 
 
-<template>
-<nav class='ribbon'>
+<template><nav class='ribbon'>
 
   <section class='proximal'>
     <Brand />
@@ -19,6 +30,7 @@ const online = computed(() => account.isLoggedIn)
       placeholder="Search..."
     />
     <div>welcome back, {{account.user.first_name +' '+ account.user.last_name }}</div>
+     <UButton label="test" @click="test"/>
   </section>
 
   <section class='links' v-if="!online">
@@ -36,8 +48,7 @@ const online = computed(() => account.isLoggedIn)
 
   </section>
 
-</nav>
-</template>
+</nav></template>
 
 
 <style scoped>

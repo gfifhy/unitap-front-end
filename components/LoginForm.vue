@@ -32,7 +32,6 @@ async function submit() {
 
   try {
     const {error} = await account.login(f.value)
-    navigateTo('/')
   } catch (e) {
     toast.add({
       icon: 'i-heroicons-shield-exclamation-solid',
@@ -56,7 +55,6 @@ async function webauth() {
       title: 'Successfully logged in.', 
       timeout: 3000,
     })
-    navigateTo('/')
   } catch (e) {
     toast.add({ 
       icon: 'i-heroicons-information-circle-20-solid',
@@ -67,6 +65,7 @@ async function webauth() {
   }
 
   waLoading.value = false
+
 }
 
 </script>

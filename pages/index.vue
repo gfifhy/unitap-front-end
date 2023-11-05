@@ -1,21 +1,27 @@
 <script setup>
 
 definePageMeta({ 
-  middleware: 'signed-out',
+  middleware: ['signed-out'],
 })
+
+const account = useAuthStore()
 
 const account_info = [
   {
+  '‏': 'Type',
+  '‎': account.user?.role.name,
+  },
+  {
   '‏': 'Number',
-  '‎': 'K6942069',
+  '‎': account.identity?.student?.student_id || '',
   },
   {
   '‏': 'Status',
-  '‎': 'Active',
+  '‎': account.identity?.wallet?.isDisabled ? 'Disabled' : 'Active',
   },
   {
   '‏': 'Balance',
-  '‎': 'php 245,637,000',
+  '‎': 'php ' + (account.identity?.wallet?.balance || '234,256,267'),
   },
 ]
 
@@ -109,7 +115,7 @@ const history = [
     <div class="stats">
 
       <h4>Statistics</h4>
-      <!-- single instance only per render -->
+      <!-- single instance only per page -->
       <Chart :datasets="graph.datasets" :grid="graph.grid" :labels="graph.labels" />
 
       <h4>Recent Transactions</h4>

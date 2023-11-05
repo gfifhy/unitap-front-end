@@ -12,7 +12,7 @@ const isDark = computed({
 
 const account = useAuthStore()
 const toast = useToast()
-const online = computed(() => account.isLoggedIn)
+const online = useState('online', () => false)
 
 async function logout() {
   await account.logout()
@@ -29,6 +29,7 @@ async function webauth() {
 }
 
 onMounted(() => {
+  online.value = computed(() => account.isLoggedIn)
   window.addEventListener("resize", handleWindowSizeChange);
   handleWindowSizeChange();
 });
@@ -50,15 +51,14 @@ const handleWindowSizeChange = () => {
 
 </script>
 
-<template>
-<nav>
-
+<template><nav>
 
   <header>
     <Logo />
-    <section class='proximal' v-if="!online"><Brand /></section>
+    <section class='proximal' v-if="!online">
+      <Brand />
+    </section>
   </header>
-
 
   <section v-if="online">
 
@@ -68,6 +68,10 @@ const handleWindowSizeChange = () => {
 
     <ButtonTooltip text="Analytics" hotkey="B" 
       variant="outline" icon="i-heroicons-chart-pie-20-solid" />
+
+    <ButtonTooltip text="Manage Accounts" hotkey="B" 
+      variant="outline" icon="i-heroicons-user-group-20-solid"
+      @click="navigateTo('/manage')" v-if="account.user?.role.name === 'Admin'"/>
 
     <ButtonTooltip text="Send" hotkey="C" 
       variant="solid" icon="i-heroicons-paper-airplane" />
@@ -81,7 +85,7 @@ const handleWindowSizeChange = () => {
       hotkey="A" variant="soft" 
       v-if="online"/>
 
-    <ClientOnly><UPopover> <!-- debug required // remove ClienOnly tag -->
+    <UPopover>
 
       <ButtonTooltip text="User" hotkey="C" 
         variant="soft" icon="i-heroicons-user-circle-20-solid"
@@ -105,10 +109,9 @@ const handleWindowSizeChange = () => {
         </div>
       </template>
 
-    </UPopover></ClientOnly>
+    </UPopover>
 
   </footer>
-
 
 </nav></template>
 
