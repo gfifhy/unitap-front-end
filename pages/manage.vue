@@ -14,10 +14,27 @@ onMounted(async () => {
 
 const isOpen = ref(false)
 const targetUser = ref({})
+const editMode = ref(true)
 
 function initEdit(val) {
-  isOpen.value = true
+  editMode.value = true
   targetUser.value = val
+  isOpen.value = true
+}
+
+function initAdd(val) {
+  editMode.value = false
+  isOpen.value = true
+}
+
+function updateUser(val) {
+  const egg = [ ...Object.values(users.value) ]
+  const index = egg.findIndex(p => p.id == targetUser.value.id)
+  users.value = { 
+    ...users.value,
+    [index]: { ...users.value[index], ...val } 
+  }
+  isOpen.value = false
 }
 
 </script>
@@ -32,40 +49,41 @@ function initEdit(val) {
     </div>
 
     <div class="buttons">
-      <ButtonTooltip text="Export to PDF" icon="i-heroicons-arrow-down-on-square-stack-20-solid" 
-        hotkey="E" variant="soft" @click=""/>
-      <UButton variant="solid" label="Add user"
-        icon="i-heroicons-user-plus-20-solid"
+      <ButtonTooltip text="Export to PDF" hotkey="E"
+        variant="soft" icon="i-heroicons-arrow-down-on-square-stack-20-solid" 
         @click=""/>
+      <UButton label="Add user"
+        variant="solid" icon="i-heroicons-user-plus-20-solid"
+        @click="initAdd"/>
     </div>
 
   </section>
 
   <section>
-    <div id='tiles'>
-
-      <UCard id='entry' v-if="users" v-for="i in users">
+    <div id='tiles'><template v-for="i in users">
+      <UCard id='entry' v-if="!i.deleted_at">
 
         <UButton id='edit'
           variant="ghost" icon="i-heroicons-pencil-square-20-solid"
-          @click="initEdit(i)"/>
+          @click="initEdit(i)"
+        />
         <UAvatar id='avatar' :src="i.user_image" size="md" />
 
         <template #footer>
-
           <span id='name'>{{i.first_name +' '+i.last_name}}</span>
-          <span id='role'>{{i.role}}</span>
-
+          <span id='role'>{{i.role?.name}}</span>
         </template>
 
       </UCard>
-
-    </div>
+    </template></div>
   </section>
 
   <UModal v-model="isOpen" :transition="false">
     <div class="p-4">
-      <UserEditForm :targetUser="targetUser" />
+      <UserEditForm v-if="editMode" 
+        :targetUser="targetUser" @update-user="updateUser"/>
+      <UserAddForm v-else 
+        :targetUser="targetUser" @update-user="updateUser"/>
     </div>
   </UModal>
 
@@ -142,7 +160,7 @@ function initEdit(val) {
 
 }
 
-@media (max-width: 501px) {
+@media (max-width: 521px) {
   #entry {
     --card-p: .4em;
     --avatar-sz: 3em;

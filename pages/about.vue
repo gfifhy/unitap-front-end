@@ -1,11 +1,3 @@
-<script setup lang="ts">
-
-const account = useAuthStore()
-
-</script>
-
-
-
 <template><article id='about'>
 
 <header>
@@ -13,10 +5,9 @@ const account = useAuthStore()
 
   <p>We’re stoked you’re here! Here’s some important info to get started.</p>
 
-  <client-only>{{account.user}}</client-only>
 </header>
 
-<!--UDivider /--> <hr>
+<hr>
 
 <section id='double'>
 
@@ -49,7 +40,7 @@ const account = useAuthStore()
 
     <p>Ultimately, this project was developed to bring together security, convenience, and innovation, offering users a safer and more efficient way to conduct transactions.</p>
 
-    <!--UDivider /--> <hr>
+    <hr>
 
     <h2>Getting started</h2>
     
@@ -59,7 +50,7 @@ const account = useAuthStore()
     <p>Confirmation and digital receipts follow, while optional features like peer-to-peer payments enhance utility. </p>
     <p>Users can manage their accounts within the app, providing a convenient, secure, and user-friendly payment experience.</p>
 
-    <!--UDivider /--> <hr>
+    <hr>
 
     <h2>Feedback</h2>
     <p>We are always looking for ways to improve our products and make them better. If you have any feedback, ideas or suggestions for this Figma Library, please reach out to us at <span class='text-red-700'>[aaaaaaaaaaaaaaaaaaaaaaaa]</span> or join our slack channel.</p>
@@ -72,7 +63,7 @@ const account = useAuthStore()
   
       <span>Built in partnership with the team at UniTeam</span>
 
-      <!--UDivider /--> <hr>
+      <hr>
 
       <UAlert
         title="James Francis Ga"
@@ -102,7 +93,7 @@ const account = useAuthStore()
   flex-direction: var(--article-split-dir);
 
   > aside {
-    @apply flex flex-col h-full pl-10 pr-10;
+    @apply flex flex-col h-full px-[var(--article-aside-p)];
   }
 }
 

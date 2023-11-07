@@ -21,42 +21,39 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUser() {
     
-    const { data } = await doRequest("api/profile")
-    user.value = data.value?.user
-    identity.value = data.value?.user_data
+    const { res } = await doRequest("api/profile")
+    user.value = res?.user
+    identity.value = res?.user_data
 
   }
 
   async function register(id: Identity) {
 
     await doRequest("sanctum/csrf-cookie")
-    const req = await doRequest("api/register",
+    const { req } = await doRequest("api/register",
       {
         method: "POST",
         body: id,
       })
     await fetchUser();
-    return req
+    return res
 
   }
 
   async function login(cred: Credentials) {
 
     await doRequest("sanctum/csrf-cookie")
-    const req = await doRequest("api/login",
+    const { res, err } = await doRequest("api/login",
       {
         method: "POST",
-        body: {
-          email: cred.email.toString(),
-          password: cred.password.toString()
-        }
+        body: cred
       })
-    if (req.error.value) {
-      throw new Error("Incorrect username or password.")
-      return
+    if (err) {
+      return Error("Incorrect username or password.")
     }
-    user.value = req.data._rawValue
-    return req
+    user.value = res
+    navigateTo('/')
+    return false
 
   }
 
@@ -85,19 +82,12 @@ export const useAuthStore = defineStore('auth', () => {
   async function wLogin(email: string) { 
 
     await new WebAuthn().login({
-      email: null,
+      email: email,
     }, {
       remember: null,
-    }).then(req => {
-      if (req.error.value) {
-        throw new Error(req.error.value.data.message)
-      } else {
-        user.value = req.data._rawValue
-      }
-      return
-    }).catch(e => {
-      throw new Error(e)
     })
+    .then(res => user.value = res)
+    .catch(e => console.error(e))
 
     navigateTo('/')
 
@@ -107,11 +97,11 @@ export const useAuthStore = defineStore('auth', () => {
 /*
     console.log(user)
 
-    const req = await doRequest("webauth/keys/" + user?.value.id,
+    const { req } = await doRequest("webauth/keys/" + user?.value.id,
       { method: "DELETE" }
     )
 
-    return req
+    return res
 */
   }
 

@@ -28,18 +28,21 @@ async function submit() {
 
   loading.value = true
 
-  if (account.isLoggedIn) { navigateTo('/'); return } 
+  const res = await account.login(f.value)
 
-  try {
-    const {error} = await account.login(f.value)
-  } catch (e) {
+  if (res) {  
     toast.add({
       icon: 'i-heroicons-shield-exclamation-solid',
-      title: e.message
+      title: res,
+      description: 'Please try again.'
     })
-    console.error(e.stack);
+  } else {
+    toast.add({ 
+      icon: 'i-heroicons-check-circle-20-solid',
+      title: 'Successfully logged in.', 
+      timeout: 3000,
+    })
   }
-
   loading.value = false
   
 }
@@ -48,22 +51,21 @@ async function webauth() {
 
   waLoading.value = true
 
-  try {
-    const res: String = await account.wLogin(f.value.email)
+  const res = await account.wLogin(f.value.email)
+
+  if (res) {
+    toast.add({ 
+      icon: 'i-heroicons-information-circle-20-solid',
+      title: 'Operation (probably) cancelled.', 
+      description: res,
+    })
+  } else {
     toast.add({ 
       icon: 'i-heroicons-check-circle-20-solid',
       title: 'Successfully logged in.', 
       timeout: 3000,
     })
-  } catch (e) {
-    toast.add({ 
-      icon: 'i-heroicons-information-circle-20-solid',
-      title: 'Operation (probably) cancelled.', 
-      description: e.message,
-    })
-    console.error(e.stack)
   }
-
   waLoading.value = false
 
 }

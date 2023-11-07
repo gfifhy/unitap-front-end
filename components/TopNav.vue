@@ -8,11 +8,6 @@ onMounted(() => {
   online.value = computed(() => account.isLoggedIn)
 });
 
-const test = async () => {
-  const a = await user.getViolations()
-  console.log(a)
-}
-
 </script>
 
 
@@ -30,7 +25,6 @@ const test = async () => {
       placeholder="Search..."
     />
     <div>welcome back, {{account.user.first_name +' '+ account.user.last_name }}</div>
-     <UButton label="test" @click="test"/>
   </section>
 
   <section class='links' v-if="!online">

@@ -79,6 +79,7 @@
     --article-p: 3em;
     --sz-h1: 4.5rem;
     --article-split-dir: row;
+    --article-aside-p: 2.5rem;
   }
 }
 
@@ -96,6 +97,7 @@
     --article-p: 1.7em;
     --sz-h1: 4rem;
     --article-split-dir: column;
+    --article-aside-p: 0;
   }
 
 }
@@ -105,7 +107,7 @@
     --login-form-w: 100%;
     --login-img-mh: 120px;
     --login-p: 1em;
-    --sz-h1: 3.2rem;
+    --sz-h1: 2.7rem;
   }
 }
 
@@ -203,7 +205,7 @@ div#double[id="double"] {
  * Elements
  * -------------------------------------------------------------------------- */
 
-form.user { /* signup/login form */
+form.user {
 
   > footer {
     @apply flex justify-between p-3;

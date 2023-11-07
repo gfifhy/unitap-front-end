@@ -13,6 +13,9 @@ export default {
   methods: {
     updateText(e){
       this.$emit('update:modelValue', e.currentTarget.value)
+    },
+    clipboard(val) {
+      navigator.clipboard.writeText(val)
     }
   }
 };
@@ -20,7 +23,7 @@ export default {
 
 <template>
 
-  <FormLabel :hint="hint" :label="label" />
+  <FormLabel v-if="label" :hint="hint" :label="label" :disabled="disabled"/>
 
   <UInput @input="updateText" :value="modelValue"
     :type="type" :name="name" :placeholder="placeholder"
@@ -29,14 +32,29 @@ export default {
     :ui="{ icon: { trailing: { pointer: '' } } }">
 
     <template #trailing>
-      <UButton v-show="modelValue !== ''" @click="modelValue = ''"
+
+      <UButton v-show="modelValue !== ''" @click="modelValue = ''" v-if="!disabled"
         icon="i-heroicons-x-mark-20-solid" 
         color="gray" variant="link" 
         :padded="false" tabindex="-1"
       />
+
+      <UButton @click="clipboard(modelValue)" v-else
+        icon="i-heroicons-clipboard-20-solid" 
+        color="gray" variant="link" 
+        :padded="false" tabindex="-1"
+      />
+
     </template>
 
   </UInput>
 
 </template>
 
+<style scoped>
+
+[disabled="true"] {
+  opacity: .3;
+}
+
+</style>

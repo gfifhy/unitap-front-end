@@ -1,6 +1,6 @@
 import type { UseFetchOptions } from 'nuxt/app'
 
-export function doRequest<T>(
+export async function doRequest<T>(
   path: string,
   options: UseFetchOptions<T> = {}
 ) {
@@ -9,32 +9,52 @@ export function doRequest<T>(
 
   const token = useCookie('XSRF-TOKEN')
 
-  let headers: any = {
+  let head: any = {
     accept: "application/json",
     "content-type": "application/json",
     referer: ($cfg.app.protocol + $cfg.app.host.slice(0, -1)) as string
   }
 
   if (token.value) {
-    headers['X-XSRF-TOKEN'] = token.value as string
+    head['X-XSRF-TOKEN'] = token.value as string
   }
 
   if (process.server) {
-    headers = {
-      ...headers,
+    head = {
+      ...head,
       ...useRequestHeaders(["cookie"]),
     }
   }
-  
-  return useFetch($cfg.api.protocol + $cfg.api.host + path,
+
+  let res;
+  let err;
+
+  await useFetch($cfg.api.protocol + $cfg.api.host + path,
     {
       credentials: "include",
       watch: false,
       ...options,
       headers: {
-        ...headers,
+        ...head,
         ...options?.headers
+      },
+      onRequest({ request, options }) {
+        console.warn("Request:")
+        console.info(options)
+        options.headers = options.headers || {}
+      },
+      onResponse({ request, response, options }) {
+        console.warn("Response:")
+        console.info(response)
+        res = response._data
+      },
+      onResponseError({ response }) {
+        console.error('Error: ' + response.status)
+        console.info(response)
+        err = response._data
       }
-    })
+    }
+  )
 
+  return { res, err }
 }

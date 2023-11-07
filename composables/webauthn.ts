@@ -20,7 +20,7 @@ export default class WebAuthn {
      * @param headers {{string}}
      * @returns {Promise<Response>}
      */
-    #fetch(data, route, headers = {}, meth) {
+    async #fetch(data, route, headers = {}, meth) {
 
         const requestOptions = {
             method: meth ? "POST" : "GET",
@@ -30,11 +30,15 @@ export default class WebAuthn {
         if (meth) {
             requestOptions.body = JSON.stringify(data);
         }
-  
-        return doRequest(
+
+        const { res, err } = await doRequest(
             route,
             requestOptions
         );
+
+        if (err) console.error(err);
+  
+        return res
     }
 
     /**
@@ -48,7 +52,7 @@ export default class WebAuthn {
      */
     async register(request = {}, response = {}) {
         const optionsResponse = await this.#fetch(request, this.#routes.registerOptions);
-        const publicKey = this.#parseIncomingServerOptions(optionsResponse.data._rawValue);
+        const publicKey = this.#parseIncomingServerOptions(optionsResponse);
         const credentials = await navigator.credentials.create({publicKey});
         const publicKeyCredential = this.#parseOutgoingCredentials(credentials);
 
@@ -69,7 +73,7 @@ export default class WebAuthn {
      */
     async login(request = {}, response = {}) {
         const optionsResponse = await this.#fetch(request, this.#routes.loginOptions);
-        const publicKey = this.#parseIncomingServerOptions(optionsResponse.data._rawValue);
+        const publicKey = this.#parseIncomingServerOptions(optionsResponse);
         const credentials = await navigator.credentials.get({publicKey});
         const publicKeyCredential = this.#parseOutgoingCredentials(credentials);
 
