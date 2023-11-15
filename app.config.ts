@@ -36,9 +36,6 @@ export default defineAppConfig({
   ],
   ui: {
     primary: 'green',
-    gray: 'neutral',
-    notifications: {
-      position: 'top-10 left-0 bottom-auto'
-    }
+    gray: 'neutral'
   },
 })

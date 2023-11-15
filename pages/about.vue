@@ -1,4 +1,4 @@
-<template><article id='about'>
+<template>  <TopNav />  <article id='about'>
 
 <header>
   <h1><span class='grade'>Revolutionizing Transactions</span>: Harnessing Secure NFC Technology for Seamless Transactions</h1>
@@ -61,7 +61,7 @@
     <div>
       <h2>Creators</h2>
   
-      <span>Built in partnership with the team at UniTeam</span>
+      <span>Built in partnership with the team at Algoplex</span>
 
       <hr>
 

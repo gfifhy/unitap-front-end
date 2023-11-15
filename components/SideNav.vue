@@ -22,31 +22,9 @@ async function logout() {
   })
 }
 
-async function webauth() {
-  const res = await account.wRegister();
-  if (res) { console.warn(res); }
-  else { navigateTo('/') }
-}
-
 onMounted(() => {
   online.value = computed(() => account.isLoggedIn)
-  window.addEventListener("resize", handleWindowSizeChange);
-  handleWindowSizeChange();
-});
-onUnmounted(() => {
-  window.removeEventListener("resize", handleWindowSizeChange);
-});
-
-const handleWindowSizeChange = () => {
-  const timeoutId = window.setTimeout(() => {}, 0);
-  for (let id = timeoutId; id >= 0; id -= 1) {
-    window.clearTimeout(id);
-  }
-
-  setTimeout(() => {
-    console.log(window.outerWidth)
-  }, 200);
-};
+})
 
 
 </script>
@@ -74,16 +52,27 @@ const handleWindowSizeChange = () => {
       @click="navigateTo('/manage')" v-if="account.user?.role.name === 'Admin'"/>
 
     <ButtonTooltip text="Send" hotkey="C" 
-      variant="solid" icon="i-heroicons-paper-airplane" />
+      variant="solid" icon="i-heroicons-paper-airplane"
+      @click="navigateTo('/transact')" />
 
   </section>
 
 
   <footer>
 
-    <ButtonTooltip text="Notifications" icon="i-heroicons-inbox" 
-      hotkey="A" variant="soft" 
-      v-if="online"/>
+    <UPopover>
+
+      <ButtonTooltip text="Notifications" icon="i-heroicons-inbox" 
+        hotkey="A" variant="soft" 
+        v-if="online"/>
+
+      <template #panel>
+        <div class="p-4">
+          <NotificationPanel />
+        </div>
+      </template>
+
+    </UPopover>
 
     <UPopover>
 
@@ -98,13 +87,21 @@ const handleWindowSizeChange = () => {
             :icon="isDark ? 'i-heroicons-sun-20-solid' : 'i-heroicons-moon-20-solid'"
             @click="isDark = !isDark"/>
 
-          <UButton variant="ghost" label="Register Passkey"
-            icon="i-heroicons-finger-print"
-            @click="webauth" v-if="online"/>
+          <template v-if="online">
+            <UButton variant="ghost" label="History"
+              icon="i-heroicons-clock"
+              @click="navigateTo('/history')"/>
 
-          <UButton variant="ghost" label="Logout"
-            icon="i-heroicons-arrow-left-on-rectangle-20-solid"
-            @click="logout" v-if="online"/>
+            <UButton variant="ghost" label="Settings"
+              icon="i-heroicons-wrench"
+              @click="navigateTo('/settings/profile')"/>
+
+            <UDivider />
+
+            <UButton variant="ghost" label="Logout"
+              icon="i-heroicons-arrow-left-on-rectangle-20-solid"
+              @click="logout"/>
+          </template>
 
         </div>
       </template>
@@ -154,13 +151,6 @@ header {
 footer {
   @apply flex;
   flex-direction: var(--sidenav-dir);
-}
-
-.ctxmenu {
-  @apply flex-col flex p-1;
-  button {
-    @apply w-[150px] h-11 justify-start;
-  }
 }
 
 </style>

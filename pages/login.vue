@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+useHead({ titleTemplate: 'Login - UniTap' })
+
 definePageMeta({ 
   middleware: 'signed-in',
 })
@@ -7,7 +9,7 @@ definePageMeta({
 </script>
 
 
-<template><div id='login'>
+<template>  <TopNav />  <div id='login'>
 
 <div id="double">
 

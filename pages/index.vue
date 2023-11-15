@@ -85,8 +85,7 @@ const history = [
 </script>
 
 
-<template><div id='dashboard'>
-
+<template>  <TopNav />  <div id='dashboard'>
 
   <section id="actions">
 
@@ -99,7 +98,7 @@ const history = [
         hotkey="E" variant="soft" @click=""/>
       <UButton variant="solid" label="Send Money"
         icon="i-heroicons-paper-airplane-20-solid"
-        @click=""/>
+        @click="navigateTo('/transact')"/>
     </div>
 
   </section>
@@ -118,7 +117,14 @@ const history = [
       <!-- single instance only per page -->
       <Chart :datasets="graph.datasets" :grid="graph.grid" :labels="graph.labels" />
 
-      <h4>Recent Transactions</h4>
+      <section id="actions">
+        <div><h4>Recent Transactions</h4></div>
+        <div class="buttons">
+          <UButton variant="ghost" label="View all"
+            trailingIcon="i-heroicons-archive-box"
+            @click="navigateTo('/history')"/>
+        </div>
+      </section>
 
       <UCard class="history" v-for="i in history">
         <div class="item">
@@ -162,7 +168,7 @@ const history = [
     @apply m-1 pl-2 pr-2;
 
     button {
-      @apply m-2;
+      @apply ml-2;
     }
   }
 
@@ -192,7 +198,7 @@ const history = [
 
 :deep(.history) {
 
-  @apply my-4;
+  @apply mb-4;
 
   > div {
     @apply p-3

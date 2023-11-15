@@ -1,39 +1,44 @@
 <script setup>
 
+useHead({ titleTemplate: 'Management - UniTap' })
+
 definePageMeta({ 
   middleware: 'admin',
 })
 
 const userdata = useUsersStore()
 
-const users = ref([])
+const users = ref({})
+const loading = ref(true)
 
 onMounted(async () => {
   users.value = await userdata.fetchUsers()
+  loading.value = false
 })
 
 const isOpen = ref(false)
 const targetUser = ref({})
 const editMode = ref(true)
 
-function initEdit(val) {
+const initEdit = (val) => {
   editMode.value = true
   targetUser.value = val
   isOpen.value = true
 }
 
-function initAdd(val) {
+const initAdd = (val) => {
   editMode.value = false
   isOpen.value = true
 }
 
-function updateUser(val) {
+const updateUser = (val) => {
   const egg = [ ...Object.values(users.value) ]
   const index = egg.findIndex(p => p.id == targetUser.value.id)
   users.value = { 
     ...users.value,
     [index]: { ...users.value[index], ...val } 
   }
+  console.log(users.value)
   isOpen.value = false
 }
 
@@ -59,23 +64,14 @@ function updateUser(val) {
 
   </section>
 
-  <section>
-    <div id='tiles'><template v-for="i in users">
-      <UCard id='entry' v-if="!i.deleted_at">
-
-        <UButton id='edit'
-          variant="ghost" icon="i-heroicons-pencil-square-20-solid"
-          @click="initEdit(i)"
-        />
-        <UAvatar id='avatar' :src="i.user_image" size="md" />
-
-        <template #footer>
-          <span id='name'>{{i.first_name +' '+i.last_name}}</span>
-          <span id='role'>{{i.role?.name}}</span>
-        </template>
-
-      </UCard>
-    </template></div>
+  <section id='tiles'>
+    <UserInfoCard_SK v-if="loading" 
+      v-for="i in 12" :key="i"
+    />
+    <template v-else v-for="i in users">
+      <UserInfoCard v-if="!i?.deleted_at" editButton :user="i" 
+        @editClicked="initEdit(i)" />
+    </template>
   </section>
 
   <UModal v-model="isOpen" :transition="false">
@@ -113,59 +109,9 @@ function updateUser(val) {
 }
 
 #tiles {
-  @apply mx-auto px-3 max-w-[1366px] grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] gap-x-4 gap-y-4
+  @apply 
+    mx-auto px-3 max-w-[1366px] grid gap-x-4 gap-y-4
+    grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] 
 }
 
-:deep(#entry) {
-  @apply h-[210px];
-  --avatar-sz: 6em;
-  --edit-pos: absolute;
-
-  div {
-    padding: var(--card-p, 1rem);
-  }
-
-  > div:first-of-type {
-    @apply flex justify-center items-center relative;
-
-    > #edit {
-      @apply z-[2] justify-center top-0 right-0 m-2;
-      position: var(--edit-pos);
-      > span {
-        @apply w-6 h-6
-      }
-    }
-
-    > span {
-      @apply h-[var(--avatar-sz)] w-[var(--avatar-sz)];
-      img {
-        @apply w-full h-full
-      }
-    }
-
-    + div {
-      @apply flex flex-col justify-center;
-
-      #name {
-        @apply text-primary-400 truncate
-      }
-
-      #role {
-        @apply text-gray-400
-      }
-
-    }
-
-  }
-
-}
-
-@media (max-width: 521px) {
-  #entry {
-    --card-p: .4em;
-    --avatar-sz: 3em;
-    --edit-pos: relative;
-    @apply flex flex-row h-[70px]
-  }
-}
 </style>

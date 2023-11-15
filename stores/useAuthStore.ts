@@ -81,15 +81,17 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function wLogin(email: string) { 
 
-    await new WebAuthn().login({
+    return await new WebAuthn().login({
       email: email,
     }, {
       remember: null,
     })
-    .then(res => user.value = res)
-    .catch(e => console.error(e))
-
-    navigateTo('/')
+    .then(res => {
+      user.value = res
+      navigateTo('/')
+    })
+    .catch(e => { return e })
+  
 
   }
 

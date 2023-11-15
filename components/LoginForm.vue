@@ -34,7 +34,8 @@ async function submit() {
     toast.add({
       icon: 'i-heroicons-shield-exclamation-solid',
       title: res,
-      description: 'Please try again.'
+      description: 'Please try again.',
+      color: red
     })
   } else {
     toast.add({ 
@@ -91,12 +92,10 @@ async function webauth() {
     <footer>
       <UButton 
         label="use passkey"
-        variant="ghost"
-        icon="i-heroicons-finger-print" 
-        @click="webauth" 
-        :loading="waLoading"
+        variant="ghost" icon="i-heroicons-finger-print"
+        @click="webauth" :loading="waLoading" :disabled="loading"
       />
-      <ColoredButton label="login" type="submit" :disabled="loading"/>
+      <ColoredButton label="login" type="submit" :disabled="loading || waLoading"/>
     </footer>
 
   </UForm>

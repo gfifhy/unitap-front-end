@@ -1,33 +1,17 @@
+<script setup lang="ts">
+useHead({ titleTemplate: 'UniTap' })
+</script>
+
 <template>
   <div id="app">
 
     <SideNav />
 
     <main>
-      <TopNav />
-      <NuxtPage />
+      <NuxtPage class="content"/>
     </main>
 
     <UNotifications />
 
   </div>
 </template>
-
-
-<style scoped>
-
-#app {
-
-  @apply flex h-screen w-screen overflow-hidden;
-  
-  flex-direction: var(--app-dir);
-
-} 
-
-main {
-
-  @apply flex flex-col w-full overflow-auto
-
-}
-
-</style>

@@ -87,6 +87,7 @@ async function submit(e) {
       title: 'Successfully added!',
       description: `New ${f.value.role.name}, ${f.value.email} added.`
     })
+    emit('update-user', { ...f.value })
     f.value = {
       first_name: '',
       last_name: '',

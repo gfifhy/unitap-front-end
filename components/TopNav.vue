@@ -18,16 +18,12 @@ onMounted(() => {
   </section>
 
   <section class='central' v-if="online">
-    <UInput
-      icon="i-heroicons-magnifying-glass-20-solid"
-      size="md"
-      :trailing="false"
-      placeholder="Search..."
-    />
-    <div>welcome back, {{account.user.first_name +' '+ account.user.last_name }}</div>
+    <div class="text-gray-400">
+      welcome back, {{account.user.first_name }}
+    </div>
   </section>
 
-  <section class='links' v-if="!online">
+  <section class='links' v-else>
     <NuxtLink variant='ghost' to="/about">about</NuxtLink>
     <NuxtLink variant='ghost' to="/">blog</NuxtLink>
     <NuxtLink variant='ghost' to="/">pages</NuxtLink>
@@ -38,8 +34,12 @@ onMounted(() => {
     <NuxtLink variant='ghost' to="/register">register</NuxtLink>
   </section>
 
-  <section class='terminal' v-if="online">
-
+  <section class='terminal' v-else>
+    <UInput
+      placeholder="Search..." class="mr-4"
+      icon="i-heroicons-magnifying-glass-20-solid" size="md"
+      :trailing="false"
+    />
   </section>
 
 </nav></template>
@@ -100,10 +100,7 @@ button {
 }
 
 .central {
-  @apply w-full h-full justify-start items-center p-4;
-  > div {
-    @apply m-2
-  }
+  @apply w-full h-full justify-start items-center pl-4;
 }
 
 .proximal {
