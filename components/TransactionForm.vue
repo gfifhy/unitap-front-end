@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import { validateForm } from '~/helpers/validateForm'
+
 const toast = useToast()
 
 const items = [{
@@ -24,14 +26,10 @@ const tabIdx = ref(0)
 const f = ref({ amount: "69" })
 const tap = ref({ data: '', test: '' })
 
-const validate = (state: any): FormError[] => {
-  const errors = []
-  const fields = ['amount']
-  const msg = (v) => {
-    if (!state[v]) errors.push({ path: v, message: 'Required' })
-  }
-  for (let i of fields) msg(i)
-  return errors
+const validate = (state) => {
+  return validateForm(state, [
+    'amount'
+  ])
 }
 
 function submit (form) {

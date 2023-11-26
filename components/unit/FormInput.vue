@@ -4,6 +4,7 @@ export default {
     modelValue: String,
     type: String,
     name: String,
+    min: Number,
     label: String,
     placeholder: String,
     hint: String,
@@ -21,14 +22,14 @@ export default {
 };
 </script>
 
-<template>
+<template><div>
 
   <FormLabel v-if="label" :hint="hint" :label="label" :disabled="disabled"/>
 
   <UInput @input="updateText" :value="modelValue"
     :type="type" :name="name" :placeholder="placeholder"
     :icon="icon" :disabled="disabled"
-    size="xl" color="white" 
+    size="xl" color="white" :min="min"
     :ui="{ icon: { trailing: { pointer: '' } } }">
 
     <template #trailing>
@@ -49,7 +50,7 @@ export default {
 
   </UInput>
 
-</template>
+</div></template>
 
 <style scoped>
 

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 
-import type {
-  FormError
-} from '@nuxt/ui/dist/runtime/types'
+import { validateForm } from '~/helpers/validateForm'
 
 const tabs = [
   {
@@ -59,17 +57,12 @@ const setRole = () => {
   }
 }
 
-const validate = (state: any): FormError[] => {
-  const errors = []
-  const fields = ['first_name', 'last_name', 'guardian_first_name', 
+const validate = (state) => {
+  return validateForm(state,
+    ['first_name', 'last_name', 'guardian_first_name', 
     'guardian_last_name', 'student_id', 'email', 'contact',
     'guardian_contact', 'password', 'password_confirmation'
-  ]
-  const msg = (v) => {
-    if (!state[v]) errors.push({ path: v, message: 'Required' })
-  }
-  for (let i of fields) msg(i)
-  return errors
+  ])
 }
 
 async function submit(e) {

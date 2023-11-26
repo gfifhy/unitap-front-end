@@ -19,7 +19,7 @@ onMounted(() => {
 
   <section class='central' v-if="online">
     <div class="text-gray-400">
-      welcome back, {{account.user.first_name }}
+      welcome back, {{account.user?.first_name }}
     </div>
   </section>
 

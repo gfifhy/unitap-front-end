@@ -4,7 +4,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 
-
 :root {
   --c-primary: #5bbb71;
   --c-secondary: #fbbf24;
@@ -213,6 +212,10 @@ div#double[id="double"] {
   > aside {
     width: var(--login-form-w);
   }
+}
+
+.sbs {
+  @apply flex flex-row justify-evenly items-center gap-x-2
 }
 
 /**

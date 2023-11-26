@@ -1,8 +1,6 @@
 <script setup lang="ts">
 
-import type {
-  FormError
-} from '@nuxt/ui/dist/runtime/types'
+import { validateForm } from '~/helpers/validateForm'
 
 const tabs = [
   {
@@ -53,14 +51,10 @@ const setRole = () => {
   }
 }
 
-const validate = (state: any): FormError[] => {
-  const errors = []
-  const fields = ['id','role','first_name','last_name','email']
-  const msg = (v) => {
-    if (!state[v]) errors.push({ path: v, message: 'Required' })
-  }
-  for (let i of fields) msg(i)
-  return errors
+const validate = (state) => {
+  return validateForm(state, [
+    'id','role','first_name','last_name','email'
+  ])
 }
 
 const onTab = async () => {
@@ -229,11 +223,6 @@ button[name="delete"] {
   &:hover {
     @apply bg-rose-600/10
   }
-}
-
-.sbs {
-  @apply flex flex-row justify-evenly items-center
-
 }
 
 </style>

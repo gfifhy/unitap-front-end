@@ -1,21 +1,16 @@
 <script setup lang="ts">
 
-import type { 
-  FormError
-} from '@nuxt/ui/dist/runtime/types'
+import { validateForm } from '~/helpers/validateForm'
 
 const f = ref({
   email: 'umakadmin.1972@umak.edu.ph',
   password: 'UmakAdmin@#1972!',
 })
 
-const validate = (state: any): FormError[] => {
-  const errors = []
-  if (!state.email)
-    errors.push({ path: 'email', message: 'Required' })
-  if (!state.password)
-    errors.push({ path: 'password', message: 'Required' })
-  return errors
+const validate = (state) => {
+  return validateForm(state, [
+    'email','password'
+  ])
 }
 
 const toast = useToast()

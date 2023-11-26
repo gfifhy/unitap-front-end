@@ -33,10 +33,18 @@ onMounted(() => {
 <style scoped>
 
 #user {
+  --dir: row;
   @apply flex gap-x-4;
+  flex-direction: var(--dir);
 
   > div {
     @apply min-w-[260px]
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  #user {
+    --dir: column;
   }
 }
 

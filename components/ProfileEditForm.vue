@@ -1,9 +1,6 @@
 <script setup lang="ts">
 
-import type {
-  FormError
-} from '@nuxt/ui/dist/runtime/types'
-
+import { validateForm } from '~/helpers/validateForm'
 
 const f = ref({
   first_name: '',
@@ -20,14 +17,10 @@ const loading = useState('loading', () => false)
 const waLoading = useState('waLoading', () => false)
 const verifyModal = ref(false)
 
-const validate = (state: any): FormError[] => {
-  const errors = []
-  const fields = ['first_name','last_name','email','contact']
-  const msg = (v) => {
-    if (!state[v]) errors.push({ path: v, message: 'Required' })
-  }
-  for (let i of fields) msg(i)
-  return errors
+const validate = (state) => {
+  return validateForm(state, [
+    'first_name','last_name','email','contact'
+  ])
 }
 
 onMounted(() => {

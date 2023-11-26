@@ -44,8 +44,9 @@ onMounted(() => {
       variant="outline" icon="i-heroicons-rectangle-group-20-solid" 
       @click="navigateTo('/login')" />
 
-    <ButtonTooltip text="Analytics" hotkey="B" 
-      variant="outline" icon="i-heroicons-chart-pie-20-solid" />
+    <ButtonTooltip text="Shop" hotkey="S" 
+      variant="outline" icon="i-heroicons-building-storefront-20-solid"
+      @click="navigateTo('/shop')" />
 
     <ButtonTooltip text="Manage Accounts" hotkey="B" 
       variant="outline" icon="i-heroicons-user-group-20-solid"
@@ -60,11 +61,10 @@ onMounted(() => {
 
   <footer>
 
-    <UPopover>
+    <UPopover v-if="online">
 
       <ButtonTooltip text="Notifications" icon="i-heroicons-inbox" 
-        hotkey="A" variant="soft" 
-        v-if="online"/>
+        hotkey="A" variant="soft" />
 
       <template #panel>
         <div class="p-4">

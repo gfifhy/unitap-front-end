@@ -4,26 +4,38 @@ definePageMeta({
   middleware: ['signed-out'],
 })
 
-const account = useAuthStore()
+const loading = ref(true)
 
-const account_info = [
-  {
-  '‏': 'Type',
-  '‎': account.user?.role.name,
-  },
-  {
-  '‏': 'Number',
-  '‎': account.identity?.student?.student_id || '',
-  },
-  {
-  '‏': 'Status',
-  '‎': account.identity?.wallet?.isDisabled ? 'Disabled' : 'Active',
-  },
-  {
-  '‏': 'Balance',
-  '‎': 'php ' + (account.identity?.wallet?.balance || '234,256,267'),
-  },
-]
+const account_info = ref([])
+
+onMounted(() => {
+  const account = useAuthStore()
+  account_info.value = [
+    {
+    '‏': 'Type',
+    '‎': account.user?.role.name,
+    },
+    {
+    '‏': 'Status',
+    '‎': account.identity?.wallet?.isDisabled ? 'Disabled' : 'Active',
+    },
+    {
+    '‏': 'Balance',
+    '‎': 'php ' + (account.identity?.wallet?.balance || '234,256,267'),
+    },
+  ]
+  if (account.user?.role.slug !== 'admin' && account.user?.role.slug !== 'store') {
+    account_info.value.unshift({
+      '‏': 'Number',
+      '‎': account.identity?.student?.student_id || '',
+    })
+
+  }
+
+  loading.value = false
+})
+
+
 
 const graph = {
   datasets: [
@@ -94,8 +106,9 @@ const history = [
     </div>
 
     <div class="buttons">
-      <ButtonTooltip text="Export to PDF" icon="i-heroicons-arrow-down-on-square-stack-20-solid" 
-        hotkey="E" variant="soft" @click=""/>
+      <ButtonTooltip text="Export to PDF" hotkey="E" variant="soft"
+        icon="i-heroicons-arrow-down-on-square-stack-20-solid" 
+        @click=""/>
       <UButton variant="solid" label="Send Money"
         icon="i-heroicons-paper-airplane-20-solid"
         @click="navigateTo('/transact')"/>
@@ -108,12 +121,24 @@ const history = [
 
     <div class="account-info">
       <h4>Account</h4>
-      <UTable :rows="account_info" />
+      <UTable
+        :loading="loading"
+        :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid',
+          label: 'Loading...' }"
+        :rows="account_info" />
     </div>
 
     <div class="stats">
 
-      <h4>Statistics</h4>
+      <section id="actions">
+        <div><h4>Statistics</h4></div>
+        <div class="buttons">
+          <UButton variant="ghost" label="View all"
+            trailingIcon="i-heroicons-chart-pie"
+            @click=""/>
+        </div>
+      </section>
+
       <!-- single instance only per page -->
       <Chart :datasets="graph.datasets" :grid="graph.grid" :labels="graph.labels" />
 

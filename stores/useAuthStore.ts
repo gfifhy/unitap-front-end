@@ -51,7 +51,8 @@ export const useAuthStore = defineStore('auth', () => {
     if (err) {
       return Error("Incorrect username or password.")
     }
-    user.value = res
+    user.value = res?.user
+    identity.value = res?.user_data
     navigateTo('/')
     return false
 
@@ -86,8 +87,8 @@ export const useAuthStore = defineStore('auth', () => {
     }, {
       remember: null,
     })
-    .then(res => {
-      user.value = res
+    .then(async res => {
+      await fetchUser();
       navigateTo('/')
     })
     .catch(e => { return e })
