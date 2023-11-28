@@ -227,13 +227,20 @@ form.user {
   > footer {
     @apply flex justify-between p-3;
     > button:last-child {
-      width: 140px
+      width: 140px;
     }
   }
   > div {
     @apply mt-2 mb-2;
   }
 
+  &[disabled]:not([disabled="false"]) {
+    input, textarea, button {
+      pointer-events: none;
+      opacity: .4;
+
+    }
+  }
 }
 
 .ctxmenu { /* context menu */

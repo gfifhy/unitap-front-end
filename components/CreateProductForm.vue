@@ -1,38 +1,46 @@
 <script setup lang="ts">
 
-import { validateForm } from '~/helpers/validateForm'
+const loading = ref(false)
 
 const f = ref({
-  product_name: '',
-  description: '',
-  price: '',
-  stock: ''
-})
-
-const productimg = ref({
+  product_name: 'Sandwich',
+  description: 'Egg',
+  price: '69',
+  stock: '5',
   image : null,
-  imageUrl: null
+  imgurl: null
 })
 
-const validate = (state) => {
+const validate = state => {
   return validateForm(state, [
-    'product_name','description','price', 'stock'
+    'product_name','description','price', 'stock', 'image'
   ])
 }
 
-const imgSelect = (e) => {
-  const file = e.target.files[0]
-  productimg.value.image = file
-  productimg.value.imageUrl = URL.createObjectURL(file)
-}
-
 async function submit(e: FormSubmitEvent<any>) {
+  
+  loading.value = true
 
-  console.log({ ...e.data, image: productimg.value.image })
+  const { res, err } = await useProductStore().addProduct(e.data)
 
-  //const { error } = await useAuthStore().register(f.value)
+  const toast = useToast()
 
-  //if(!error.value) { navigateTo("/") } else { console.log(error) }
+  if (err) {
+    toast.add({
+      icon: "i-heroicons-exclamation-circle-20-solid",
+      title: 'Operation failed!',
+      description: err.message.join('; '),
+      color: 'red'
+    })
+  } else {
+    toast.add({
+      icon: "i-heroicons-check-circle-20-solid",
+      title: "Product added!",
+      description: res.product_name,
+    })
+    f.value = clearObject(f.value)
+  }
+  loading.value = false
 
 }
 
@@ -40,11 +48,11 @@ async function submit(e: FormSubmitEvent<any>) {
 
 <template>
 
-  <UForm class="user" :validate="validate" :state="f" @submit="submit">
+  <UForm class="user" :validate="validate" :validateOn="['submit']" :state="f" @submit="submit" :disabled="loading ?? false">
     
     <FormInput placeholder="Sandwich" icon="i-heroicons-cube-solid"
       label="Name" type="text" name="product_name"
-      v-model="f.name"
+      v-model="f.product_name"
     />
     <UTextarea
       autoresize
@@ -57,41 +65,21 @@ async function submit(e: FormSubmitEvent<any>) {
         v-model="f.price"
       />
       <FormInput placeholder="0" icon="i-tabler-hash"
-        label="Stock" type="number" name="Stock" min="-1"
+        label="Stock" type="number" name="stock" min="-1"
         v-model="f.stock"
       />
     </div>
-    <FormLabel label="Image" />
-    <UInput type="file" accept="image/*" @change="imgSelect"/>
-
-    <div id="preview" v-if="productimg.imageUrl" class="max-w-[240px] mx-auto">
-      <ShopItemCard :name="f.name || 'Sandwich'" :price="f.price || '0.00'" :img="productimg.imageUrl"/>
-    </div>
-
+    <FilePicker v-model="f.image" @onFileSelect="f.imgurl = $event">
+      <ShopItemCard :name="f.name || 'Sandwich'" :price="f.price || '0.00'"
+        :img="f.imgurl" v-if="f.imgurl" />
+    </FilePicker>
 
     <footer>
       <div></div>
-      <ColoredButton type="submit" label="create"/>
+      <UButton label="create" type="submit" trailingIcon="i-tabler-cube-plus"
+        :loading="loading" class="h-12 w-1 justify-end" />
     </footer>
 
   </UForm>
 
 </template>
-
-
-<style scoped>
-
-:deep(input[type=file]) {
-  &::file-selector-button {
-    @apply border-transparent bg-primary-950
-           text-primary cursor-pointer px-2 py-1 rounded-[0.2em]
-    ;
-    
-    &:hover {
-      @apply bg-primary-900 text-gray-100
-    }
-
-  }
-}
-
-</style>

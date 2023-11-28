@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-import { validateForm } from '~/helpers/validateForm'
-
 const tabs = [
   {
     key: 'account',
@@ -51,7 +49,7 @@ const setRole = () => {
   }
 }
 
-const validate = (state) => {
+const validate = state => {
   return validateForm(state, [
     'id','role','first_name','last_name','email'
   ])
@@ -138,7 +136,7 @@ async function test() {
 
 <template>  <UTabs :items="tabs" class="w-full" @change="onTab">  <template #item="{ item }">
 
-<UForm class="user" :validate="validate" :state="f" @submit="submit(item.key)">
+<UForm class="user" :validate="validate" :validateOn="['submit']" :state="f" @submit="submit(item.key)">
 
   <template v-if="item.key === 'account'" class="space-y-3">
 

@@ -17,6 +17,11 @@ definePageMeta({
   </div>
 
   <div class="buttons">
+
+    <UButton label="back to my shop"
+      variant="ghost" icon="i-heroicons-arrow-long-left"
+      @click="navigateTo('/myshop')"
+    />
     <UPopover mode="hover">
 
       <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
@@ -52,7 +57,7 @@ definePageMeta({
   
   div {
 
-    @apply m-1 pl-2 pr-2;
+    @apply m-1 pl-2 pr-2 flex;
 
     button {
       @apply m-2;

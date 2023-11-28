@@ -6,6 +6,8 @@ definePageMeta({
   middleware: 'signed-out',
 })
 
+const loading = ref(true)
+
 const product = ref({
   id: useRoute().params.id,
   product_name: 'Black Hat G',
@@ -15,8 +17,9 @@ const product = ref({
   image: '/tui.jpg'
 })
 
-onMounted(() => {
-  //product.value = 
+onMounted(async () => {
+  //product.value = await useProductStore().fetchProduct(useRoute().params.id)
+  loading.value = false
 })
 
 </script>
@@ -56,21 +59,21 @@ onMounted(() => {
   <div id="double">
 
     <section>
-      <NuxtImg :src="product.image" />
+      <NuxtImg :src="product?.image" />
     </section>
 
     <aside>
 
       <pre class="invisible">{{ $route.params.id }}</pre>
-      <h2>{{ product.product_name }}</h2>
+      <h2>{{ product?.product_name }}</h2>
       <div id='price'>
-        <UIcon name="i-tabler-currency-peso"/> {{ product.price }}
+        <UIcon name="i-tabler-currency-peso"/> {{ product?.price }}
       </div>
 
       <UDivider />
 
       <UForm class="user">
-        <FormInput placeholder="1" :hint="product.stock + ' items left'" icon="i-tabler-brand-x"
+        <FormInput placeholder="1" :hint="product?.stock + ' items left'" icon="i-tabler-brand-x"
           label="Quantity" type="number" name="quantity" min="1"
         />
 
@@ -94,7 +97,7 @@ onMounted(() => {
   <div id="double" class="details">
 
     <section id="desc">
-      {{ product.description }}
+      {{ product?.description }}
     </section>
 
     <aside>

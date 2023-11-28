@@ -1,13 +1,11 @@
 <script setup lang="ts">
 
-import { validateForm } from '~/helpers/validateForm'
-
 const f = ref({
   email: 'umakadmin.1972@umak.edu.ph',
   password: 'UmakAdmin@#1972!',
 })
 
-const validate = (state) => {
+const validate = state => {
   return validateForm(state, [
     'email','password'
   ])
@@ -70,7 +68,7 @@ async function webauth() {
 
 <template>
 
-  <UForm class="user" :validate="validate" :state="f" @submit="submit">
+  <UForm class="user" :validate="validate" :validateOn="['submit']" :state="f" @submit="submit">
 
     <FormInput type="text" name="username" placeholder="Username"
       icon="i-heroicons-user-20-solid"

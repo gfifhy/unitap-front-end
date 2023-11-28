@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-import { validateForm } from '~/helpers/validateForm'
-
 const toast = useToast()
 
 const items = [{
@@ -57,7 +55,7 @@ function submit (form) {
 
 <template #item="{ item }">
 
-  <UForm class="user" :validate="validate" :state="f" @submit="submit(f)">
+  <UForm class="user" :validate="validate" :validateOn="['submit']" :state="f" @submit="submit(f)">
 
   <UCard>
     

@@ -14,6 +14,7 @@ const initPasswordCh = () => {
 }
 
 async function webauth() {
+  const toast = useToast()
   const res = await account.wRegister();
 
   if (res) {

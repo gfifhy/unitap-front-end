@@ -4,7 +4,7 @@ export default {
     modelValue: String,
     type: String,
     name: String,
-    min: Number,
+    min: String,
     label: String,
     placeholder: String,
     hint: String,

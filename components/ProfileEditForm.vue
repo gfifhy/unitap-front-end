@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-import { validateForm } from '~/helpers/validateForm'
-
 const f = ref({
   first_name: '',
   last_name: '',
@@ -64,7 +62,7 @@ async function test() {
 
 <template>
 
-<UForm class="user" :validate="validate" :state="f" @submit="submit">
+<UForm class="user" :validate="validate" :validateOn="['submit']" :state="f" @submit="submit">
   <FormInput placeholder="Samuelo"
     label="First name" name="first_name"
     icon="i-heroicons-identification-20-solid"

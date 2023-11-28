@@ -8,6 +8,10 @@ export const validateForm = (state: any, fields: string[]): FormError[] => {
   for (let i of fields) msg(i)
   if (errors.length > 0) {
     console.error('Form validation errors:', errors)
+    useToast().add({
+      title: 'Incomplete data',
+      description: `Missing { ${errors[0].path} }`
+    })
   } 
   return errors
 }

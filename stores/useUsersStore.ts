@@ -1,31 +1,11 @@
 import { defineStore } from "pinia"
 
-type Identity = {
-  //'nfc_id': String|null
-  'first_name': String
-  'middle_name': String|null
-  'last_name': String
-  'student_id': String
-  'email': String
-  'role': any
-  'contact': String
-  'password': String
-  'guardian_first_name': String
-  'guardian_middle_name': String|null
-  'guardian_last_name': String
-  'guardian_contact': String
-  //'user_image': String|null
-  //'user_signature': String|null
-}
-
 export const useUsersStore = defineStore('users', () => {
 
   const violations = ref(null)
 
   const getViolations = async () => {
-    if (!violations.value) {
-      await fetchViolation()
-    } 
+    if (!violations.value) await fetchViolation()
     return violations.value
   }
 
@@ -34,17 +14,16 @@ export const useUsersStore = defineStore('users', () => {
       const { res } = await doRequest(`api/admin/users/${id}`)
       return res
     }
-    await useFetch('http://127.0.0.1') // shit workaround for first fetch err
+    await useFetch('http://0.0.0.0') // shit workaround for first fetch err
     const { res } = await doRequest('api/admin/users')
     return res.data
   }
 
-  async function addStudent(id: Identity) { // replace with add user
-    let { res, err } = await doRequest('api/admin/student', {
+  async function addUser(id, isStaff: Boolean) {
+    const { res, err } = await doRequest(`api/admin/${isStaff ? 'staff' : 'student'}`, {
       method: "POST",
-      body: id
+      body: convertForm(id)
     })
-    res = res.data
     return { res, err }
   }
 
@@ -66,7 +45,7 @@ export const useUsersStore = defineStore('users', () => {
 
   return { 
     fetchUsers,
-    addStudent,
+    addUser,
     editUser,
     getViolations,
   }
@@ -77,4 +56,22 @@ export const useUsersStore = defineStore('users', () => {
 function removeNullProperties(obj) {
   const filteredEntries = Object.entries(obj).filter(([key, value]) => value !== null);
   return Object.fromEntries(filteredEntries);
+}
+
+function convertForm(obj) {
+  const formData: FormData = new FormData();
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (Object.prototype.toString.call(value) === '[object Object]') {
+        formData.append(key, JSON.stringify(value));
+    } else {
+        formData.append(key, value);
+    }
+  }
+  
+  for (var pair of formData.entries()) {
+    console.warn(pair[0]+ ', ' + pair[1]); 
+  }
+
+  return formData
 }

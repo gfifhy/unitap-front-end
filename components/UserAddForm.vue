@@ -1,19 +1,17 @@
 <script setup lang="ts">
 
-import { validateForm } from '~/helpers/validateForm'
-
 const tabs = [
-  {
-    key: 'names',
-    label: 'Names'
-  },
-  {
-    key: 'contact',
-    label: 'Contact'
-  },
   {
     key: 'credential',
     label: 'Credential'
+  },
+  {
+    key: 'background',
+    label: 'Background'
+  },
+  {
+    key: 'identity',
+    label: 'Identity'
   }
 ]
 
@@ -33,17 +31,18 @@ const f = ref({
   role: {
     name: 'Student',
     slug: 'student',
-  }
+  },
+  nfc_id: '~',
+  store_name: 'CoolStore',
+  user_image: null,
+  imgurl: null,
+  user_signature: null,
+  sigurl: null,
+  store_logo: null,
+  logourl: null
 })
 
 const emit = defineEmits(["update-user"])
-const props = defineProps<{ targetUser: any }>()
-const prop_target = computed(() => props.targetUser); 
-const target = ref()
-const wallet = ref()
-
-const toast = useToast()
-const users = useUsersStore()
 
 const tabIdx = ref(0)
 const role_sel = ref(roles[0])
@@ -57,16 +56,22 @@ const setRole = () => {
   }
 }
 
-const validate = (state) => {
+const validate = state => {
   return validateForm(state,
     ['first_name', 'last_name', 'guardian_first_name', 
     'guardian_last_name', 'student_id', 'email', 'contact',
-    'guardian_contact', 'password', 'password_confirmation'
+    'guardian_contact', 'password', 'password_confirmation',
+    'store_name'
   ])
 }
 
 async function submit(e) {
-  const {res, err} = await users.addStudent(e.data)
+
+  const users = useUsersStore()
+  const toast = useToast()
+
+  const req = e.data
+  const {res, err} = await users.addUser(req, req.role.slug !== 'student' ?? true)
   if (err) {
     toast.add({
       icon: "i-heroicons-exclamation-circle-20-solid",
@@ -80,23 +85,7 @@ async function submit(e) {
       title: 'Successfully added!',
       description: `New ${f.value.role.name}, ${f.value.email} added.`
     })
-    emit('update-user', { ...f.value })
-    f.value = {
-      first_name: '',
-      last_name: '',
-      guardian_first_name: '',
-      guardian_last_name: '',
-      student_id: '',
-      email: '',
-      contact: '',
-      guardian_contact: '',
-      password: '',
-      password_confirmation: '',
-      role: {
-        name: '',
-        slug: '',
-      }
-    }
+    emit('update-user', { ...f.value, ...res.user })
   }
 }
 
@@ -104,65 +93,25 @@ async function submit(e) {
 
 <template>  <UTabs :items="tabs" class="w-full" v-model="tabIdx">  <template #item="{ item }">
 
-<UForm class="user" :validate="validate" :state="f" @submit="submit">
+<UForm class="user" :validate="validate" :validateOn="['submit']" :state="f" @submit="submit">
 
-  <template v-if="item.key === 'names'" class="space-y-3">
+  <template v-if="item.key === 'credential'" class="space-y-3">
 
-    <FormInput placeholder="Samuelo"
-      label="First name" name="first_name"
-      icon="i-heroicons-identification-20-solid"
-      v-model="f.first_name"
-    />
-    <FormInput placeholder="Buelo"
-      label="Last name" name="last_name"
-      icon="i-heroicons-identification-20-solid"
-      v-model="f.last_name"
-    />
-    <FormInput placeholder="Samuelita"
-      label="Guardian first name" name="guardian_first_name"
-      icon="i-heroicons-identification-20-solid"
-      v-model="f.guardian_first_name"
-    />
-    <FormInput placeholder="Buelo"
-      label="Guardian last name" name="guardian_last_name"
-      icon="i-heroicons-identification-20-solid"
-      v-model="f.guardian_last_name"
-    />
-  </template>
-
-  <template v-else-if="item.key === 'contact'" class="space-y-3">
-
-    <FormInput placeholder="samuelo@example.com"
-      label="E-mail address" name="email"
-      icon="i-heroicons-at-symbol-20-solid"
-      v-model="f.email"
+    <FormInput placeholder="~"
+      label="NFC ID" name="nfcid"
+      icon="i-tabler-nfc"
+      v-model="f.nfc_id"
     />
     <FormInput placeholder="09xxx--x"
       label="Contact #" type="number" name="contact"
       icon="i-heroicons-hashtag-20-solid"
       v-model="f.contact"
     />
-    <FormInput placeholder="09xxx--x"
-      label="Guardian Contact #" type="number" name="guardian_contact"
-      icon="i-heroicons-hashtag-20-solid"
-      v-model="f.guardian_contact"
+    <FormInput placeholder="samuelo@example.com"
+      label="E-mail address" name="email"
+      icon="i-heroicons-at-symbol-20-solid"
+      v-model="f.email"
     />
-
-  </template>
-
-  <template v-else-if="item.key === 'credential'" class="space-y-3">
-    <FormInput placeholder="K6942069"
-      label="Student ID" name="student_id"
-      icon="i-heroicons-identification-20-solid"
-      v-model="f.student_id" :disabled="f.role.slug !== 'student'"
-    />
-    <USelectMenu v-model="role_sel" :options="roles" @change="setRole">
-      <template #label>
-        <UIcon v-if="role_sel.icon" :name="role_sel.icon" class="w-4 h-4" />
-        {{ role_sel.label }} Role
-      </template>
-    </USelectMenu>
-
     <FormInput placeholder="a-z, A-Z, 0-9, !@#$~" hint="at least 8 characters"
       label="Password" type="password" name="password"
       icon="i-heroicons-key-20-solid"
@@ -173,6 +122,77 @@ async function submit(e) {
       icon="i-heroicons-hashtag-20-solid"
       v-model="f.password_confirmation"
     />
+
+  </template>
+
+  <template v-else-if="item.key === 'background'" class="space-y-3">
+
+    <div class="sbs">
+      <FormInput placeholder="Samuelita"
+        label="Guardian first name" name="guardian_first_name"
+        icon="i-heroicons-identification-20-solid"
+        v-model="f.guardian_first_name"
+      />
+      <FormInput placeholder="Buelo"
+        label="Guardian last name" name="guardian_last_name"
+        icon="i-heroicons-identification-20-solid"
+        v-model="f.guardian_last_name" />
+    </div>
+
+    <FormInput placeholder="09xxx--x"
+      label="Guardian Contact #" type="number" name="guardian_contact"
+      icon="i-heroicons-hashtag-20-solid"
+      v-model="f.guardian_contact"
+    />
+
+  </template>
+
+  <template v-else-if="item.key === 'identity'" class="space-y-3">
+
+    <div class="sbs">
+      <div>
+        <FormLabel label="Role"/>
+        <USelectMenu v-model="role_sel" :options="roles" @change="setRole" id="role">
+          <template #label>
+            <UIcon v-if="role_sel.icon" :name="role_sel.icon" class="w-5 h-5" />
+            {{ role_sel.label }}
+          </template>
+        </USelectMenu>
+      </div>
+      <FormInput placeholder="K6942069"
+        label="Student ID" name="student_id"
+        icon="i-heroicons-identification-20-solid"
+        v-model="f.student_id" v-if="f?.role.slug == 'student'"
+      />
+      <FormInput placeholder="CoolStore"
+        label="Store Name" name="student_id"
+        icon="i-heroicons-identification-20-solid"
+        v-model="f.store_name" v-else-if="f?.role.slug == 'store'"
+      />
+    </div>
+
+    <div class="sbs">
+      <FormInput placeholder="Samuelo"
+        label="First name" name="first_name"
+        icon="i-heroicons-identification-20-solid"
+        v-model="f.first_name"
+      />
+      <FormInput placeholder="Buelo"
+        label="Last name" name="last_name"
+        icon="i-heroicons-identification-20-solid"
+        v-model="f.last_name" />
+    </div>
+
+    <FilePicker label="Profile Picture" v-model="f.user_image" @onFileSelect="f.imgurl = $event">
+      <UserInfoCard v-if="f.imgurl" :user="f" />
+    </FilePicker>
+    <FilePicker label="Signature Picture" v-model="f.user_signature" @onFileSelect="f.sigurl = $event">
+      <UCard v-if="f.sigurl"><NuxtImg :src="f.sigurl"></NuxtImg></UCard>
+    </FilePicker>
+    <FilePicker label="Store Logo" v-model="f.store_logo" @onFileSelect="f.logourl = $event" v-if="f.role.slug == 'store'">
+      <ShopInfoCard :img="f.logourl" :name="f.store_name" desc="This is a store."
+        v-if="f.logourl" />
+    </FilePicker>
 
   </template>
 
@@ -191,6 +211,10 @@ async function submit(e) {
 
 
 <style scoped>
+
+:deep(#role) {
+  @apply h-11
+}
 
 footer {
   height: 4.5rem;

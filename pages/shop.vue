@@ -6,26 +6,32 @@ definePageMeta({
   middleware: 'signed-out',
 })
 
-//const userdata = useUsersStore()
+const product = useProductStore()
 
-const users = ref({})
+const myProducts = ref({})
+const stores = ref({})
+const products = ref({})
 const role = ref('student')
 const loading = ref(true)
 
 onMounted(async () => {
   const account = useAuthStore()
   role.value = account.user?.role.slug
-  //users.value = await userdata.fetchUsers()
+  myProducts.value = await product.fetchProduct()
+  stores.value = await product.getStores()
   loading.value = false
 })
 
+const switchStore = async v => {
+  products.value = await product.fetchProduct(v)
+}
 
 </script>
 
 
 <template><div id='shop'>
 
-<div id='merchant' v-if="loading || role == 'store'">
+<div id='merchant' v-if="role == 'store'">
 
   <section id='actions'>
 
@@ -46,21 +52,59 @@ onMounted(async () => {
 
   <section id='items'>
     <ShopItemCard_SK v-for="i in 5" :key="i" v-if="loading"/>
-    <template v-else v-for="i in 5">
-      <ShopItemCard :name="'Black Hat G'" :price="'140'" :img="'/tui.jpg'"
-        @click="navigateTo('/product/product-id')"
+    <template v-else v-for="(i, k) in myProducts">
+      <ShopItemCard :name="i.product_name" :price="i.price" :img="i.image"
+        @click="navigateTo(`/product/${i.id}`)" v-if="k < 6"
       />
+    </template>
+    <UButton label="View all"
+      variant="soft" icon="i-heroicons-squares-2x2-20-solid"
+      @click="navigateTo('/myshop')" v-if="myProducts.length !== 0"/>
+    <template v-else>
+      <UButton label="Add product" class="min-h-[320px]"
+        variant="soft" icon="i-heroicons-plus-circle-20-solid"
+        @click="navigateTo('/product/create')" />
+      <UCard v-for="i in 3" />
     </template>
   </section>
 
 </div>
 
-<div id='global'>
+<div id='stores'>
 
   <section id='actions'>
 
     <div>
-      <h3>Store</h3>
+      <h3>Stores</h3>
+    </div>
+
+    <div class="buttons" v-if="!loading">
+      <UInput
+        placeholder="Search..." class="max-w-[10rem]" id="search"
+        icon="i-heroicons-magnifying-glass-20-solid" size="md"
+        :trailing="false"
+      />
+    </div>
+
+  </section>
+
+  <section id='items'>
+    <ShopInfoCard_SK v-for="i in 5" :key="i" v-if="loading"/>
+    <template v-else v-for="i in stores">
+      <ShopInfoCard
+        :img="i.store_logo" :name="i.store_name" desc="This is a store."
+        @click="switchStore(i.id)" />
+    </template>
+  </section>
+
+</div>
+
+<div id='global' v-if="products.length !== 0">
+
+  <section id='actions'>
+
+    <div>
+      <h3>Products</h3>
     </div>
 
     <div class="buttons" v-if="!loading">
@@ -112,6 +156,7 @@ onMounted(async () => {
 
 }
 
+#stores #items,
 #global #items {
   --mw: 15rem;
   @apply 

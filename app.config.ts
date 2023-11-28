@@ -30,7 +30,7 @@ export default defineAppConfig({
     },
     {
       id: 'admin',
-      label: 'Admin',
+      label: 'Administrator',
       icon: 'i-heroicons-building-library-20-solid'
     }
   ],

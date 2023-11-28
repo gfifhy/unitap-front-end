@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import WebAuthn from "~/composables/webauthn"
+import WebAuthn from "~/composables/helpers/webauthn"
 type Credentials = {
   email: string
   password: string

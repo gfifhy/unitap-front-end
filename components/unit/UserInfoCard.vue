@@ -20,7 +20,7 @@ export default {
       variant="ghost" icon="i-heroicons-pencil-square-20-solid"
       v-if="editButton" @click="editClick"
     />
-    <UAvatar id='avatar' :src="user?.user_image" size="md" />
+    <UAvatar id='avatar' :src="user?.imgurl || user?.user_image" size="md" />
 
     <template #footer>
       <span id='name'>{{user?.first_name +' '+user?.last_name}}</span>
@@ -56,7 +56,7 @@ export default {
     > span {
       @apply h-[var(--avatar-sz)] w-[var(--avatar-sz)];
       #avatar {
-        @apply w-full h-full
+        @apply w-full h-full object-cover
       }
     }
 

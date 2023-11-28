@@ -38,7 +38,6 @@ const updateUser = (val) => {
     ...users.value,
     [index]: { ...users.value[index], ...val } 
   }
-  console.log(users.value)
   isOpen.value = false
 }
 
