@@ -1,0 +1,129 @@
+<template><div id='cms'>
+
+<section id='landing'>
+  <div id='actions'>
+    <div>
+      <h3>Landing Page</h3>
+    </div>
+    <div class="buttons">
+
+      <UPopover mode="hover">
+
+        <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
+          @click="" />
+
+        <template #panel>
+          <div class="ctxmenu">
+            
+            <UButton variant="ghost" icon="i-heroicons-beaker-solid"
+              label="Test" 
+              @click="" />
+
+          </div>
+        </template>
+
+      </UPopover>
+    </div>
+  </div>
+
+  <div id="interface">
+    <LandingPageEditForm />
+  </div>
+</section>
+
+<div id="double">
+<section id='articles'>
+  <div id='actions'>
+    <div>
+      <h3>Articles</h3>
+    </div>
+    <div class="buttons">
+
+      <UButton label="New" icon="i-tabler-file-plus"
+        @click=""/>
+
+      <UPopover mode="hover">
+
+        <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
+          @click="" />
+
+        <template #panel>
+          <div class="ctxmenu">
+            
+            <UButton variant="ghost" icon="i-heroicons-beaker-solid"
+              label="Test" 
+              @click="" />
+
+          </div>
+        </template>
+
+      </UPopover>
+    </div>
+  </div>
+
+  <div id="interface">
+
+  </div>
+</section>
+
+<section id='notifications'>
+  <div id='actions'>
+    <div>
+      <h3>Push Notifications</h3>
+    </div>
+    <div class="buttons">
+
+      <UButton label="New" icon="i-tabler-file-plus"
+        @click="navigateTo('/myshop')"/>
+
+      <UPopover mode="hover">
+
+        <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
+          @click="" />
+
+        <template #panel>
+          <div class="ctxmenu">
+            
+            <UButton variant="ghost" icon="i-heroicons-beaker-solid"
+              label="Test" 
+              @click="" />
+
+          </div>
+        </template>
+
+      </UPopover>
+    </div>
+  </div>
+
+  <div id="interface">
+
+  </div>
+</section>
+</div>
+
+</div></template>
+
+
+<style scoped>
+
+#actions {
+  
+  @apply flex flex-wrap items-center justify-between;
+  
+  div {
+
+    @apply flex items-center m-1 pl-2 pr-2;
+
+    button {
+      @apply ml-2;
+    }
+  }
+
+}
+
+#interface {
+  @apply px-4
+}
+
+
+</style>

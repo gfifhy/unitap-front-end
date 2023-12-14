@@ -7,7 +7,6 @@ definePageMeta({
 })
 
 const userdata = useUsersStore()
-
 const users = ref({})
 const loading = ref(true)
 
@@ -19,6 +18,8 @@ onMounted(async () => {
 const isOpen = ref(false)
 const targetUser = ref({})
 const editMode = ref(true)
+
+const closeModal = () => isOpen.value = false
 
 const initEdit = (val) => {
   editMode.value = true
@@ -73,12 +74,12 @@ const updateUser = (val) => {
     </template>
   </section>
 
-  <UModal v-model="isOpen" :transition="false">
+  <UModal v-model="isOpen" :transition="false" prevent-close>
     <div class="p-4">
       <UserEditForm v-if="editMode" 
-        :targetUser="targetUser" @update-user="updateUser"/>
+        :targetUser="targetUser" @update-user="updateUser" @onClose="closeModal"/>
       <UserAddForm v-else 
-        :targetUser="targetUser" @update-user="updateUser"/>
+        :targetUser="targetUser" @update-user="updateUser" @onClose="closeModal"/>
     </div>
   </UModal>
 

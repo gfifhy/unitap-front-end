@@ -26,11 +26,11 @@ export const useAuthStore = defineStore('auth', () => {
     identity.value = res?.user_data
 
   }
-
+/*
   async function register(id: Identity) {
 
     await doRequest("sanctum/csrf-cookie")
-    const { req } = await doRequest("api/register",
+    const { res } = await doRequest("api/register",
       {
         method: "POST",
         body: id,
@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', () => {
     return res
 
   }
-
+*/
   async function login(cred: Credentials) {
 
     await doRequest("sanctum/csrf-cookie")
@@ -88,6 +88,9 @@ export const useAuthStore = defineStore('auth', () => {
       remember: null,
     })
     .then(async res => {
+      if (res) {
+        return res.message
+      }
       await fetchUser();
       navigateTo('/')
     })
@@ -96,8 +99,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   }
 
-  async function wUnRegister() {
 /*
+  async function wUnRegister() {
     console.log(user)
 
     const { req } = await doRequest("webauth/keys/" + user?.value.id,
@@ -105,14 +108,14 @@ export const useAuthStore = defineStore('auth', () => {
     )
 
     return res
-*/
   }
+*/
 
   return { 
     user, identity, isLoggedIn, 
     fetchUser,
-    register, login, logout,
-    wRegister, wLogin, wUnRegister
+    /*register,*/ login, logout,
+    wRegister, wLogin, /*wUnRegister*/
   }
 
 })

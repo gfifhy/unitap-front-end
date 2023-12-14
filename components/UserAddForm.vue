@@ -183,26 +183,41 @@ async function submit(e) {
         v-model="f.last_name" />
     </div>
 
-    <FilePicker label="Profile Picture" v-model="f.user_image" @onFileSelect="f.imgurl = $event">
+    <FilePicker label="Profile Picture" v-model="f.user_image"
+      @onFileSelect="f.imgurl = $event">
+
       <UserInfoCard v-if="f.imgurl" :user="f" />
+
     </FilePicker>
-    <FilePicker label="Signature Picture" v-model="f.user_signature" @onFileSelect="f.sigurl = $event">
-      <UCard v-if="f.sigurl"><NuxtImg :src="f.sigurl"></NuxtImg></UCard>
+
+    <FilePicker label="Signature Picture" v-model="f.user_signature"
+      @onFileSelect="f.sigurl = $event">
+
+      <UCard v-if="f.sigurl" class="max-w-[240px] mx-auto">
+        <NuxtImg :src="f.sigurl"></NuxtImg>
+      </UCard>
+
     </FilePicker>
-    <FilePicker label="Store Logo" v-model="f.store_logo" @onFileSelect="f.logourl = $event" v-if="f.role.slug == 'store'">
-      <ShopInfoCard :img="f.logourl" :name="f.store_name" desc="This is a store."
-        v-if="f.logourl" />
+
+    <FilePicker label="Store Logo" v-model="f.store_logo"
+      @onFileSelect="f.logourl = $event" v-if="f.role.slug == 'store'">
+
+      <ShopInfoCard :name="f.store_name" desc="This is a store."
+        :img="f.logourl" v-if="f.logourl"  />
+
     </FilePicker>
 
   </template>
 
   <footer>
-    <UButton label="Previous" color="gray" leadingIcon="i-heroicons-arrow-left-20-solid"
-      @click="tabIdx--" :disabled="tabIdx < 1" />
-    <UButton label="Next" color="gray" trailingIcon="i-heroicons-arrow-right-20-solid"
+    <UButton label="Previous" color="gray" 
+      leadingIcon="i-heroicons-arrow-left-20-solid"
+      @click="tabIdx--" :disabled="tabIdx < 1" v-if="tabIdx > 0" />
+    <UButton label="Close" color="gray" @click="emit('onClose')" v-else />
+    <UButton label="Next" color="gray" 
+      trailingIcon="i-heroicons-arrow-right-20-solid"
       @click="tabIdx++" v-if="tabIdx < 2" />
-    <ColoredButton type="submit" label="add"
-      v-else />
+    <ColoredButton type="submit" label="add" v-else />
   </footer>
 
 </UForm>

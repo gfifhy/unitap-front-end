@@ -3,7 +3,7 @@
 export default {
 	emits: ['update:modelValue', 'onFileSelect'],
   props: {
-    modelValue: String,
+    modelValue: File|null,
     label: { default: 'Image', type: String },
   },
   methods: {
@@ -27,7 +27,7 @@ export default {
   <UInput type="file" name="image" accept="image/*" 
     @change="onFileSelect" />
 
-  <div id="preview" class="max-w-[240px] mx-auto">
+  <div id="preview" class="py-2">
     <slot></slot>
   </div>
 

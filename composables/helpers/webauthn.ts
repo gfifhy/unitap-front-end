@@ -36,7 +36,10 @@ export default class WebAuthn {
             requestOptions
         );
 
-        if (err) console.error(err);
+        if (err) {
+            console.error(err)
+            return err
+        }
   
         return res
     }

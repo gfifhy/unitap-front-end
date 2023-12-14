@@ -76,7 +76,7 @@ onUnmounted(() => {
 
   <div class="w-full px-4">
     <hr class="m-9 invisible">
-    <NuxtPage class="max-w-3xl mx-auto" />
+    <slot class="max-w-3xl mx-auto" />
   </div>
 
   <footer>

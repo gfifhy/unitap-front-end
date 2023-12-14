@@ -67,7 +67,7 @@
 @media only screen and (min-width: 1011px) { /* desktop (> 813 w) */
   :root {
     --app-dir: row;
-    --topnav-h: 2.2em;
+    --topnav-h: 4.2em;
     --topnav-p: 2.1em;
     --sidenav-dir: column;
     --sidenav-h: 100vh;
@@ -207,6 +207,7 @@ article {
  * -------------------------------------------------------------------------- */
 
 div#double[id="double"] {
+  @apply flex;
   flex-direction: var(--login-layout);
 
   > aside {
@@ -216,6 +217,10 @@ div#double[id="double"] {
 
 .sbs {
   @apply flex flex-row justify-evenly items-center gap-x-2
+}
+
+.avatar img {
+  @apply object-cover
 }
 
 /**

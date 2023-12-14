@@ -28,7 +28,7 @@ async function submit() {
       icon: 'i-heroicons-shield-exclamation-solid',
       title: res,
       description: 'Please try again.',
-      color: red
+      color: 'red'
     })
   } else {
     toast.add({ 

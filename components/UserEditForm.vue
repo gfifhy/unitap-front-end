@@ -36,6 +36,7 @@ const f = ref({})
 const s = ref({})
 
 const toast = useToast()
+const isOpen = ref(false)
 const loading = useState('loading', () => false)
 
 const role_sel = ref(roles[0])
@@ -194,16 +195,13 @@ async function test() {
 
   <footer>
     <UButton 
-      label="Delete User" name="delete"
-      variant="ghost"
+      label="Delete User" variant="ghost"
       icon="i-heroicons-user-minus" 
-      @click="accDelete" :disabled="loading"
+      @click="isOpen = true" :disabled="loading"
     />
     <UButton 
-      label="test"
-      variant="ghost"
-      icon="i-heroicons-beaker" 
-      @click="test" :disabled="loading"
+      label="Close" color="gray"
+      @click="emit('onClose')" :disabled="loading"
     />
     <ColoredButton type="submit" label="apply" :disabled="loading"/>
   </footer>
@@ -211,7 +209,31 @@ async function test() {
 
 </UForm>
 
-</template></UTabs></template>
+</template></UTabs>
+
+
+<UModal v-model="isOpen" :transition="false">
+  <UCard>
+    <template #header>
+      <span class="text-xl">Confirmation</span>
+    </template>
+
+    <p>Are you sure sure you want to delete the account for {{ f.email }}?</p>
+
+    <span class="text-gray-500">Account will not be created again.</span>
+
+    <template #footer>
+      <div class="flex justify-center gap-x-3">
+        <UButton name="delete" label="Yes" variant="ghost" @click="accDelete" />
+        <UButton label="No" @click="isOpen = false"/>
+      </div>
+    </template>
+    
+  </UCard>
+</UModal>
+
+
+</template>
 
 
 <style scoped>

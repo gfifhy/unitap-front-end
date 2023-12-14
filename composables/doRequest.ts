@@ -10,20 +10,11 @@ export async function doRequest<T>(
   const token = useCookie('XSRF-TOKEN')
 
   let head: any = {
-    accept: "application/json",
-    //"content-type": "application/json",
-    referer: ($cfg.app.protocol + $cfg.app.host.slice(0, -1)) as string
+    accept: "application/json"
   }
 
   if (token.value) {
     head['X-XSRF-TOKEN'] = token.value as string
-  }
-
-  if (process.server) {
-    head = {
-      ...head,
-      ...useRequestHeaders(["cookie"]),
-    }
   }
 
   let res;

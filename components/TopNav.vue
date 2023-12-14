@@ -23,14 +23,11 @@ onMounted(() => {
     </div>
   </section>
 
-  <section class='links' v-else>
-    <NuxtLink variant='ghost' to="/about">about</NuxtLink>
-    <NuxtLink variant='ghost' to="/">blog</NuxtLink>
-    <NuxtLink variant='ghost' to="/">pages</NuxtLink>
-    <NuxtLink variant='ghost' to="/">contact</NuxtLink>
-  </section>
-
   <section class='terminal' v-if="!online">
+    <NuxtLink variant='ghost' to="/about">about</NuxtLink>
+    <NuxtLink variant='ghost' to="/announcements">announcements</NuxtLink>
+    <NuxtLink variant='ghost' to="/">calendar</NuxtLink>
+    <NuxtLink variant='ghost' to="/">contact</NuxtLink>
     <NuxtLink variant='ghost' to="/register">register</NuxtLink>
   </section>
 
@@ -53,11 +50,10 @@ nav, section {
 
 nav {
 
-  @apply justify-between flex-row w-full;
+  @apply justify-between flex-row w-full overflow-x-auto;
 
-  height: var(--topnav-h);
-  padding-top: var(--topnav-p);
-  padding-bottom: var(--topnav-p);
+  min-height: var(--topnav-h);
+  max-height: var(--topnav-h);
   align-items: center;
 
 }

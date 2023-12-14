@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-  app: { rootId: false, rootTag: undefined },
+  app: { rootId: 'app', rootTag: undefined },
   devServer: {
     host: "127.0.0.1",
     port: 5173,

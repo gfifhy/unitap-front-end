@@ -48,9 +48,9 @@ onMounted(() => {
       variant="outline" icon="i-heroicons-building-storefront-20-solid"
       @click="navigateTo('/shop')" />
 
-    <ButtonTooltip text="Manage Accounts" hotkey="B" 
-      variant="outline" icon="i-heroicons-user-group-20-solid"
-      @click="navigateTo('/manage')" v-if="account.user?.role.name === 'Admin'"/>
+    <ButtonTooltip text="Admin Panel" hotkey="B" 
+      variant="outline" icon="i-tabler-shield-checkered-filled"
+      @click="navigateTo('/admin')" v-if="account.user?.role.name === 'Admin'"/>
 
     <ButtonTooltip text="Send" hotkey="C" 
       variant="solid" icon="i-heroicons-paper-airplane"
@@ -63,8 +63,10 @@ onMounted(() => {
 
     <UPopover v-if="online">
 
-      <ButtonTooltip text="Notifications" icon="i-heroicons-inbox" 
-        hotkey="A" variant="soft" />
+      <UChip class="notif-blob" color="red" :show="true">
+        <ButtonTooltip text="Notifications" icon="i-heroicons-inbox" 
+          hotkey="A" variant="soft" />
+      </UChip>
 
       <template #panel>
         <div class="p-4">
@@ -120,6 +122,10 @@ onMounted(() => {
 
   aspect-ratio: 1/1;
 
+}
+
+:deep(.notif-blob) > span {
+  @apply top-[15px] right-[15px]
 }
 
 nav {

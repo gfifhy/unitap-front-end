@@ -3,15 +3,13 @@ useHead({ titleTemplate: 'UniTap' })
 </script>
 
 <template>
-  <div id="app">
 
-    <SideNav />
+  <SideNav />
 
-    <main>
-      <NuxtPage class="content"/>
-    </main>
+  <main>
+    <slot/>
+  </main>
 
-    <UNotifications />
+  <UNotifications />
 
-  </div>
 </template>
