@@ -8,7 +8,7 @@ a {
   @apply flex max-w-[56px] select-none;
 
   img {
-    @apply flex p-3 mt-[.4em] mb-[.4em] w-full;
+    @apply flex p-3 h-[56px] mt-[.4em] mb-[.4em] w-full;
   }
 
 }

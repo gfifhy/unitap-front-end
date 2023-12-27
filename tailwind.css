@@ -223,6 +223,9 @@ div#double[id="double"] {
   @apply object-cover
 }
 
+.paragraphnopad p::before {
+  margin-left: 0;
+}
 /**
  * Elements
  * -------------------------------------------------------------------------- */
@@ -252,6 +255,19 @@ form.user {
   @apply flex-col flex p-1 !important;
   button {
     @apply w-[150px] h-11 justify-start !important;
+  }
+}
+
+input[type=file] { /* file picker button */
+  &::file-selector-button {
+    @apply border-transparent dark:bg-primary-950 bg-primary-100
+           text-primary cursor-pointer px-2 py-1 rounded-[0.2em]
+    ;
+    
+    &:hover {
+      @apply dark:bg-primary-900 bg-primary-500 text-gray-100
+    }
+
   }
 }
 

@@ -32,73 +32,15 @@
 </section>
 
 <div id="double">
-<section id='articles'>
-  <div id='actions'>
-    <div>
-      <h3>Articles</h3>
-    </div>
-    <div class="buttons">
+  
+  <section id='articles'>
+    <ArticlesEditForm />
+  </section>
 
-      <UButton label="New" icon="i-tabler-file-plus"
-        @click=""/>
+  <section id='notifications'>
+    <PushNotificationForm />
+  </section>
 
-      <UPopover mode="hover">
-
-        <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
-          @click="" />
-
-        <template #panel>
-          <div class="ctxmenu">
-            
-            <UButton variant="ghost" icon="i-heroicons-beaker-solid"
-              label="Test" 
-              @click="" />
-
-          </div>
-        </template>
-
-      </UPopover>
-    </div>
-  </div>
-
-  <div id="interface">
-
-  </div>
-</section>
-
-<section id='notifications'>
-  <div id='actions'>
-    <div>
-      <h3>Push Notifications</h3>
-    </div>
-    <div class="buttons">
-
-      <UButton label="New" icon="i-tabler-file-plus"
-        @click="navigateTo('/myshop')"/>
-
-      <UPopover mode="hover">
-
-        <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
-          @click="" />
-
-        <template #panel>
-          <div class="ctxmenu">
-            
-            <UButton variant="ghost" icon="i-heroicons-beaker-solid"
-              label="Test" 
-              @click="" />
-
-          </div>
-        </template>
-
-      </UPopover>
-    </div>
-  </div>
-
-  <div id="interface">
-
-  </div>
-</section>
 </div>
 
 </div></template>
@@ -106,11 +48,11 @@
 
 <style scoped>
 
-#actions {
+:deep(#actions) {
   
   @apply flex flex-wrap items-center justify-between;
   
-  div {
+  > div {
 
     @apply flex items-center m-1 pl-2 pr-2;
 
@@ -121,8 +63,8 @@
 
 }
 
-#interface {
-  @apply px-4
+:deep(#interface) {
+  @apply px-4 flex flex-col gap-y-2
 }
 
 

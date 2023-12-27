@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+const $cfg = useAppConfig()
+
 const tabs = [
   {
     key: 'section1',
@@ -27,44 +29,13 @@ const radio = [
 ]
 
 
-const u = ref({
-  coverimg: '',
-  coverimgurl: null,
-  title:'',
-  subtitle:'',
-  description:'',
-  btn_txt:'',
-  btn_lnk:'',
-  disabled: '',
-})
-const m = ref({
-  title:'',
-  subtitle:'',
-  disabled: '',
-  cards: [
-    {
-      title: '',
-      subtitle: '',
-      avatar: null,
-      avatarurl: '',
-    }
-  ]
-})
-const l = ref({
-  title:'',
-  subtitle:'',
-  disabled: '',
-  cards: [
-    {
-      title: '',
-      subtitle: '',
-      avatar: null,
-      avatarurl: '',
-    }
-  ]
-})
+const u = ref($cfg.bannerTitleCardRef)
+const m = ref($cfg.simpleTitleCardRef)
+const mCards = ref([$cfg.smallAvatarCardRef])
+const l = ref($cfg.bannerTitleCardRef)
 
 const loading = ref(false)
+const cms = useCMSStore()
 
 const validate = state => {
   return validateForm(state, [
@@ -77,18 +48,26 @@ const onTab = e => {
 }
 
 const handleNewCard = () => {
-  m.value.cards.push({
-    ctitle: '',
-    csubtitle: '',
-    avatar: '',
-    avatarurl: '',
-  })
+  mCards.value.push($cfg.smallAvatarCardRef)
 }
 
-/*
-onMounted(() => {
+onMounted(async () => {
 
-})*/
+  const init = await cms.getLanding()
+
+  u.value = JSON.parse(init.find(x => x.type === 'upperLanding').value)
+  m.value = JSON.parse(init.find(x => x.type === 'middleLanding').value)
+  l.value = JSON.parse(init.find(x => x.type === 'lowerLanding').value)
+
+  mCards.value = init.reduce((filter, item) => {
+    const parsedValue = JSON.parse(item.value) || {};
+    if (item.type === "middleLanding_card") {
+      filter.push(parsedValue);
+    }
+    return filter;
+  }, []);
+
+})
 
 async function submit(e) {
 
@@ -96,30 +75,60 @@ async function submit(e) {
 
   const toast = useToast()
 
-  if (e === 'section1') {
-    const { res, err } = await users.editUser(m.value, "PUT")
-    if (err) {
-      toast.add({
-        icon: "i-heroicons-exclamation-circle-20-solid",
-        title: 'Operation failed!',
-        description: err.message.join('; '),
-        color: 'red'
-      })
-    } else {
-      toast.add({
-        icon: "i-heroicons-check-circle-20-solid",
-        title: "User updated!",
-        description: `Updated info for ${res.email}`,
+  var req = []
+
+  if (e === 'section1' || e === 0) {
+    req.push({
+      type: 'upperLanding',
+      value: u.value,
+      is_disabled: false
+    })
+  }
+  if (e === 'section2' || e === 0) {
+    req.push({
+      type: 'middleLanding',
+      value: m.value,
+      is_disabled: !!m.value.disabled
+    })
+    for (let i=0; i<mCards.value.length; ++i) {
+      req.push({
+        type: 'middleLanding_card',
+        value: mCards.value[i],
+        option: i
       })
     }
-    loading.value = false
+  }
+  if (e === 'section3' || e === 0) {
+    req.push({
+      type: 'lowerLanding',
+      value: l.value,
+      is_disabled: !!l.value.disabled
+    })
   }
 
+  if (!req.length) throw new Error('Request is empty.');
+
+  const { res, err } = await cms.editLanding(req)
+  
+  if (err) {
+    toast.add({
+      icon: "i-heroicons-exclamation-circle-20-solid",
+      title: 'Operation failed!',
+      description: err.message?.join('; '),
+      color: 'red'
+    })
+  } else {
+    toast.add({
+      icon: "i-heroicons-check-circle-20-solid",
+      title: "Operation successful!",
+      description: 'Updated Landing Page.',
+    })
+  }
+
+  loading.value = false
+  
 }
 
-async function test() {
-  console.log('bet');
-}
 
 </script>
 
@@ -132,8 +141,12 @@ async function test() {
     <div id="double" class="gap-x-2">
 
       <section class="max-h-[300px] overflow-hidden">
-        <FilePicker v-model="u.coverimg" @onFileSelect="u.coverimgurl = $event" label="Cover">
-          <NuxtImg :src="u.coverimgurl" v-if="u.coverimgurl" />
+        <FilePicker v-model="u.img" @onFileSelect="u.imgurl = $event" label="Cover">
+          <NuxtImg 
+            :src="u.imgurl.lastIndexOf('blob:', 0) === 0 ?
+                  u.imgurl : 
+                  $cfg.api.head + u.imgurl"
+            v-if="u.imgurl" />
         </FilePicker>
       </section>
 
@@ -164,9 +177,6 @@ async function test() {
 
     </div>
 
-    <URadioGroup legend="Section disabled" :options="radio"
-      v-model="u.disabled" />
-
   </template>
 
   <template v-else-if="item.key === 'section2'" class="space-y-3">
@@ -174,11 +184,11 @@ async function test() {
 
       <section class="grow">
         <FormInput placeholder="Title" icon="i-tabler-cursor-text"
-          label="Lead" name="title"
+          label="Lead" name="mtitle"
           v-model="m.title"
         />
         <UTextarea placeholder="Subtitle" icon="i-tabler-cursor-text"
-          name="subtitle"
+          name="msubtitle"
           v-model="m.subtitle"
         />
         <URadioGroup legend="Section disabled" :options="radio"
@@ -187,12 +197,12 @@ async function test() {
       </section>
 
       <aside class="px-2">
-        <template v-for="(i, k) in m.cards" :key="k">
+        <template v-for="(i, k) in mCards" :key="k">
 
           <div class="sbs py-2">
             <FormLabel :label="'Card #' + (k + 1)" class="grow" />
             <UButton color="red" variant="ghost" icon="i-tabler-trash-x"
-              @click="m.cards.splice(k, 1)" v-if="m.cards[1]" />
+              @click="mCards.splice(k, 1)" v-if="mCards[1]" />
             <UButton label="Add card" variant="soft" icon="i-tabler-library-plus"
               @click="handleNewCard" v-if="k === 0"/>
           </div>
@@ -200,12 +210,12 @@ async function test() {
           <div class="sbs dark:bg-gray-900 bg-gray-100 rounded-xl p-3 ">
 
             <div class="max-h-[190px] max-w-[100px] overflow-hidden">
-              <UAvatar size="3xl" class="avatar" :src="i.avatarurl" 
-                v-if="i.avatarurl" />
+              <UAvatar size="3xl" class="avatar" :src="$cfg.api.head + i.imgurl" 
+                v-if="i.imgurl" />
             </div>
 
             <div class="grow gap-y-2 flex flex-col">
-              <FilePicker v-model="i.avatar" @onFileSelect="i.avatarurl = $event" />
+              <FilePicker v-model="i.img" @onFileSelect="i.imgurl = $event" />
               <FormInput placeholder="Title" icon="i-tabler-cursor-text"
                 type="text" name="ctitle"
                 v-model="i.title" />
@@ -224,55 +234,47 @@ async function test() {
 
   <template v-else-if="item.key === 'section3'" class="space-y-3">
 
-    <div id="double">
+    <div id="double" class="gap-x-2">
 
-      <section class="grow">
-        <FormInput placeholder="Title" icon="i-tabler-cursor-text"
-          label="Lead" name="title"
-          v-model="l.title"
-        />
-        <UTextarea placeholder="Subtitle" icon="i-tabler-cursor-text"
-          name="subtitle"
-          v-model="l.subtitle"
-        />
-        <URadioGroup legend="Section disabled" :options="radio"
-          v-model="l.disabled"
-        />
+      <section class="max-h-[300px] overflow-hidden">
+        <FilePicker v-model="l.img" @onFileSelect="l.imgurl = $event" label="Cover">
+          <NuxtImg 
+            :src="l.imgurl.lastIndexOf('blob:', 0) === 0 ?
+                  l.imgurl : 
+                  $cfg.api.head + l.imgurl"
+            v-if="l.imgurl" />
+        </FilePicker>
       </section>
 
-      <aside class="px-2">
-        <template v-for="(i, k) in l.cards" :key="k">
-
-          <div class="sbs py-2">
-            <FormLabel :label="'Card #' + (k + 1)" class="grow" />
-            <UButton color="red" variant="ghost" icon="i-tabler-trash-x"
-              @click="l.cards.splice(k, 1)" />
-            <UButton label="Add card" variant="soft" icon="i-tabler-library-plus"
-              @click="handleNewCard" v-if="k === 0"/>
-          </div>
-
-          <div class="sbs dark:bg-gray-900 bg-gray-100 rounded-xl p-3 ">
-
-            <div class="max-h-[190px] max-w-[100px] overflow-hidden">
-              <UAvatar size="3xl" class="avatar" :src="i.avatarurl" 
-                v-if="i.avatarurl" />
-            </div>
-
-            <div class="grow gap-y-2 flex flex-col">
-              <FilePicker v-model="i.avatar" @onFileSelect="i.avatarurl = $event" />
-              <FormInput placeholder="Title" icon="i-tabler-cursor-text"
-                type="text" :name="'ctitle_' + k"
-                v-model="i.ctitle" />
-              <FormInput placeholder="Subtitle" icon="i-tabler-cursor-text"
-                type="text" :name="'csubtitle' + k"
-                v-model="i.csubtitle" />
-            </div>
-
-          </div>
-
-        </template>
+      <aside class="grow">
+        <FormInput placeholder="Title" icon="i-tabler-cursor-text"
+          label="Title" type="text" name="ltitle"
+          v-model="l.title"
+        />
+        <FormInput placeholder="Subtitle" icon="i-tabler-cursor-text"
+          label="Subtitle" type="text" name="lsubtitle"
+          v-model="l.subtitle"
+        />
+        <UTextarea placeholder="Description" icon="i-tabler-cursor-text"
+          label="Description" type="text" name="ldescription"
+          v-model="l.description"
+        />
+        <div class="sbs">
+          <FormInput placeholder="Click Here" icon="i-tabler-cursor-text"
+            label="Button Text" type="text" name="lbtn_txt"
+            v-model="l.btn_txt"
+          />
+          <FormInput placeholder="/article/abcd" icon="i-tabler-cursor-text"
+            label="Button Destination" type="text" name="lbtn_lnk" class="grow"
+            v-model="l.btn_lnk"
+          />
+        </div>
       </aside>
+
     </div>
+
+    <URadioGroup legend="Section disabled" :options="radio"
+      v-model="l.disabled" />
 
   </template>
 

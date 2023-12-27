@@ -1,5 +1,6 @@
 <script setup>
 
+const $route = useRoute()
 const colorMode = useColorMode()
 const isDark = computed({
   get() {
@@ -61,6 +62,10 @@ onMounted(() => {
 
   <footer>
 
+    <ButtonTooltip text="Switch Theme" hotkey="T" 
+      variant="soft" :icon="isDark ? 'i-heroicons-sun-20-solid' : 'i-heroicons-moon-20-solid'"
+      @click="isDark = !isDark" v-if="!online"/>
+
     <UPopover v-if="online">
 
       <UChip class="notif-blob" color="red" :show="true">
@@ -76,34 +81,32 @@ onMounted(() => {
 
     </UPopover>
 
-    <UPopover>
+    <UPopover v-if="$route.path !== '/login'">
 
       <ButtonTooltip text="User" hotkey="C" 
         variant="soft" icon="i-heroicons-user-circle-20-solid"
         @click="online ? false : navigateTo('/login')" />
 
-      <template #panel>
+      <template #panel v-if="online">
         <div class="ctxmenu">
           
           <UButton variant="ghost" label="Switch Theme"
             :icon="isDark ? 'i-heroicons-sun-20-solid' : 'i-heroicons-moon-20-solid'"
             @click="isDark = !isDark"/>
 
-          <template v-if="online">
-            <UButton variant="ghost" label="History"
-              icon="i-heroicons-clock"
-              @click="navigateTo('/history')"/>
+          <UButton variant="ghost" label="History"
+            icon="i-heroicons-clock"
+            @click="navigateTo('/history')"/>
 
-            <UButton variant="ghost" label="Settings"
-              icon="i-heroicons-wrench"
-              @click="navigateTo('/settings/profile')"/>
+          <UButton variant="ghost" label="Settings"
+            icon="i-heroicons-wrench"
+            @click="navigateTo('/settings/profile')"/>
 
-            <UDivider />
+          <UDivider />
 
-            <UButton variant="ghost" label="Logout"
-              icon="i-heroicons-arrow-left-on-rectangle-20-solid"
-              @click="logout"/>
-          </template>
+          <UButton variant="ghost" label="Logout"
+            icon="i-heroicons-arrow-left-on-rectangle-20-solid"
+            @click="logout"/>
 
         </div>
       </template>

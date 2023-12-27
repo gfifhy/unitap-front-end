@@ -218,9 +218,9 @@ async function test() {
       <span class="text-xl">Confirmation</span>
     </template>
 
-    <p>Are you sure sure you want to delete the account for {{ f.email }}?</p>
+    <p>Are you sure you want to delete the account for {{ f.email }}?</p>
 
-    <span class="text-gray-500">Account will not be created again.</span>
+    <span class="text-gray-500">Account cannot be created again.</span>
 
     <template #footer>
       <div class="flex justify-center gap-x-3">

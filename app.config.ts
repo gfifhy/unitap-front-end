@@ -1,11 +1,20 @@
+const apiProtocol = 'https://'
+const apiHost = 'api.unitap.dev/'
+const appProtocol = 'https://'
+const appHost = 'unitap.dev/'
+
 export default defineAppConfig({
   api: {
-    protocol: 'https://',
-    host: 'api.unitap.dev/'
+    base: apiProtocol + apiHost,
+    head: apiProtocol + apiHost.slice(0, -1),
   },
   app: {
-    protocol: 'https://',
-    host: 'unitap.dev/'
+    base: appProtocol + appHost,
+    head: appProtocol + appHost.slice(0, -1),
+  },
+  ui: {
+    primary: 'green',
+    gray: 'neutral'
   },
   user_roles: [
     {
@@ -34,8 +43,26 @@ export default defineAppConfig({
       icon: 'i-heroicons-building-library-20-solid'
     }
   ],
-  ui: {
-    primary: 'green',
-    gray: 'neutral'
+  bannerTitleCardRef: {
+    img: null,
+    imgurl: '',
+    title:'',
+    subtitle:'',
+    description:'',
+    btn_txt:'',
+    btn_lnk:'',
+    disabled: '',
   },
+  smallAvatarCardRef: {
+    img: null,
+    imgurl: '',
+    title: '',
+    subtitle: '',
+  },
+  simpleTitleCardRef: {
+    title:'',
+    subtitle:'',
+    disabled: '',
+  },
+
 })

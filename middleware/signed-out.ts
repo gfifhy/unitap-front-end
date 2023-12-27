@@ -4,9 +4,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   if (!user.isLoggedIn) {
     if (process.server) {
-      navigateTo('/about', { replace: true })
+      navigateTo('/landing', { replace: true })
     } else {
-      return navigateTo('/about', { replace: true })
+      return navigateTo('/landing', { replace: true })
     }
   }
 

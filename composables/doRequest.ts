@@ -20,7 +20,7 @@ export async function doRequest<T>(
   let res;
   let err;
 
-  await useFetch($cfg.api.protocol + $cfg.api.host + path,
+  await useFetch($cfg.api.base + path,
     {
       credentials: "include",
       watch: false,
