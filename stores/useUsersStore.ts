@@ -3,9 +3,15 @@ import { defineStore } from "pinia"
 export const useUsersStore = defineStore('users', () => {
 
   const violations = ref(null)
+  const allUsers = ref(null)
+
+  const getAllUsers = async () => {
+    if (!allUsers.value) allUsers.value = await fetchUsers()
+    return allUsers.value
+  }
 
   const getViolations = async () => {
-    if (!violations.value) await fetchViolation()
+    if (!violations.value) violations.value = await fetchViolation()
     return violations.value
   }
 
@@ -22,7 +28,7 @@ export const useUsersStore = defineStore('users', () => {
   async function addUser(id, isStaff: Boolean) {
     const { res, err } = await doRequest(`api/admin/${isStaff ? 'staff' : 'student'}`, {
       method: "POST",
-      body: convertForm(id)
+      body: convertForm(id, 0)
     })
     return { res, err }
   }
@@ -36,15 +42,9 @@ export const useUsersStore = defineStore('users', () => {
     return { res, err }
   }
 
-  async function fetchViolation() {
-    const { res } = await doRequest('api/student/violation', {
-      method: "POST"
-    })
-    violations.value = res
-  }
-
   return { 
     fetchUsers,
+    getAllUsers,
     addUser,
     editUser,
     getViolations,
@@ -53,25 +53,14 @@ export const useUsersStore = defineStore('users', () => {
 })
 
 
-function removeNullProperties(obj) {
-  const filteredEntries = Object.entries(obj).filter(([key, value]) => value !== null);
-  return Object.fromEntries(filteredEntries);
+async function fetchViolation() {
+  const { res } = await doRequest('api/student/violation', {
+    method: "POST"
+  })
+  return res
 }
 
-function convertForm(obj) {
-  const formData: FormData = new FormData();
-
-  for (const [key, value] of Object.entries(obj)) {
-    if (Object.prototype.toString.call(value) === '[object Object]') {
-        formData.append(key, JSON.stringify(value));
-    } else {
-        formData.append(key, value);
-    }
-  }
-  
-  for (var pair of formData.entries()) {
-    console.warn(pair[0]+ ', ' + pair[1]); 
-  }
-
-  return formData
+const removeNullProperties = obj => {
+  const filteredEntries = Object.entries(obj).filter(([key, value]) => value !== null);
+  return Object.fromEntries(filteredEntries);
 }

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 
 const $cfg = useAppConfig()
 
@@ -17,25 +17,14 @@ const tabs = [
   }
 ]
 
-const radio = [
-  {
-    value: 1,
-    label: 'Yes'
-  },
-  {
-    value: 0,
-    label: 'No'
-  }
-]
-
+const radio = $cfg.radioYesNo
 
 const u = ref($cfg.bannerTitleCardRef)
 const m = ref($cfg.simpleTitleCardRef)
 const mCards = ref([$cfg.smallAvatarCardRef])
 const l = ref($cfg.bannerTitleCardRef)
 
-const loading = ref(false)
-const cms = useCMSStore()
+const loading = ref(true)
 
 const validate = state => {
   return validateForm(state, [
@@ -53,27 +42,15 @@ const handleNewCard = () => {
 
 onMounted(async () => {
 
-  const init = await cms.getLanding()
+  [u.value, m.value, mCards.value, l.value] = await useCMSStore().getLanding(true)
 
-  u.value = JSON.parse(init.find(x => x.type === 'upperLanding').value)
-  m.value = JSON.parse(init.find(x => x.type === 'middleLanding').value)
-  l.value = JSON.parse(init.find(x => x.type === 'lowerLanding').value)
-
-  mCards.value = init.reduce((filter, item) => {
-    const parsedValue = JSON.parse(item.value) || {};
-    if (item.type === "middleLanding_card") {
-      filter.push(parsedValue);
-    }
-    return filter;
-  }, []);
+  loading.value = false
 
 })
 
 async function submit(e) {
 
   loading.value = true
-
-  const toast = useToast()
 
   var req = []
 
@@ -106,23 +83,27 @@ async function submit(e) {
     })
   }
 
-  if (!req.length) throw new Error('Request is empty.');
+  if (!req.length) { throw new Error('Request is empty.') }
+  else {
 
-  const { res, err } = await cms.editLanding(req)
-  
-  if (err) {
-    toast.add({
-      icon: "i-heroicons-exclamation-circle-20-solid",
-      title: 'Operation failed!',
-      description: err.message?.join('; '),
-      color: 'red'
-    })
-  } else {
-    toast.add({
-      icon: "i-heroicons-check-circle-20-solid",
-      title: "Operation successful!",
-      description: 'Updated Landing Page.',
-    })
+    const { res, err } = await useCMSStore().editLanding(req)
+    
+    const toast = useToast()
+    if (err) {
+      toast.add({
+        icon: "i-heroicons-exclamation-circle-20-solid",
+        title: 'Operation failed!',
+        description: err.message?.join('; '),
+        color: 'red'
+      })
+    } else {
+      toast.add({
+        icon: "i-heroicons-check-circle-20-solid",
+        title: "Operation successful!",
+        description: 'Updated Landing Page.',
+      })
+    }
+
   }
 
   loading.value = false
@@ -140,14 +121,26 @@ async function submit(e) {
 
     <div id="double" class="gap-x-2">
 
-      <section class="max-h-[300px] overflow-hidden">
+      <section>
+
         <FilePicker v-model="u.img" @onFileSelect="u.imgurl = $event" label="Cover">
-          <NuxtImg 
+          <NuxtImg v-if="u.imgurl" class="max-h-[300px] overflow-y-auto"
             :src="u.imgurl.lastIndexOf('blob:', 0) === 0 ?
                   u.imgurl : 
-                  $cfg.api.head + u.imgurl"
-            v-if="u.imgurl" />
+                  $cfg.api.head + u.imgurl" />
         </FilePicker>
+
+        <URadioGroup legend="Cover mode" :options="[
+            {
+              value: 'covered',
+              label: 'Covered'
+            },
+            {
+              value: 'tiled',
+              label: 'Tiled'
+            }
+          ] " v-model="u.cover_mode" />
+
       </section>
 
       <aside class="grow">

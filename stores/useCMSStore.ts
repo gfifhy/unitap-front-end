@@ -4,52 +4,95 @@ export const useCMSStore = defineStore('cms', () => {
 
   const landing = ref(null)
 
-  const getLanding = async () => {
-    if (!landing.value) await fetchLanding()
-    return landing.value
+  const notifications = ref(null)
+  const myNotifications = ref(null)
+
+  const getLanding = async isAdmin => {
+    if (!landing.value) {
+      const { res, err } = await fetchLanding(isAdmin)
+      landing.value = res
+    }
+    const def = { disabled: 1 }
+    return [
+      JSON.parse(landing.value.find(x => x.type === 'upperLanding').value),
+      JSON.parse(landing.value.find(x => x.type === 'middleLanding')?.value ?? false) || def,
+      landing.value.reduce((filter, item) => {
+        const val = JSON.parse(item.value) || {};
+        if (item.type === "middleLanding_card") {
+          filter.push(val);
+        }
+        return filter;
+      }, []),
+      JSON.parse(landing.value.find(x => x.type === 'lowerLanding')?.value ?? false) || def,
+    ]
   }
-  
-  async function fetchLanding() {
-    await useFetch('http://0.0.0.0') // shit workaround for first fetch err
-    let { res, err } = await doRequest('api/landing')
-    landing.value = res 
-    return { res, err }
+
+  const getNotifications = async (refresh: Boolean = false, opt) => {
+    if (refresh || !notifications.value) {
+      const { res, err } = await fetchNotifications(opt)
+      notifications.value = res
+    }
+    return notifications.value
+  }
+
+  const getMyNotifications = async (refresh: Boolean = false, opt) => {
+    if (refresh || !myNotifications.value) {
+      const { res, err } = await fetchNotifications(opt)
+      myNotifications.value = res
+    }
+    return myNotifications.value
   }
 
   async function editLanding(val) {
     const { res, err } = await doRequest('api/landing', {
       method: 'POST',
-      body: convertForm(val)
+      body: convertForm(val, 1, 'value')
     })
+    return { res, err }
+  }
+
+  async function addNotification(val) {
+    const { res, err } = await doRequest('api/notification', {
+      method: 'POST',
+      body: convertForm(val, 0)
+    })
+    return { res, err }
+  }
+
+  async function deleteNotification(id) {
+    const { res, err } = await doRequest(`api/notification/${id}`, {
+      method: 'DELETE'
+    })
+    return { res, err }
+  }
+
+  async function markNotification(id) {
+    const { res, err } = await doRequest(
+      `api/notification/${id ? 'mark-read/' + id : 'mark-read-all'}`
+    )
     return { res, err }
   }
 
   return { 
     getLanding,
-    editLanding
+    editLanding,
+    getNotifications,
+    getMyNotifications,
+    addNotification,
+    deleteNotification,
+    markNotification
   }
 
 })
 
-function convertForm(req) {
-  const formData = new FormData();
+async function fetchLanding(isAdmin) {
+  await useFetch('http://0.0.0.0') // shit workaround for first fetch err
+  const { res, err } = await doRequest(`api/landing${isAdmin ? '/all' : ''}`)
+  return { res, err }
+}
 
-  req.forEach((item, index) => {
-    for (const [key, value] of Object.entries(item)) {
-      if (key === 'value' && typeof value === 'object' && value !== null && !(value instanceof File)) {
-        for (const [nestedKey, nestedValue] of Object.entries(value)) {
-          formData.append(`${index}.value[${nestedKey}]`, 
-            Object.prototype.toString.call(nestedValue) === '[object Object]' ? 
-            JSON.stringify(nestedValue) : nestedValue
-          );
-        }
-      } else if (value instanceof File) {
-        formData.append(`${index}.value[image]`, value, value.name);
-      } else {
-        formData.append(`${index}.${key}`, value);
-      }
-    }
-  });
-
-  return formData;
+async function fetchNotifications(opt) {
+  await useFetch('http://0.0.0.0') // shit workaround for first fetch err
+  const { res, err } = await doRequest(`api/notification${opt ? '/' + opt : ''}`)
+  return { res, err }
 }

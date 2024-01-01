@@ -1,33 +1,151 @@
 <script setup>
 
+const $cfg = useAppConfig()
+const cms = useCMSStore()
+const loading = ref(true)
+/*
 const actions = i => {
   return [
     { variant: 'solid', color: 'primary', label: 'Action', click: () => alert(i) },
     { variant: 'soft', color: 'primary', label: 'Action', click: () => alert('bsabsabs') }
   ]
 }
+*/
+const notifList = ref([])
+
+
+const closeButton = ref({})
+const newMode = ref(true)
+
+const switchNotifMode = () => {
+  newMode.value = !newMode.value
+  toggleCloseButtonVisibility()
+}
+
+const toggleCloseButtonVisibility = () => {
+  if (newMode.value) {
+    closeButton.value = { icon: 'i-tabler-input-check', color: 'gray', variant: 'outline', padded: true, size: '2xs', ui: { rounded: 'rounded-full' } }  
+  } else {
+    closeButton.value = null
+  }
+}
+
+async function refresh(b = false) {
+  loading.value = true
+  notifList.value = await cms.getMyNotifications(b, 'my')
+  loading.value = false
+}
+
+async function markRead(v) {
+  
+  loading.value = true
+
+  const { err } = await cms.markNotification(v)
+
+  const toast = useToast()
+
+  if (err) {
+    toast.add({
+      icon: "i-heroicons-exclamation-circle-20-solid",
+      title: 'Operation failed!',
+      description: err.message.join('; '),
+      color: 'red'
+    })
+  } else {
+    toast.add({
+      icon: "i-heroicons-check-circle-20-solid",
+      title: 'Operation successful!',
+      description: 'Notification has been marked as read.'
+    })
+    refresh(true)
+  }
+
+  loading.value = false
+
+}
+
+onMounted(async () => {
+
+  toggleCloseButtonVisibility()
+
+  await refresh()
+
+  loading.value = false
+})
 
 </script>
 
-<template><div id="notifications">
+<template><div id="notifications" class="p-2 m-2">
 
-<UNotification
-  v-for="i in 3"
-  :id="i"
-  :actions="actions(i)"
-  :avatar="{ src: 'https://avatars.githubusercontent.com/u/0?v=4' }"
-  title="Notification"
-  description="This is a notification."
-  :timeout="0"
-/>
+<div id='actions' class="px-2">
+  <div>
+    <h4>Notifications</h4>
+  </div>
+  <div class="buttons">
+
+    <ButtonTooltip variant="soft"
+      :text="newMode ? 'View read notifications' : 'View new notifications'"
+      :icon="newMode ? 'i-tabler-archive-filled' : 'i-tabler-notification'"
+      @click="switchNotifMode"/>
+
+    <ButtonTooltip text="Mark all as read" variant="soft" icon="i-tabler-list-check"
+      @click="markRead()"/>
+
+    <ButtonTooltip text="Refresh" icon="i-tabler-reload"
+      @click="refresh(true)"/>
+
+  </div>
+</div>
+
+<div class="max-h-[49vh] overflow-y-auto space-y-3 overflow-x-hidden p-3">
+
+<template v-for="i in notifList">
+  
+  <UNotification
+    v-if="!newMode === Boolean(i.isRead)"
+    class="notifEntry bg-cover bg-center"
+    :class="i.type"
+    :closeButton="closeButton"
+    :style="i.img ? {backgroundImage: `linear-gradient(0deg, var(--foreground), var(--foreground)), url(${$cfg.api.head + i.img})`} : false"
+    :actions="[]/*actions(i)*/"
+    :avatar="{ src: i.avatar }"
+    :title="i.event"
+    :description="i.description"
+    :timeout="0"
+    :id="i.id"
+    @close="markRead(i.id)"
+  />
+
+</template>
+
+
+</div>
 
 </div></template>
 
+<style>
+
+.dark #notifications{
+  --foreground: #000a;
+}
+.light #notifications{
+  --foreground: #fffa;
+}
+
+</style>
+
 <style scoped>
 
+
 #notifications {
-  @apply w-[400px]
+  @apply w-[400px] space-y-3;
+
+  :deep(div > span > img) {
+    background-color: #0005;
+  }
 }
+
+
 
 @media only screen and (max-width: 500px) {
   #notifications {

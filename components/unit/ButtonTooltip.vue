@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <UTooltip :text="text" :shortcuts="['⌘', hotkey]" :popper="{ placement: 'right' }">
+  <UTooltip :text="text" :shortcuts="hotkey ? ['⌘', hotkey] : []" :popper="{ placement: 'right' }">
     <UButton :icon="icon" :color="color" :variant="variant" @click="click" />
   </UTooltip>
 </template>

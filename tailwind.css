@@ -219,9 +219,11 @@ div#double[id="double"] {
   @apply flex flex-row justify-evenly items-center gap-x-2
 }
 
+#avatar,
 .avatar img {
   @apply object-cover
 }
+
 
 .paragraphnopad p::before {
   margin-left: 0;
@@ -271,6 +273,19 @@ input[type=file] { /* file picker button */
   }
 }
 
+#actions {
+  @apply flex justify-between;
+  > div {
+    @apply flex;
+  }
+}
+
+.notifEntry.announce {
+  @apply border-2 border-solid dark:border-primary-700 border-primary-600
+}
+.notifEntry.warn {
+  @apply border-2 border-solid dark:border-rose-900 border-rose-600
+}
 
 /**
  * Animation

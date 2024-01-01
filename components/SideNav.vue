@@ -41,10 +41,6 @@ onMounted(() => {
 
   <section v-if="online">
 
-    <ButtonTooltip text="Dashboard" hotkey="D"
-      variant="outline" icon="i-heroicons-rectangle-group-20-solid" 
-      @click="navigateTo('/login')" />
-
     <ButtonTooltip text="Shop" hotkey="S" 
       variant="outline" icon="i-heroicons-building-storefront-20-solid"
       @click="navigateTo('/shop')" />
@@ -74,9 +70,7 @@ onMounted(() => {
       </UChip>
 
       <template #panel>
-        <div class="p-4">
           <NotificationPanel />
-        </div>
       </template>
 
     </UPopover>

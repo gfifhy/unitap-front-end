@@ -11,19 +11,7 @@ const loading = ref(true)
 
 onMounted(async () => {
 
-  const init = await useCMSStore().getLanding()
-
-  u.value = JSON.parse(init.find(x => x.type === 'upperLanding').value)
-  m.value = JSON.parse(init.find(x => x.type === 'middleLanding').value)
-  l.value = JSON.parse(init.find(x => x.type === 'lowerLanding').value)
-
-  mCards.value = init.reduce((filter, item) => {
-    const parsedValue = JSON.parse(item.value) || {};
-    if (item.type === "middleLanding_card") {
-      filter.push(parsedValue);
-    }
-    return filter;
-  }, [])
+  [u.value, m.value, mCards.value, l.value] = await useCMSStore().getLanding()
 
   loading.value = false
 
@@ -33,8 +21,8 @@ onMounted(async () => {
 
 <template>  <TopNav />  <article id='landing' class="flex flex-col" v-if="!loading">
 
-<section id="top-section" class="text-white p-6 md:py-12 md:px-32 rounded-b-[4em]" 
-  :style="{backgroundImage: `url(${$cfg.api.head}${u.imgurl})`}"
+<section id="top-section" :class="`text-white p-6 md:py-12 md:px-32 rounded-b-[4em] ${u.cover_mode}`" 
+  :style="{backgroundImage: `${u.cover_mode === 'covered' ? 'linear-gradient(0deg, #0003, #0003),' : '' } url(${$cfg.api.head}${u.imgurl})`}"
 >
   <h1 class="p-3 text-4xl text-primary-700 dark:text-primary-400 bg-white dark:bg-black font-semibold mb-4 rounded-lg">
     {{ u.title }}
@@ -49,7 +37,7 @@ onMounted(async () => {
 
 </section>
 
-<section id="middle-section" class="flex-grow relative overflow-hidden">
+<section id="middle-section" v-if="Boolean(Object(m.disabled))" class="flex-grow relative overflow-hidden">
   <div class="container mx-auto px-6 pt-16 pb-12 z-10">
 
     <h1 class="text-5xl font-semibold mb-4 flex items-end justify-between gap-x-5 pb-8">
@@ -67,7 +55,7 @@ onMounted(async () => {
 </section>
 
 <section id="bottom-section" class="pt-12 md:pt-24 rounded-t-[4rem] md:rounded-t-[10rem]">
-  <div class="container mx-auto px-6 max-w-5xl w-full mx-auto">
+  <div class="container mx-auto px-6 max-w-5xl w-full mx-auto" v-if="Boolean(Object(l.disabled))">
     <h2 class="text-4xl font-semibold mb-6">{{ l.title }}</h2>
     <p class="mb-8 dark:text-gray-400 text-gray-600 leading-relaxed">{{ l.subtitle }}</p>
     <NuxtImg :src="$cfg.api.head + l.imgurl" class="mx-auto" />
@@ -111,8 +99,12 @@ onMounted(async () => {
 
 #top-section, #middle-section {
   @apply max-w-5xl w-full mx-auto;
+
+}
+
+.tiled {
   background-size: 50%;
-  animation: panning 50s;
+  animation: panning 175s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   animation-direction: alternate;

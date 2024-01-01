@@ -6,12 +6,11 @@ definePageMeta({
   middleware: 'admin',
 })
 
-const userdata = useUsersStore()
 const users = ref({})
 const loading = ref(true)
 
 onMounted(async () => {
-  users.value = await userdata.fetchUsers()
+  users.value = await useUsersStore().getAllUsers()
   loading.value = false
 })
 

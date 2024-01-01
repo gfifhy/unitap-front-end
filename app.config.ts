@@ -43,9 +43,27 @@ export default defineAppConfig({
       icon: 'i-heroicons-building-library-20-solid'
     }
   ],
+  notif_types: [
+    {
+      id: 'notify',
+      label: 'Notify',
+      icon: 'i-tabler-info-triangle-filled'
+    },
+    {
+      id: 'announce',
+      label: 'Announce',
+      icon: 'i-heroicons-megaphone-20-solid'
+    },
+    {
+      id: 'warn',
+      label: 'Warn',
+      icon: 'i-tabler-exclamation-circle'
+    },
+  ],
   bannerTitleCardRef: {
     img: null,
     imgurl: '',
+    cover_mode: 'cover',
     title:'',
     subtitle:'',
     description:'',
@@ -64,5 +82,15 @@ export default defineAppConfig({
     subtitle:'',
     disabled: '',
   },
+  radioYesNo: [
+    {
+      value: 1,
+      label: 'Yes'
+    },
+    {
+      value: 0,
+      label: 'No'
+    }
+  ]
 
 })
