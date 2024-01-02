@@ -58,7 +58,7 @@ export const useSecurityGuardStore = defineStore('security-guard', () => {
   async function updateLocation(val) {
     const { res, err } = await doRequest('api/security-guard/update-location', {
       method: 'POST',
-      body: val
+      body: { location_id: val }
     })
     return { res, err }
   }
