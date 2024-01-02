@@ -2,26 +2,24 @@ import { defineStore } from "pinia"
 
 export const useUsersStore = defineStore('users', () => {
 
-  const violations = ref(null)
   const allUsers = ref(null)
 
-  const getAllUsers = async () => {
-    if (!allUsers.value) allUsers.value = await fetchUsers()
+  const reset = () => {
+    allUsers.value = null
+  }
+
+  const getAllUsers = async (id = false, role = 'admin') => {
+    if (!allUsers.value) allUsers.value = await fetchUsers(id, role)
     return allUsers.value
   }
 
-  const getViolations = async () => {
-    if (!violations.value) violations.value = await fetchViolation()
-    return violations.value
-  }
-
-  async function fetchUsers(id) {
+  async function fetchUsers(id, role) {
     if (id) {
-      const { res } = await doRequest(`api/admin/users/${id}`)
+      const { res } = await doRequest(`api/${role}/users/${id}`)
       return res
     }
     await useFetch('http://0.0.0.0') // shit workaround for first fetch err
-    const { res } = await doRequest('api/admin/users')
+    const { res } = await doRequest(`api/${role}/users`)
     return res.data
   }
 
@@ -47,18 +45,10 @@ export const useUsersStore = defineStore('users', () => {
     getAllUsers,
     addUser,
     editUser,
-    getViolations,
+    reset,
   }
 
 })
-
-
-async function fetchViolation() {
-  const { res } = await doRequest('api/student/violation', {
-    method: "POST"
-  })
-  return res
-}
 
 const removeNullProperties = obj => {
   const filteredEntries = Object.entries(obj).filter(([key, value]) => value !== null);

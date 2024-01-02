@@ -238,9 +238,9 @@ onMounted(async () => {
         </UPopover>
       </div>
     </div>
-    <FormInput placeholder="Recipient" icon="i-tabler-cursor-text"
+    <FormInput placeholder="Recipient" icon="i-tabler-users-plus"
       label="Send to" type="text" name="title" v-model="f.recipients_sel"
-      @click="recipientSelectorModal = true" :disabled="Boolean(f.recipients_sel)"
+      @click="recipientSelectorModal = true"
     />
     <FormInput placeholder="Title" icon="i-tabler-cursor-text"
       label="Notification" type="text" name="subtitle"

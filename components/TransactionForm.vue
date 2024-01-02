@@ -80,8 +80,8 @@ function submit (form) {
 
     <div v-else-if="item.key === 'confirm'" class="space-y-3 h-96 text-gray-300 relative">
       <NuxtImg class="mx-auto h-full" src="/confirm.jpg" />
-      <span id="accept">php 0</span>
-      <span id="recept">php {{ f.amount }}</span>
+      <span id="send">php {{ f.amount }}</span>
+      <span id="recept">php 0</span>
     </div>
 
   </UCard>
@@ -164,7 +164,7 @@ footer {
   top: 80px;
   right: 125px;
 }
-#accept {
+#send {
   @apply absolute;
   top: 80px;
   left: 105px;

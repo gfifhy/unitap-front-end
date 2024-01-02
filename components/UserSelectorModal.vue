@@ -62,7 +62,9 @@ const select = row => {
 
 onMounted(async () => {
 
-	allUsers.value = (await useUsersStore().getAllUsers()).map(i => ({
+  const role = useAuthStore().user?.role.slug
+
+	allUsers.value = (await useUsersStore().getAllUsers(false, role)).map(i => ({
 	  ...i,
 	  role_name: i.role.name,
 	  role_slug: i.role.slug,
@@ -81,13 +83,16 @@ onMounted(async () => {
 <UModal :modelValue="prop_target" :transition="false" prevent-close>
   <div class="flex justify-between px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
     <div class="flex gap-x-3">
+      <ButtonTooltip text="Clear Text" 
+        variant="ghost" color="gray" icon="i-heroicons-x-mark"
+        @click="q = ''" v-show="q !== ''" />
       <UInput v-model="q" placeholder="Search..." />
       <ButtonTooltip text="Select All" 
         color="gray" variant="ghost" icon="i-tabler-select-all"
         @click="emit('onClose', ['all'])"/>
     </div>
     <div>
-      <ButtonTooltip text="Select All" 
+      <ButtonTooltip text="Confirm Selection" 
         color="gray" variant="ghost" icon="i-heroicons-check-20-solid"
         @click="emit('onClose', selected)"/>
       

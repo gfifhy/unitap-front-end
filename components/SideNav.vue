@@ -17,6 +17,7 @@ const role = useState('role', () => 'student')
 
 async function logout() {
   await account.logout()
+  useUsersStore().reset()
   toast.add({
     icon: 'i-heroicons-shield-check-solid',
     title: 'Successfully logged out!'
@@ -42,15 +43,19 @@ onMounted(() => {
 
   <section v-if="online">
 
-    <ButtonTooltip text="Shop" hotkey="S" 
+    <ButtonTooltip text="Shop"
       variant="outline" icon="i-heroicons-building-storefront-20-solid"
       @click="navigateTo(role === 'store' ? '/myshop' : '/shop')" v-if="role === 'store' || role === 'student'" />
 
-    <ButtonTooltip text="Admin Panel" hotkey="B" 
+    <ButtonTooltip text="Admin Panel"
       variant="outline" icon="i-tabler-shield-checkered-filled"
-      @click="navigateTo('/admin')" v-if="account.user?.role.name === 'Admin'"/>
+      @click="navigateTo('/admin')" v-if="role === 'admin'"/>
 
-    <ButtonTooltip text="Send" hotkey="C" 
+    <ButtonTooltip text="Security Guard Panel"
+      variant="outline" icon="i-tabler-user-shield"
+      @click="navigateTo('/guard')" v-if="role === 'security-guard'"/>
+
+    <ButtonTooltip text="Send"
       variant="solid" icon="i-heroicons-paper-airplane"
       @click="navigateTo('/transact')" />
 
@@ -59,7 +64,7 @@ onMounted(() => {
 
   <footer>
 
-    <ButtonTooltip text="Switch Theme" hotkey="T" 
+    <ButtonTooltip text="Switch Theme"
       variant="soft" :icon="isDark ? 'i-heroicons-sun-20-solid' : 'i-heroicons-moon-20-solid'"
       @click="isDark = !isDark" v-if="!online"/>
 
@@ -67,7 +72,7 @@ onMounted(() => {
 
       <UChip class="notif-blob" color="red" :show="true">
         <ButtonTooltip text="Notifications" icon="i-heroicons-inbox" 
-          hotkey="A" variant="soft" />
+          variant="soft" />
       </UChip>
 
       <template #panel>
@@ -78,7 +83,7 @@ onMounted(() => {
 
     <UPopover v-if="$route.path !== '/login'">
 
-      <ButtonTooltip text="User" hotkey="C" 
+      <ButtonTooltip text="User" 
         variant="soft" icon="i-heroicons-user-circle-20-solid"
         @click="online ? false : navigateTo('/login')" />
 
