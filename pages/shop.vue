@@ -14,17 +14,27 @@ const products = ref({})
 const role = ref('student')
 const loading = ref(true)
 
+async function switchStore(v) {
+  loading.value = true
+  products.value = await product.fetchStore(v)
+  loading.value = false
+}
+
 onMounted(async () => {
+  
   const account = useAuthStore()
   role.value = account.user?.role.slug
-  myProducts.value = await product.fetchProduct()
-  stores.value = await product.getStores()
-  loading.value = false
-})
+  
+  if (role.value === 'store') {
+    myProducts.value = await product.getMyProducts()
+  }
 
-const switchStore = async v => {
-  products.value = await product.fetchProduct(v)
-}
+  stores.value = await product.getStores()
+  products.value = await product.fetchStore('6397bc07-c198-454e-9507-a868f14c1e96')
+
+  loading.value = false
+
+})
 
 </script>
 
@@ -78,7 +88,7 @@ const switchStore = async v => {
       <h3>Stores</h3>
     </div>
 
-    <div class="buttons" v-if="!loading">
+    <div class="buttons" v-if="!loading && false">
       <UInput
         placeholder="Search..." class="max-w-[10rem]" id="search"
         icon="i-heroicons-magnifying-glass-20-solid" size="md"
@@ -107,7 +117,7 @@ const switchStore = async v => {
       <h3>Products</h3>
     </div>
 
-    <div class="buttons" v-if="!loading">
+    <div class="buttons" v-if="!loading && false">
       <ButtonTooltip text="Filter" hotkey="F"
         variant="soft" icon="i-heroicons-funnel-20-solid" 
         @click=""/>
@@ -122,9 +132,9 @@ const switchStore = async v => {
 
   <section id='items'>
     <ShopItemCard_SK v-for="i in 5" :key="i" v-if="loading"/>
-    <template v-else v-for="i in 5">
-      <ShopItemCard :name="'Black Hat G'" :price="'140'" :img="'/tui.jpg'"
-        @click="navigateTo('/product/product-id')"
+    <template v-else v-for="i in products">
+      <ShopItemCard :name="i.product_name" :price="i.price" :img="i.image"
+        @click="navigateTo('/product/' + i.id)"
       />
     </template>
   </section>

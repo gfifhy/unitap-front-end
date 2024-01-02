@@ -1,6 +1,5 @@
 <script setup>
 
-const $route = useRoute()
 const colorMode = useColorMode()
 const isDark = computed({
   get() {
@@ -14,6 +13,7 @@ const isDark = computed({
 const account = useAuthStore()
 const toast = useToast()
 const online = useState('online', () => false)
+const role = useState('role', () => 'student')
 
 async function logout() {
   await account.logout()
@@ -25,6 +25,7 @@ async function logout() {
 
 onMounted(() => {
   online.value = computed(() => account.isLoggedIn)
+  role.value = computed(() => account.user?.role.slug)
 })
 
 
@@ -43,7 +44,7 @@ onMounted(() => {
 
     <ButtonTooltip text="Shop" hotkey="S" 
       variant="outline" icon="i-heroicons-building-storefront-20-solid"
-      @click="navigateTo('/shop')" />
+      @click="navigateTo(role === 'store' ? '/myshop' : '/shop')" v-if="role === 'store' || role === 'student'" />
 
     <ButtonTooltip text="Admin Panel" hotkey="B" 
       variant="outline" icon="i-tabler-shield-checkered-filled"

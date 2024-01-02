@@ -33,7 +33,7 @@
 
 <div id="double">
   
-  <section id='articles'>
+  <section id='articles' v-if="false">
     <ArticlesEditForm />
   </section>
 

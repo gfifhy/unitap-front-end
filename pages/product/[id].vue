@@ -9,7 +9,6 @@ definePageMeta({
 const loading = ref(true)
 
 const product = ref({
-  id: useRoute().params.id,
   product_name: 'Black Hat G',
   description : `Yo, peep the game-changer – "Black Hat G" in the house! This ain't your grandma's graduation cap; it's the flyest, baddest way to rep your academic grind with straight-up gangsta style. Draped in that jet-black satin, this hat ain't playin'. Smooth like victory, it's got that golden insignia upfront, screaming success louder than a mic drop. This ain't just a cap; it's a symbol of hustlin', grinding, and making it against all odds.`,
   stock: '6',
@@ -17,8 +16,17 @@ const product = ref({
   image: '/tui.jpg'
 })
 
+const f = ref({
+  productID: useRoute().params.id,
+  quantity: 1,
+})
+
+async function buy() {
+  //await useProductStore().buyProduct(f.value.productID)
+}
+
 onMounted(async () => {
-  //product.value = await useProductStore().fetchProduct(useRoute().params.id)
+  product.value = await useProductStore().fetchProduct(f.value.productID)
   loading.value = false
 })
 
@@ -54,7 +62,7 @@ onMounted(async () => {
 
 </section>
 
-<section id="interface">
+<section id="interface" v-if="!loading">
 
   <div id="double">
 
@@ -64,7 +72,6 @@ onMounted(async () => {
 
     <aside>
 
-      <pre class="invisible">{{ $route.params.id }}</pre>
       <h2>{{ product?.product_name }}</h2>
       <div id='price'>
         <UIcon name="i-tabler-currency-peso"/> {{ product?.price }}
@@ -73,19 +80,22 @@ onMounted(async () => {
       <UDivider />
 
       <UForm class="user">
-        <FormInput placeholder="1" :hint="product?.stock + ' items left'" icon="i-tabler-brand-x"
+        <FormInput placeholder="1" 
+          :hint="product?.stock + ' items left'" icon="i-tabler-brand-x"
           label="Quantity" type="number" name="quantity" min="1"
+          v-model="f.quantity"
         />
 
         <footer id="actions">
-          <UButton 
+          <UButton v-if="false"
             label="add to cart"
             variant="ghost" icon="i-tabler-shopping-cart-plus"
             @click="" :loading="loading" :disabled="loading"
           />
+          <span v-else></span>
           <UButton 
             label="Buy" icon="i-tabler-shopping-bag"
-            @click="" :loading="loading" :disabled="loading"
+            @click="buy" :loading="loading" :disabled="loading"
           />
         </footer>
       </UForm>
@@ -101,7 +111,7 @@ onMounted(async () => {
     </section>
 
     <aside>
-      <h3>Reviews</h3>
+      <h3 class="invisible">Reviews</h3>
     </aside>
 
   </div>

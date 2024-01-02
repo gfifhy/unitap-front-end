@@ -35,7 +35,7 @@ onMounted(() => {
     <UInput
       placeholder="Search..." class="mr-4"
       icon="i-heroicons-magnifying-glass-20-solid" size="md"
-      :trailing="false"
+      :trailing="false" v-if="false"
     />
   </section>
 

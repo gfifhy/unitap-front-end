@@ -6,10 +6,14 @@ definePageMeta({
 
 const loading = ref(true)
 
+const role = ref('student')
+
 const account_info = ref([])
 
 onMounted(() => {
   const account = useAuthStore()
+  role.value = account.user?.role.slug
+
   account_info.value = [
     {
     '‏': 'Type',
@@ -21,10 +25,10 @@ onMounted(() => {
     },
     {
     '‏': 'Balance',
-    '‎': 'php ' + (account.identity?.wallet?.balance || '234,256,267'),
+    '‎': 'php ' + (account.identity?.wallet?.balance || '0'),
     },
   ]
-  if (account.user?.role.slug !== 'admin' && account.user?.role.slug !== 'store') {
+  if (role.value !== 'admin' && role.value !== 'store') {
     account_info.value.unshift({
       '‏': 'Number',
       '‎': account.identity?.student?.student_id || '',
@@ -108,10 +112,10 @@ const history = [
     <div class="buttons">
       <ButtonTooltip text="Export to PDF" hotkey="E" variant="soft"
         icon="i-heroicons-arrow-down-on-square-stack-20-solid" 
-        @click=""/>
+        @click="" v-if="false" />
       <UButton variant="solid" label="Send Money"
         icon="i-heroicons-paper-airplane-20-solid"
-        @click="navigateTo('/transact')"/>
+        @click="navigateTo('/transact')" />
     </div>
 
   </section>

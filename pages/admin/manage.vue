@@ -55,10 +55,10 @@ const updateUser = (val) => {
     <div class="buttons">
       <ButtonTooltip text="Export to PDF" hotkey="E"
         variant="soft" icon="i-heroicons-arrow-down-on-square-stack-20-solid" 
-        @click=""/>
+        @click="" v-if="false" />
       <UButton label="Add user"
         variant="solid" icon="i-heroicons-user-plus-20-solid"
-        @click="initAdd"/>
+        @click="initAdd" />
     </div>
 
   </section>

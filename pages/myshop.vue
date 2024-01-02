@@ -28,18 +28,21 @@ onMounted(async () => {
   <section id='actions'>
 
     <div>
-      <h3>Store</h3>
+      <h3>My Store</h3>
     </div>
 
     <div class="buttons" v-if="!loading">
-      <ButtonTooltip text="Filter" hotkey="F"
+      <!--ButtonTooltip text="Filter" hotkey="F"
         variant="soft" icon="i-heroicons-funnel-20-solid" 
         @click=""/>
       <UInput
         placeholder="Search..." class="max-w-[10rem]" id="search"
         icon="i-heroicons-magnifying-glass-20-solid" size="md"
         :trailing="false"
-      />
+      /-->
+      <UButton label="Add"
+        variant="solid" icon="i-heroicons-plus-circle-20-solid"
+        @click="navigateTo('/product/create')"/>
     </div>
 
   </section>
@@ -48,7 +51,7 @@ onMounted(async () => {
     <ShopItemCard_SK v-for="i in 10" :key="i" v-if="loading"/>
     <template v-else-if="myProducts.length !== 0" v-for="(i, k) in myProducts">
       <ShopItemCard :name="i.product_name" :price="i.price" :img="i.image"
-        @click="navigateTo(`/product/${i.id}`)"
+        @click="false/*navigateTo(`/product/${i.id}`)*/"
       />
     </template>
     <template v-else>

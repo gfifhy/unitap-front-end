@@ -70,7 +70,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     await new WebAuthn().register()
       .then(response => {
-        alert('Registration successful!'); // replace with modal
         return response
       })
       .catch(error => {

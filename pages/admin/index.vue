@@ -26,14 +26,14 @@
 
 <section id="interface">
   <div id="items">
-    <UButton label="Manage Users" icon="i-tabler-users-group"
+    <UButton variant="outline" label="Manage Users" icon="i-tabler-users-group"
       @click="navigateTo('admin/manage')" />
-    <UButton label="CMS" icon="i-tabler-brackets-contain-end"
+    <UButton variant="outline" label="CMS" icon="i-tabler-brackets-contain-end"
       @click="navigateTo('admin/cms')" />
-    <UButton label="Logs" icon="i-tabler-report"
+    <!--UButton label="Logs" icon="i-tabler-report"
       @click="navigateTo('admin/log')" />
     <UButton label="System" icon="i-tabler-robot"
-      @click="navigateTo('admin/system')" />
+      @click="navigateTo('admin/system')" /-->
   </div>
 </section>
 
@@ -64,10 +64,20 @@
 
 #items {
   --mw: 15rem;
+
   @apply 
     mx-auto px-3 max-w-[1366px] grid gap-x-4 gap-y-4
     grid-cols-[repeat(auto-fill,minmax(var(--mw),1fr))]
   ;
+
+  :deep(button) {
+    > span:first-child {
+      @apply w-14 h-14;
+      + span {
+        @apply text-xl 
+      }
+    }
+  }
 }
 @media screen only and (max-width: 535px) {
   #items {
