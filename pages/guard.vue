@@ -17,7 +17,7 @@ const location_sel = ref(locations.value[0])
 
 async function setLocation() {
 
-  loading.value = false
+  loading.value = true
 
   const { res, err } = await guard.updateLocation(location_sel.value.id)
 
@@ -133,7 +133,7 @@ onMounted(async () => {
         <i class="i-tabler-map-pin w-14 h-14 text-gray-500" />
 
         <span>
-          <USelectMenu v-model="location_sel" :disabled="loading"
+          <USelectMenu v-model="location_sel" :disabled="loading" class="min-w-[200px]"
             :options="locations" @change="setLocation" size="xl" />
         </span>
       </div>
