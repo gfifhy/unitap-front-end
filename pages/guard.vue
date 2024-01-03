@@ -118,8 +118,13 @@ async function scan(val) { // POST 'api/security-guard/student-entry'
         user_id = textDecoder.decode(record.data);
         nfc_id = serialNumber;
       });
-      const {res, err} = await guard.studentEntry({"user_id": user_id, "nfc_id": nfc_id});
-      console.log(res);
+      const res = await guard.studentEntry({"user_id": user_id, "nfc_id": nfc_id});
+      console.log("======================================");
+      const person = res.student_user.first_name + " " + res.student_user.last_name;
+      toast.add({
+        icon: 'i-tabler-user-scan',
+        title: `${person}`
+      })
     });
     //scannedToast();
   } catch (error) {
