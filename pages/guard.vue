@@ -96,16 +96,15 @@ const scannedToast = (person = "Manny Pacquiao") => {
 
 async function scan(val) { // POST 'api/security-guard/student-entry'
   try {
+    let user_id, nfc_id;
     const ndef = new NDEFReader();
     await ndef.scan();
-    console.log("> Scan started");
     toast.add({
       icon: 'i-tabler-user-scan',
-      title: `scanned`
+      title: `Scanning Started`
     })
 
     ndef.addEventListener("readingerror", () => {
-      console.log("Argh! Cannot read data from the NFC tag. Try another one?");
       toast.add({
         icon: 'i-tabler-user-scan',
         title: `Argh! Cannot read data from the NFC tag. Try another one?`
@@ -113,24 +112,20 @@ async function scan(val) { // POST 'api/security-guard/student-entry'
       // Handle error scenario here, maybe display a message to the user
     });
 
-    ndef.addEventListener("reading", ({ message, serialNumber }) => {
-      console.log(`> Serial Number: ${serialNumber}`);
-      console.log(`> Records: (${message.records})`);
+    ndef.addEventListener("reading", async ({message, serialNumber}) => {
       message.records.forEach(record => {
         const textDecoder = new TextDecoder();
-        const user_id = textDecoder.decode(record.data);
-        const nfc_id = serialNumber;
+        user_id = textDecoder.decode(record.data);
+        nfc_id = serialNumber;
       });
-      // Process the data from the NFC tag here
-      // You can use this data to perform further actions, update UI, etc.
+      const {res, err} = await guard.studentEntry({"user_id": user_id, "nfc_id": nfc_id});
+      console.log(res);
     });
+    //scannedToast();
   } catch (error) {
     console.log("Argh! " + error);
     // Handle any unexpected errors here
   }
-  scannedToast();
-  const test = await guard.studentEntry({"user_id":user_id, "nfc_id": nfc_id});
-  console.log(test);
 }
 
 onMounted(async () => {
@@ -210,6 +205,7 @@ onMounted(async () => {
 
         <span class="text-gray-500">Currently scanning...</span>
       </div>
+      <UButton label="SCAAAN" @click="scan" variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid"/>
     </section>
   </div>
 
