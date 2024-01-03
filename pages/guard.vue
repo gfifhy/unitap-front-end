@@ -95,7 +95,35 @@ const scannedToast = (person = "Manny Pacquiao") => {
 }
 
 async function scan(val) { // POST 'api/security-guard/student-entry'
-  //await guard.studentEntry(val)
+  try {
+    const ndef = new NDEFReader();
+    await ndef.scan();
+    console.log("> Scan started");
+    toast.add({
+      icon: 'i-tabler-user-scan',
+      title: `scanned`
+    })
+
+    ndef.addEventListener("readingerror", () => {
+      console.log("Argh! Cannot read data from the NFC tag. Try another one?");
+      toast.add({
+        icon: 'i-tabler-user-scan',
+        title: `Argh! Cannot read data from the NFC tag. Try another one?`
+      })
+      // Handle error scenario here, maybe display a message to the user
+    });
+
+    ndef.addEventListener("reading", ({ message, serialNumber }) => {
+      console.log(`> Serial Number: ${serialNumber}`);
+      console.log(`> Records: (${message.records})`);
+      console.log(message.records);
+      // Process the data from the NFC tag here
+      // You can use this data to perform further actions, update UI, etc.
+    });
+  } catch (error) {
+    console.log("Argh! " + error);
+    // Handle any unexpected errors here
+  }
   scannedToast();
 }
 
