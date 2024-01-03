@@ -116,7 +116,11 @@ async function scan(val) { // POST 'api/security-guard/student-entry'
     ndef.addEventListener("reading", ({ message, serialNumber }) => {
       console.log(`> Serial Number: ${serialNumber}`);
       console.log(`> Records: (${message.records})`);
-      console.log(message.records);
+      message.records.forEach(record => {
+        const textDecoder = new TextDecoder();
+        const user_id = textDecoder.decode(record.data);
+        const nfc_id = serialNumber;
+      });
       // Process the data from the NFC tag here
       // You can use this data to perform further actions, update UI, etc.
     });
@@ -125,6 +129,8 @@ async function scan(val) { // POST 'api/security-guard/student-entry'
     // Handle any unexpected errors here
   }
   scannedToast();
+  const test = await guard.studentEntry({"user_id":user_id, "nfc_id": nfc_id});
+  console.log(test);
 }
 
 onMounted(async () => {
