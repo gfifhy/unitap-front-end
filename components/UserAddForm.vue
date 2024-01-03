@@ -32,7 +32,7 @@ const f = ref({
     name: 'Student',
     slug: 'student',
   },
-  nfc_id: '~',
+  nfc_id: '',
   store_name: 'CoolStore',
   user_image: null,
   imgurl: null,
@@ -65,6 +65,39 @@ const validate = state => {
   ])
 }
 
+//nfc read
+//added read function from NFC to set the NFC ID field
+async function scan() { // POST 'api/security-guard/student-entry'
+
+  const toast = useToast()
+  try {
+    const ndef = new NDEFReader();
+    await ndef.scan();
+    ndef.addEventListener("readingerror", () => {
+      toast.add({
+        icon: "i-heroicons-exclamation-circle-20-solid",
+        title: 'Operation failed!',
+        description: err.message.join('; '),
+        color: 'red'
+      })
+      // Handle error scenario here, maybe display a message to the user
+    });
+    ndef.addEventListener("reading", ({ message, serialNumber }) => {
+      f.value.nfc_id = serialNumber;
+    });
+  } catch (error) {
+    console.log("Argh! " + error);
+  }
+}
+
+
+
+
+
+
+
+
+
 async function submit(e) {
 
   const users = useUsersStore()
@@ -85,7 +118,12 @@ async function submit(e) {
       title: 'Successfully added!',
       description: `New ${f.value.role.name}, ${f.value.email} added.`
     })
+
+    //took the user id from response and write it directly to NFC
+    const uuid = res.user.id
     emit('update-user', { ...f.value, ...res.user })
+    const ndef = new NDEFReader();
+    await ndef.write(uuid);
   }
 }
 
@@ -97,10 +135,11 @@ async function submit(e) {
 
   <template v-if="item.key === 'credential'" class="space-y-3">
 
-    <FormInput placeholder="~"
+    <FormInput
       label="NFC ID" name="nfcid"
       icon="i-tabler-nfc"
       v-model="f.nfc_id"
+               @focusin.once="scan"
     />
     <FormInput placeholder="09xxx--x"
       label="Contact #" type="number" name="contact"
