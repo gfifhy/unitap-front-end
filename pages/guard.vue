@@ -120,7 +120,7 @@ async function scan(val) { // POST 'api/security-guard/student-entry'
       });
       const res = await guard.studentEntry({"user_id": user_id, "nfc_id": nfc_id});
       console.log("======================================");
-      const person = res.student_user.first_name + " " + res.student_user.last_name;
+      const person = res.student_user.first_name + (res.student_user != null) ? " " + res.student_user.middle_name + ". ": " " + res.student_user.last_name;
       toast.add({
         icon: 'i-tabler-user-scan',
         title: `${person}`
