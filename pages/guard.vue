@@ -85,52 +85,74 @@ const filteredRows = computed(() => {
 
 })
 
-const scannedToast = (person = "Manny Pacquiao") => {
+let ndef = null
+const busyNDEF = ref(true)
+const isScanning = ref(false)
 
-  toast.add({
-    icon: 'i-tabler-user-scan',
-    title: `Recognized ${person}`
-  })
+async function startNFCcardScan() {
 
-}
+  const toastErrorNDEF = desc => {
+    toast.add({
+      icon: 'i-tabler-exclamation-circle',
+      title: 'NFC card reading error.',
+      color: 'orange',
+      timeout: 10000,
+      description: desc
+    })
+  }
 
-async function scan(val) { // POST 'api/security-guard/student-entry'
-  try {
-    let user_id, nfc_id;
-    const ndef = new NDEFReader();
-    await ndef.scan();
+  if (!ndef) {
+    try {
+      ndef = new NDEFReader()
+    } catch (e) { 
+      console.warn(e)
+      toastErrorNDEF('This device or browser has no NFC scanner support.\n' + e)
+      busyNDEF.value = false 
+      return
+    }
+  } else { await ndef.stop() }
+
+  isScanning.value = true
+
+  const toastUserScanned = (person = "Manny Pacquiao") => {
     toast.add({
       icon: 'i-tabler-user-scan',
-      title: `Scanning Started`
+      title: `Recognized ${person}`
     })
+  }
+
+  try {
+
+    await ndef.scan();
 
     ndef.addEventListener("readingerror", () => {
-      toast.add({
-        icon: 'i-tabler-user-scan',
-        title: `Argh! Cannot read data from the NFC tag. Try another one?`
-      })
-      // Handle error scenario here, maybe display a message to the user
+      console.error('NDEFReader: readingerror')
+      toastErrorNDEF()
     });
 
-    ndef.addEventListener("reading", async ({message, serialNumber}) => {
-      message.records.forEach(record => {
-        const textDecoder = new TextDecoder();
-        user_id = textDecoder.decode(record.data);
-        nfc_id = serialNumber;
-      });
-      const res = await guard.studentEntry({"user_id": user_id, "nfc_id": nfc_id});
-      console.log("======================================");
-      const person = res.student_user.first_name + (res.student_user != null) ? " " + res.student_user.middle_name + ". ": " " + res.student_user.last_name;
-      toast.add({
-        icon: 'i-tabler-user-scan',
-        title: `${person}`
-      })
+    ndef.addEventListener("reading", async ({ message, serialNumber }) => {
+
+      busyNDEF.value = true
+
+      const [user_id, nfc_id] = message.records.map((record) => [
+        (new TextDecoder()).decode(record.data),
+        serialNumber,
+      ]).flat()
+
+      const res = await guard.studentEntry([user_id, nfc_id])
+      toastUserScanned(res.student_user.first_name +' '+ res.student_user.last_name)
+
+      busyNDEF.value = false
+
     });
-    //scannedToast();
-  } catch (error) {
-    console.log("Argh! " + error);
-    // Handle any unexpected errors here
+
+  } catch (e) { console.error(e); toastErrorNDEF(e) } finally {
+
+    await ndef.stop()
+    isScanning.value = false
+
   }
+
 }
 
 onMounted(async () => {
@@ -141,6 +163,8 @@ onMounted(async () => {
   
   location_sel.value = locations.value
     .find(e => e.id === useAuthStore().identity.location_id)
+
+  startNFCcardScan()
 
   loading.value = false
 
@@ -188,14 +212,10 @@ onMounted(async () => {
 
           <template #panel>
             <div class="ctxmenu">
-              
-              <UButton variant="ghost" icon="i-heroicons-beaker-solid"
-                label="Test" 
-                @click="" />
 
               <UButton variant="ghost" icon="i-heroicons-beaker-solid"
-                label="invoke scan" 
-                @click="scan" />
+                label="Restart scanning" 
+                @click="startNFCcardScan" />
 
             </div>
           </template>
@@ -206,11 +226,20 @@ onMounted(async () => {
 
     <section id='student-entry'>
       <div class="flex flex-col items-center gap-y-3">
-        <i class="i-tabler-grid-scan w-14 h-14 text-gray-500" />
 
-        <span class="text-gray-500">Currently scanning...</span>
+        <EosIconsThreeDotsLoading class="w-14 h-14 text-gray-500" v-show="busyNDEF"/>
+        <i class="w-14 h-14 text-gray-500" v-show="!busyNDEF && isScanning"
+          :class="isScanning ? 'i-tabler-zoom-scan' : 'i-tabler-border-corners'" />
+
+        <span class="text-gray-500" 
+          v-show="!busyNDEF && isScanning">Currently scanning...</span>
+
+        <template v-if="!busyNDEF && !isScanning">
+          <i class="i-tabler-mood-sad w-14 h-14 text-gray-500"/>
+          <span class="dark:text-red-800 text-red-400" >No NFC scanner supported.</span>        
+        </template>
+
       </div>
-      <UButton label="SCAAAN" @click="scan" variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid"/>
     </section>
   </div>
 

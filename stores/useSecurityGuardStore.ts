@@ -47,10 +47,10 @@ export const useSecurityGuardStore = defineStore('security-guard', () => {
     return { res, err }
   }
 
-  async function studentEntry(val) {
+  async function studentEntry(val: Array) {
     const { res, err } = await doRequest('api/security-guard/student-entry', {
       method: 'POST',
-      body: val
+      body: { user_id: val[0], nfc_id: val[1] }
     })
     return res
   }

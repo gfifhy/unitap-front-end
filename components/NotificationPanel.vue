@@ -12,6 +12,7 @@ const actions = i => {
 }
 */
 const notifList = ref([])
+const containsUnread = ref(false)
 
 
 const closeButton = ref({})
@@ -20,6 +21,12 @@ const newMode = ref(true)
 const switchNotifMode = () => {
   newMode.value = !newMode.value
   toggleCloseButtonVisibility()
+}
+
+
+const checkUnreads = () => {
+  console.warn(notifList.value.some((item) => !item.isRead && !item.all))
+  return notifList.value.some((item) => !item.isRead && !item.all);
 }
 
 const toggleCloseButtonVisibility = () => {
@@ -33,6 +40,7 @@ const toggleCloseButtonVisibility = () => {
 async function refresh(b = false) {
   loading.value = true
   notifList.value = await cms.getMyNotifications(b, 'my')
+  containsUnread.value = checkUnreads()
   loading.value = false
 }
 
@@ -97,14 +105,17 @@ onMounted(async () => {
   </div>
 </div>
 
-<div class="max-h-[49vh] overflow-y-auto space-y-3 overflow-x-hidden p-3">
+<div class="max-h-[49vh] overflow-y-auto space-y-3 overflow-x-hidden p-3" :class="newMode ? 'new' : ''">
+
+<span v-if="newMode && !containsUnread">No new notifications.</span>
 
 <template v-for="i in notifList">
   
   <UNotification
-    v-if="!newMode === Boolean(i.isRead)"
+    v-if="!newMode === Boolean(i.isRead) || (i.all && !!i.isReceived)"
     class="notifEntry bg-cover bg-center"
     :class="i.type"
+    :data-system-notif-read="i.all && !!i.isReceived"
     :closeButton="closeButton"
     :style="i.img ? {backgroundImage: `linear-gradient(0deg, var(--foreground), var(--foreground)), url(${$cfg.api.head + i.img})`} : false"
     :actions="[]/*actions(i)*/"
@@ -114,7 +125,32 @@ onMounted(async () => {
     :timeout="0"
     :id="i.id"
     @close="markRead(i.id)"
-  />
+ >
+  <template #title="{ title }">
+    <div class="flex flex-col">
+
+      <div class="flex">
+
+        <span class="text-gray-400 w-full truncate">
+          {{ i.agent ? i.agent.first_name +' '+ i.agent.last_name : 'System' }}
+        </span>
+
+        <span class="dark:text-gray-500 text-gray-300 w-full text-right whitespace-nowrap">
+          {{ relativeTime(i.pushDate)[0] }}
+        </span>
+
+      </div>
+
+      <span v-html="title" />
+
+    </div>
+  </template>
+
+  <template #description="{ description }">
+    <span v-html="description" />
+  </template>
+  
+ </UNotification>
 
 </template>
 
@@ -145,7 +181,9 @@ onMounted(async () => {
   }
 }
 
-
+.new [data-system-notif-read] {
+  display: none;
+}
 
 @media only screen and (max-width: 500px) {
   #notifications {

@@ -70,10 +70,10 @@ onMounted(() => {
 
     <UPopover v-if="online">
 
-      <UChip class="notif-blob" color="red" :show="true">
+      <!--UChip class="notif-blob" color="red" :show="true"-->
         <ButtonTooltip text="Notifications" icon="i-heroicons-inbox" 
           variant="soft" />
-      </UChip>
+      <!--/UChip-->
 
       <template #panel>
           <NotificationPanel />

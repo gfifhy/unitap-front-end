@@ -9,7 +9,7 @@ export async function doRequest<T>(
 
   const token = useCookie('XSRF-TOKEN')
 
-  let head: any = {
+  const head: any = {
     accept: "application/json"
   }
 
@@ -30,18 +30,12 @@ export async function doRequest<T>(
         ...options?.headers
       },
       onRequest({ request, options }) {
-        console.warn("Request:")
-        console.info(options)
         options.headers = options.headers || {}
       },
       onResponse({ request, response, options }) {
-        console.warn("Response:")
-        console.info(response)
         res = response._data
       },
       onResponseError({ response }) {
-        console.error('Error: ' + response.status)
-        console.info(response)
         err = response._data
       }
     }

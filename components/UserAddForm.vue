@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 
 const tabs = [
   {
@@ -43,6 +43,7 @@ const f = ref({
 })
 
 const emit = defineEmits(["update-user"])
+const toast = useToast()
 
 const tabIdx = ref(0)
 const role_sel = ref(roles[0])
@@ -57,54 +58,71 @@ const setRole = () => {
 }
 
 const validate = state => {
-  return validateForm(state,
-    ['first_name', 'last_name', 'guardian_first_name', 
+  return validateForm(state, [
+    'first_name', 'last_name', 'guardian_first_name', 
     'guardian_last_name', 'student_id', 'email', 'contact',
     'guardian_contact', 'password', 'password_confirmation',
     'store_name'
   ])
 }
 
-//nfc read
-//added read function from NFC to set the NFC ID field
-async function scan() { // POST 'api/security-guard/student-entry'
+let ndef = null
+const isScanning = ref(false)
 
-  const toast = useToast()
-  try {
-    const ndef = new NDEFReader();
-    await ndef.scan();
-    ndef.addEventListener("readingerror", () => {
-      toast.add({
-        icon: "i-heroicons-exclamation-circle-20-solid",
-        title: 'Operation failed!',
-        description: err.message.join('; '),
-        color: 'red'
-      })
-      // Handle error scenario here, maybe display a message to the user
-    });
-    ndef.addEventListener("reading", ({ message, serialNumber }) => {
-      f.value.nfc_id = serialNumber;
-    });
-  } catch (error) {
-    console.log("Argh! " + error);
+async function setupNFCcard() {
+
+  const toastErrorNDEF = desc => {
+    toast.add({
+      icon: 'i-tabler-exclamation-circle',
+      title: 'NFC card reading error.',
+      color: 'orange',
+      description: desc
+    })
   }
+
+  if (!ndef) {
+    try {
+      ndef = new NDEFReader()
+    } catch (e) { 
+      console.error(e)
+      toastErrorNDEF('No NDEFReader support.')
+      return
+    }
+  } else { await ndef.stop() }
+
+  isScanning.value = true
+
+  try {
+
+    await ndef.scan();
+
+    ndef.addEventListener("readingerror", () => {
+      console.error('NDEFReader: readingerror')
+      toastErrorNDEF()
+    });
+
+    ndef.addEventListener("reading", async ({ message, serialNumber }) => {
+
+      f.value.nfc_id = serialNumber
+      await ndef.stop()
+
+    });
+
+  } catch (e) { console.error(e); toastErrorNDEF(e) } finally {
+
+    await ndef.stop()
+    isScanning.value = false
+
+  }
+
 }
-
-
-
-
-
-
-
-
 
 async function submit(e) {
 
-  const users = useUsersStore()
-  const toast = useToast()
-
   const req = e.data
-  const {res, err} = await users.addUser(req, req.role.slug !== 'student' ?? true)
+  const {res, err} = await useUsersStore()
+    .addUser(req, req.role.slug !== 'student' ?? true)
+
   if (err) {
     toast.add({
       icon: "i-heroicons-exclamation-circle-20-solid",
@@ -120,11 +138,12 @@ async function submit(e) {
     })
 
     //took the user id from response and write it directly to NFC
-    const uuid = res.user.id
+
     emit('update-user', { ...f.value, ...res.user })
-    const ndef = new NDEFReader();
-    await ndef.write(uuid);
+
+    await ndef.write(res.user.id);
   }
+
 }
 
 </script>
@@ -135,11 +154,10 @@ async function submit(e) {
 
   <template v-if="item.key === 'credential'" class="space-y-3">
 
-    <FormInput
+    <FormInput :placeholder="isScanning ? 'Scanning' : 'Click here to activate scanning'"
       label="NFC ID" name="nfcid"
       icon="i-tabler-nfc"
-      v-model="f.nfc_id"
-               @focusin.once="scan"
+      v-model="f.nfc_id" @focusin.once="setupNFCcard" :disabled="isScanning /* move this el to another tab */"
     />
     <FormInput placeholder="09xxx--x"
       label="Contact #" type="number" name="contact"
