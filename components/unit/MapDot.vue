@@ -12,10 +12,11 @@ export default {
 
 <template>
 
-<span id="dot" :class="location + 
-  ` absolute -translate-x-1/2 -translate-y-1/2`"
+<span 
+  id="dot"
+  :class="location + ` absolute -translate-x-1/2 -translate-y-1/2`"
   :style="{ top: yPosition+'%', left: xPosition+'%' }"
-  >
+>
 
   <UPopover mode="hover" :popper="{ placement: 'top' }">
     <UButton color="white" label="" class="p-3 rounded-full"/>

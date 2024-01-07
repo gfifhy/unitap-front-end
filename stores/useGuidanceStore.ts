@@ -5,14 +5,14 @@ export const useGuidanceStore = defineStore('guidance-staff', () => {
 
   const locationPopulations = ref(null)
 
-  const getLocationPopulations = async () => {
-    if (!locationPopulations.value) locationPopulations.value = await fetchLocationPopulations()
+  const getLocationPopulations = async (role) => {
+    if (!locationPopulations.value) locationPopulations.value = await fetchLocationPopulations(role)
     return locationPopulations.value
   }
 
-  async function fetchLocationPopulations() {
+  async function fetchLocationPopulations(role) {
     await useFetch('http://0.0.0.0') // shit workaround for first fetch err
-    const { res } = await doRequest('api/guidance/data/location')
+    const { res } = await doRequest(`api/${role}/data/location`)
     return res
   }
 

@@ -11,7 +11,7 @@ const counts = ref([{
 
 onMounted(async () => {
 
-  counts.value = // await useGuidanceStore().getLocationPopulations()
+  counts.value = // await useGuidanceStore().getLocationPopulations('admin')
 
   [{
     id: 'safsafkasfjlksajfsakh',
