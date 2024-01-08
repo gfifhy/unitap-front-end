@@ -1,5 +1,5 @@
 <template>
-  <ButtonTooltip text="Dashboard" hotkey="D" id="dashboard"
+  <ButtonTooltip text="Dashboard" id="dashboard"
   variant="ghost" icon="i-heroicons-rectangle-group-20-solid" 
   @click="navigateTo('/login')" v-if="useAuthStore().isLoggedIn && useRoute().path !== '/'" />
   <NuxtLink to="/"><img src="/unitap_f.svg" alt="Unitap logo"></NuxtLink>

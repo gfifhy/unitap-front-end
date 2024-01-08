@@ -250,7 +250,7 @@ onMounted(async () => {
       label="Description" type="text" name="description"
       v-model="f.description"
     />
-    <URadioGroup legend="Cover image" :options="radio"
+    <URadioGroup legend="Cover image" :options="radio" class="py-2"
         v-model="f.cover" v-if="!f.cover"
     />
     <div class="flex gap-x-3 items-center py-2" v-else>
@@ -262,17 +262,17 @@ onMounted(async () => {
         @onFileSelect="f.imgurl = $event" v-if="f.cover" />
 
     </div>
-
-    <UNotification
-      class="bg-cover bg-center"
-      :style="{backgroundImage: `linear-gradient(0deg, #000a, #000a), url(${f.imgurl})`}"
+    
+    <span id="notifications"><UNotification
+      class="bg-cover bg-center my-2"
+      :style="{backgroundImage: f.imgurl ? `linear-gradient(0deg, var(--foreground), var(--foreground)), url(${f.imgurl})` : false }"
       :actions="[]/*[{ variant: 'solid', color: 'primary', label: 'Action', click: () => alert('ssvkjsv') }]*/"
       :avatar="{ src: useAuthStore().user.user_image }"
       :title="f.event"
       :description="f.description"
       :timeout="0"
-    />
-
+    /></span>
+    
     <template #footer>
       <div class="flex justify-end gap-x-3">
         <ColoredButton type="submit" label="apply" :disabled="loading"/>

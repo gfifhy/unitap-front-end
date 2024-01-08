@@ -159,16 +159,6 @@ onMounted(async () => {
 
 </div></template>
 
-<style>
-
-.dark #notifications{
-  --foreground: #000a;
-}
-.light #notifications{
-  --foreground: #fffa;
-}
-
-</style>
 
 <style scoped>
 

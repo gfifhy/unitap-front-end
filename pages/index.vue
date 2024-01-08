@@ -143,7 +143,6 @@ const history = [
         </div>
       </section>
 
-      <!-- single instance only per page -->
       <Chart :datasets="graph.datasets" :grid="graph.grid" :labels="graph.labels" />
 
       <section id="actions">

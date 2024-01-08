@@ -1,5 +1,11 @@
 <template><div id="map">
-  
+ 
+<section id="actions">
+  <div>
+    <h3>Heat Map</h3>
+  </div>
+</section>
+
 <HeatMap/>
 
 </div></template>

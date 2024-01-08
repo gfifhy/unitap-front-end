@@ -4,24 +4,6 @@
   <div>
     <h3>Admin Panel</h3>
   </div>
-  <div class="buttons">
-    <UPopover mode="hover">
-
-      <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
-        @click="" />
-
-      <template #panel>
-        <div class="ctxmenu">
-          
-          <UButton variant="ghost" icon="i-heroicons-beaker-solid"
-            label="Test" 
-            @click="" />
-
-        </div>
-      </template>
-
-    </UPopover>
-  </div>
 </section>
 
 <section id="interface">
@@ -30,9 +12,9 @@
       @click="navigateTo('admin/manage')" />
     <UButton variant="outline" label="CMS" icon="i-tabler-brackets-contain-end"
       @click="navigateTo('admin/cms')" />
-    <!--UButton label="Logs" icon="i-tabler-report"
-      @click="navigateTo('admin/log')" />
-    <UButton label="System" icon="i-tabler-robot"
+    <UButton variant="outline" label="User Analytics" icon="i-tabler-report"
+      @click="navigateTo('admin/analytics')" />
+    <!--UButton label="System" icon="i-tabler-robot"
       @click="navigateTo('admin/system')" /-->
   </div>
 </section>
@@ -71,6 +53,7 @@
   ;
 
   :deep(button) {
+    @apply h-24;
     > span:first-child {
       @apply w-14 h-14;
       + span {

@@ -228,6 +228,7 @@ div#double[id="double"] {
 .paragraphnopad p::before {
   margin-left: 0;
 }
+
 /**
  * Elements
  * -------------------------------------------------------------------------- */
@@ -273,11 +274,25 @@ input[type=file] { /* file picker button */
   }
 }
 
+
+
 #actions {
-  @apply flex justify-between;
-  > div {
-    @apply flex;
+  
+  @apply flex items-center justify-between;
+  
+  div {
+
+    @apply flex items-center px-1;
+    
+    > h3 {
+      @apply px-3;
+    }
+    
+    > h4 {
+      @apply px-3;
+    }
   }
+
 }
 
 .notifEntry.announce {
@@ -286,6 +301,14 @@ input[type=file] { /* file picker button */
 .notifEntry.warn {
   @apply border-2 border-solid dark:border-rose-900 border-rose-600
 }
+
+.dark #notifications {
+  --foreground: #000a;
+}
+.light #notifications {
+  --foreground: #fffa;
+}
+
 
 /**
  * Animation

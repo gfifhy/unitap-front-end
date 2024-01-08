@@ -1,85 +1,94 @@
-<script>
-import { createPopper } from '@popperjs/core';
+<script setup lang="ts">
+//import { createPopper } from '@popperjs/core';
 import TrendChart from './TrendChart/trend-chart';
-export default {
-  data() {
-    return {
-      tooltipData: null,
-      popper: null,
-      popperIsActive: false
-    }
-  },
-  props: {
-    datasets: {
-      type: Array,
-      default: [
-        {
-          data: [70, 100, 400, 180, 100, 300, 500],
-          smooth: true,
-          showPoints: true,
-          fill: true,
-          className: "curve1"
-        },
-        {
-          data: [150, 300, 350, 100, 350, 100, 15],
-          smooth: true,
-          showPoints: true,
-          className: "curve2"
-        },
-        {
-          data: [50, 150, 200, 50, 120, 250, 200],
-          smooth: true,
-          showPoints: true,
-          className: "curve3"
+
+let popper = null
+let popperIsActive = false
+
+const tooltipData = ref(null)
+const trendo = ref(null)
+const tooltip = ref(null)
+
+const initPopper = () => {
+  const chart = trendo.value;
+  if (chart) {
+    popper = createPopper(chart.$refs['active-line'], tooltip.value, {
+      placement: "right",
+      modifiers: {
+        offset: { offset: "0,10" },
+        preventOverflow: {
+          boundariesElement: chart
         }
-      ],
-    },
-    grid: {
-      type: Object,
-      default: {
-        verticalLines: true,
-        horizontalLines: true
-      },
-    },
-    labels: {
-      type: Object,
-      default: {
-        xLabels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        yLabels: 5,
-        yLabelsTextFormatter: val => Math.round(val * 100) / 100
-      },
-    },
-  },
-  methods: {
-    initPopper() {
-      const chart = document.querySelector(".trend");
-      const ref = chart.querySelector(".active-line");
-      const tooltip = this.$refs.tooltip;
-      this.popper = createPopper(ref, tooltip, {
-        placement: "right",
-        modifiers: {
-          offset: { offset: "0,10" },
-          preventOverflow: {
-            boundariesElement: chart
-          }
-        }
-      });
-    },
-    onMouseMove(params) {
-      this.popperIsActive = !!params;
-      this.popper.update();
-      this.tooltipData = params || null;
-    }
-  },
-  mounted() {
-    this.initPopper();
+      }
+    })
   }
-};
+}
+
+const onMouseMove = (params) => {
+  if (!props.loading) {
+    popperIsActive = !!params;
+    popper.update();
+    tooltipData.value = params || null;
+  }
+}
+
+const initChart = () =>  {
+  if (!popper) {
+    initPopper()
+  }
+  return true
+}
+
+export interface Props {
+  datasets?: Array
+  grid?: Object
+  labels?: Object
+  loading?: Boolean
+}
+
+const props = withDefaults(defineProps<Props>(),{
+  datasets: [
+    {
+      data: [70, 100, 400, 180, 100, 300, 500],
+      smooth: true,
+      showPoints: true,
+      fill: true,
+      className: "curve1"
+    },
+    {
+      data: [150, 300, 350, 100, 350, 100, 15],
+      smooth: true,
+      showPoints: true,
+      className: "curve2"
+    },
+    {
+      data: [50, 150, 200, 50, 120, 250, 200],
+      smooth: true,
+      showPoints: true,
+      className: "curve3"
+    }
+  ],
+  grid: {
+      verticalLines: true,
+      horizontalLines: true
+    },
+  labels: {
+      xLabels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      yLabels: 5,
+      yLabelsTextFormatter: val => Math.round(val * 100) / 100
+    },
+  loading: false,
+})
+
+
 </script>
 
 
 <template>
-  <div class="chartgraph">
+  <div class="flex items-center justify-center min-h-[240px] p-3 border-2 rounded-lg border-[#5555]" v-if="loading">
+    <EosIconsThreeDotsLoading class="w-[4rem] h-[4rem] text-gray-500" />
+  </div>
+  <div class="chartgraph" v-else-if="!loading && initChart()">
     <TrendChart
       :datasets="datasets"
       :grid="grid"
@@ -89,15 +98,19 @@ export default {
       :interactive="true"
       @mouse-move="onMouseMove"
       class="trend"
+      ref="trendo"
       v-if="datasets.length"
-    ></TrendChart>
-    <div id="pop" role="tooltip" ref="tooltip" class="tooltip" :class="{'is-active': tooltipData}">
+    />
+    <div id="pop" role="tooltip" ref="tooltip" class="tooltip rounded-lg" :class="{'is-active': tooltipData}">
       <div class="tooltip-container" v-if="tooltipData">
         <strong>{{labels.xLabels[tooltipData.index]}}</strong>
         <div class="tooltip-data">
-          <div class="tooltip-data-item tooltip-data-item--1">{{tooltipData.data[0]}}</div>
-          <div class="tooltip-data-item tooltip-data-item--2">{{tooltipData.data[1]}}</div>
-          <div class="tooltip-data-item tooltip-data-item--3">{{tooltipData.data[2]}}</div>
+          <template v-for="(i, k) in tooltipData.data">
+            <UBadge 
+              color="gray" variant="solid" :label="i"
+              :class="`tooltip-data-item tooltip-data-item--${k+1}`"
+            />
+          </template>
         </div>
       </div>
     </div>

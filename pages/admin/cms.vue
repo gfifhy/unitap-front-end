@@ -5,25 +5,6 @@
     <div>
       <h3>Landing Page</h3>
     </div>
-    <div class="buttons">
-
-      <UPopover mode="hover">
-
-        <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
-          @click="" />
-
-        <template #panel>
-          <div class="ctxmenu">
-            
-            <UButton variant="ghost" icon="i-heroicons-beaker-solid"
-              label="Test" 
-              @click="" />
-
-          </div>
-        </template>
-
-      </UPopover>
-    </div>
   </div>
 
   <div id="interface">

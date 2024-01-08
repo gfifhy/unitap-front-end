@@ -1,54 +1,10 @@
 <script setup lang="ts">
 
-const counts = ref([{
-  id: '',
-  name: '',
-  slug: '',
-  count: '',
-  x_pos: '',
-  y_pos: '',
-}])
+const counts = ref(false)
 
 onMounted(async () => {
 
-  counts.value = // await useGuidanceStore().getLocationPopulations('admin')
-
-  [{
-    id: 'safsafkasfjlksajfsakh',
-    name: 'Admin Building',
-    slug: 'admin',
-    count: 8,
-    x_pos: '41.3',
-    y_pos: '26',
-  }, {
-    id: 'asvbasbsaasn',
-    name: 'Oval Entrance',
-    slug: 'oval',
-    count: 3,
-    x_pos: '41.8',
-    y_pos: '70',
-  }, {
-    id: 'fgdldltryl',
-    name: 'Rear Entrance',
-    slug: 'admin',
-    count: 1,
-    x_pos: '26',
-    y_pos: '42.3',
-  }, {
-    id: 'safsafkasytlydlfjlksajfsakh',
-    name: 'Exit',
-    slug: 'admin',
-    count: 1,
-    x_pos: '83',
-    y_pos: '57.4',
-  }, {
-    id: 'safsafkasfjlksajfsakh',
-    name: 'Admin Building',
-    slug: 'hpsb',
-    count: 69,
-    x_pos: '29.4',
-    y_pos: '11',
-  }]
+  counts.value = await useGuidanceStore().getLocationPopulations('admin')
 
 })
 
@@ -62,7 +18,8 @@ onMounted(async () => {
 
   <template v-if="counts" v-for="i in counts">
     <MapDot 
-      :location="i.slug"
+      :name="i.location"
+      :location="i.location_slugs"
       :count="i.count"
       :xPosition="i.x_pos"
       :yPosition="i.y_pos"  />

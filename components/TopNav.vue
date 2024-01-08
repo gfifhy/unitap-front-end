@@ -25,10 +25,10 @@ onMounted(() => {
 
   <section class='terminal' v-if="!online">
     <NuxtLink variant='ghost' to="/about">about</NuxtLink>
-    <NuxtLink variant='ghost' to="/announcements">announcements</NuxtLink>
+    <NuxtLink variant='ghost' to="/announcements">announcements</NuxtLink><!--
     <NuxtLink variant='ghost' to="/">calendar</NuxtLink>
     <NuxtLink variant='ghost' to="/">contact</NuxtLink>
-    <NuxtLink variant='ghost' to="/register">register</NuxtLink>
+    <NuxtLink variant='ghost' to="/register">register</NuxtLink>-->
   </section>
 
   <section class='terminal' v-else>
