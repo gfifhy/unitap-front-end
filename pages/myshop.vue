@@ -50,7 +50,7 @@ onMounted(async () => {
   <section id='items'>
     <ShopItemCard_SK v-for="i in 10" :key="i" v-if="loading"/>
     <template v-else-if="myProducts.length !== 0" v-for="(i, k) in myProducts">
-      <ShopItemCard :name="i.product_name" :price="i.price" :img="i.image"
+      <ShopItemCard :name="i.product_name" :price="i.price" :img="i.image" :stock="i.stock"
         @click="false/*navigateTo(`/product/${i.id}`)*/"
       />
     </template>

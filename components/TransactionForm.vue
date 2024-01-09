@@ -1,8 +1,9 @@
 <script setup lang="ts">
 
 const toast = useToast()
+const loading = ref(false)
 
-const items = [{
+const items = ref([{
   key: 'amount',
   label: 'Amount',
   icon: 'i-heroicons-adjustments-horizontal',
@@ -10,38 +11,122 @@ const items = [{
 }, {
   key: 'tap',
   label: 'Tap',
+  disabled: true,
   icon: 'i-heroicons-signal',
-  description: 'Hold your device near the recipient\'s device'
+  description: 'Hold the device near the recipient\'s card'
 }, {
   key: 'confirm',
   label: 'Confirm',
+  disabled: true,
   icon: 'i-heroicons-information-circle',
   description: 'Double check if this is the change you intend.'
-}]
+}])
 
 const tabIdx = ref(0)
 
-const f = ref({ amount: "69" })
+
+const f = ref({ amount: "", user_id: "" })
 const tap = ref({ data: '', test: '' })
 
-const validate = (state) => {
-  return validateForm(state, [
-    'amount'
-  ])
+const onTab = async (v = tabIdx.value) => {
+  if (v === 1) {
+    f.value.user_id = await startNFCScan()
+  }
 }
 
-function submit (form) {
-  console.log('Submitted form:', form)
-  toast.add({
-    icon: 'i-heroicons-check-badge-solid',
-    title: 'Submitted form',
-    description: form
-  })
+const checkAmountInput = () => {
+  if (f.value.amount > 4) {
+    items.value[1].disabled = false
+  } else {
+    items.value[1].disabled = true
+  }
 }
+
+const userSelectModal = ref(false)
+
+const setTargets = v => {
+
+  f.value = { ...f.value, ...v, user_id: v.id }
+
+  items.value[2].disabled = false
+  
+  userSelectModal.value = false
+
+  setTimeout(() => {
+    tabIdx.value++
+  }, 100)
+
+}
+
+const busyNDEF = ref(false)
+const isScanning = ref(false)
+
+async function startNFCScan() {
+
+  const uNDEF = useNDEFStore()
+
+  if (!uNDEF.start()) return;
+
+  isScanning.value = true
+
+  uNDEF.ndef.addEventListener("reading", async ({ message, serialNumber }) => {
+
+    busyNDEF.value = true
+
+    const [user_id, nfc_id] = message.records.map((record) => [
+      (new TextDecoder()).decode(record.data),
+      serialNumber,
+    ]).flat()
+
+    await uNDEF.ndef.stop()
+    
+    busyNDEF.value = false
+    isScanning.value = false
+
+    return [user_id, nfc_id]
+
+  });
+
+}
+
+async function submit() {
+
+  loading.value = true
+
+  const form = f.value
+  
+  const { res, err } = await useWalletStore().topUp(f.value)
+
+  if (err) {
+    toast.add({
+      icon: "i-heroicons-exclamation-circle-20-solid",
+      title: 'Operation failed!',
+      description: err.message.join('; '),
+      color: 'red'
+    })
+  } else {
+    toast.add({
+      icon: "i-heroicons-check-circle-20-solid",
+      title: 'Successful!',
+      description: `Sent ${form.amount} to ${form.first_name+' '+ form.last_name ?? res.id}.`
+    })
+    f.value = { amount: "", user_id: "" }
+    items.value[2].disabled = true
+    tabIdx.value = 0
+  }
+
+  loading.value = false
+
+}
+
 </script>
 
 
-<template> <UTabs :items="items" class="w-full navigation" v-model="tabIdx">
+<template> 
+
+<EosIconsThreeDotsLoading class="h-20 w-20 m-auto" v-if="loading" />
+
+<UTabs :items="items" class="w-full navigation" v-model="tabIdx" @change="onTab" v-else>
 
 <template #default="{ item, index, selected }">
   <div id="tab" :class="{ inactive: !selected }">
@@ -55,7 +140,7 @@ function submit (form) {
 
 <template #item="{ item }">
 
-  <UForm class="user" :validate="validate" :validateOn="['submit']" :state="f" @submit="submit(f)">
+  <UForm class="user">
 
   <UCard>
     
@@ -66,22 +151,37 @@ function submit (form) {
     </template>
 
     <div v-if="item.key === 'amount'" class="space-y-3">
-      <FormInput placeholder="0.00" type="text" name="first_name"
+
+      <FormInput placeholder="0.00" type="text" name="amount"
         icon="i-heroicons-currency-pound-20-solid"
-        v-model="f.amount"
+        v-model="f.amount" @input="checkAmountInput"
       />
+
     </div>
 
     <div v-else-if="item.key === 'tap'" class="space-y-3 text-gray-300 text-center">
-      <svg class="text-gray-500 opacity-50" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7.07L8.43 8.5c.91-.91 2.18-1.48 3.57-1.48s2.66.57 3.57 1.48L17 7.07C15.72 5.79 13.95 5 12 5s-3.72.79-5 2.07zM12 1C8.98 1 6.24 2.23 4.25 4.21l1.41 1.41C7.28 4 9.53 3 12 3s4.72 1 6.34 2.62l1.41-1.41A10.963 10.963 0 0012 1zm2.86 9.01L9.14 10C8.51 10 8 10.51 8 11.14v9.71c0 .63.51 1.14 1.14 1.14h5.71c.63 0 1.14-.51 1.14-1.14v-9.71c.01-.63-.5-1.13-1.13-1.13zM15 20H9v-8h6v8z"></path></svg>
 
-      <NuxtLink to="#" @click="">no NFC supported?</NuxtLink>
+      <SmartphoneSignal />
+      <UButton variant="ghost" color="gray" @click="userSelectModal = true">
+        no NFC supported?
+      </UButton>
+
     </div>
 
-    <div v-else-if="item.key === 'confirm'" class="space-y-3 h-96 text-gray-300 relative">
-      <NuxtImg class="mx-auto h-full" src="/confirm.jpg" />
-      <span id="send">php {{ f.amount }}</span>
-      <span id="recept">php 0</span>
+    <div v-else-if="item.key === 'confirm'" class="text-center">
+
+      <div class="relative space-y-3 h-96 text-gray-300">
+        <NuxtImg class="mx-auto h-full" src="/confirm.jpg" />
+        <span id="send">₱ {{ f.amount }}</span>
+        <span id="recept">₱ {{ f.amount }}</span>
+      </div>
+      <p class="pt-5">
+        Recipient: <UBadge color="gray" size="lg">{{ f.first_name+ ' '+ f.last_name }}</UBadge>
+      </p>
+      <p class="pt-4">
+        Amount to be sent: <UBadge color="orange" size="lg">₱{{ f.amount }}</UBadge>
+      </p>
+
     </div>
 
   </UCard>
@@ -89,19 +189,28 @@ function submit (form) {
   <footer>
     <UButton label="Previous" color="gray"
       leadingIcon="i-heroicons-arrow-left-20-solid"
-      @click="tabIdx--" :disabled="tabIdx < 1" />
+      @click="() => { tabIdx--; onTab() }" :disabled="tabIdx < 1" />
     <UButton label="Next" color="gray"
-      trailingIcon="i-heroicons-arrow-right-20-solid"
-      @click="tabIdx++" v-if="tabIdx < 2" />
+      trailingIcon="i-heroicons-arrow-right-20-solid" :disabled="items[tabIdx + 1].disabled"
+      @click="() => { tabIdx++; onTab() }" v-if="tabIdx < 2" />
     <ColoredButton type="submit" label="confirm"
-      v-else />
+      @click="submit()" v-else />
   </footer>
 
   </UForm>
 
 </template>
 
-</UTabs></template>
+</UTabs>
+
+
+<template v-if="userSelectModal">
+  <UserSelectorModal :isOpen="userSelectModal" selection="onlyOne"
+    @onClose="setTargets($event)" />
+</template>
+
+
+</template>
 
 
 <style>

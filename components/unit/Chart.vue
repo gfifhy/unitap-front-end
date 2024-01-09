@@ -88,7 +88,7 @@ const props = withDefaults(defineProps<Props>(),{
   <div class="flex items-center justify-center min-h-[240px] p-3 border-2 rounded-lg border-[#5555]" v-if="loading">
     <EosIconsThreeDotsLoading class="w-[4rem] h-[4rem] text-gray-500" />
   </div>
-  <div class="chartgraph" v-else-if="!loading && initChart()">
+  <div class="chartgraph" v-else-if="!loading && (datasets[0].data.length > 1) && initChart()">
     <TrendChart
       :datasets="datasets"
       :grid="grid"
@@ -114,6 +114,17 @@ const props = withDefaults(defineProps<Props>(),{
         </div>
       </div>
     </div>
+  </div>
+  <div v-else>
+    <span class="text-primary-500 block py-20" v-if="labels.xLabels[0]">
+      <span class="text-white">{{ labels.xLabels[0] }}: </span>
+      <br>
+      {{ datasets[0].data[0] }} people
+    </span>
+    <span class="text-gray-500 flex flex-col items-center py-20" v-else>
+      <i class="i-tabler-question-circle h-14 w-14" />
+      <span>No record</span>
+    </span>
   </div>
 </template>
 

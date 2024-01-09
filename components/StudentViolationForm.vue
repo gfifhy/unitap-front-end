@@ -140,7 +140,7 @@ onMounted(async () => {
 </UForm>
 
 <template v-if="violatorSelectorModal">
-  <UserSelectorModal :isOpen="violatorSelectorModal"
+  <UserSelectorModal :isOpen="violatorSelectorModal" selection="notAll"
     @onClose="setViolators($event)" />
 </template>
 

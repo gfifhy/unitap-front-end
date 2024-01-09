@@ -1,7 +1,7 @@
 <script setup>
 
 definePageMeta({ 
-  middleware: ['signed-out'],
+  middleware: ['signed-out', 'guard-panel'],
 })
 
 const loading = ref(true)
@@ -113,7 +113,7 @@ const history = [
       <ButtonTooltip text="Export to PDF" hotkey="E" variant="soft"
         icon="i-heroicons-arrow-down-on-square-stack-20-solid" 
         @click="" v-if="false" />
-      <UButton variant="solid" label="Send Money"
+      <UButton variant="solid" label="Top Up"
         icon="i-heroicons-paper-airplane-20-solid"
         @click="navigateTo('/transact')" />
     </div>

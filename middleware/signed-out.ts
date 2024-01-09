@@ -3,9 +3,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   const user = useAuthStore();
 
   if (!user.isLoggedIn) {
-    if (process.server) {
-      navigateTo('/landing', { replace: true })
-    } else {
+    if (!process.server) {
       return navigateTo('/landing', { replace: true })
     }
   }

@@ -10,10 +10,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   } 
 
-  if (process.server) {
-    navigateTo('/', { replace: true })
-    return
-  } else {
+  if (!process.server) {
     return navigateTo('/', { replace: true })
   }
 

@@ -77,17 +77,8 @@ onMounted(async () => {
             :datasets="i.datasets"
             :grid="i.grid"
             :labels="i.labels"
-            v-if="i.datasets[0].data.length > 1"
           />
-          <div v-else>
-            <span class="text-primary-500 block py-20" v-if="i.labels.xLabels[0]">
-              {{ i.labels.xLabels[0] }}: {{ i.datasets[0].data[0] }} people
-            </span>
-            <span class="text-gray-500 flex flex-col items-center py-20" v-else>
-              <i class="i-tabler-question-circle h-14 w-14" />
-              <span>No record</span>
-            </span>
-          </div>
+
         </div>
 
       </template>

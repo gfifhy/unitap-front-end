@@ -42,10 +42,10 @@ const onNotifEdit = () => {
       <span>{{ pushDate[1] ? 'Pushed' : 'Push by' }} {{ pushDate[0] }}</span>
       <span>from <b>{{ agent }}</b></span>
     </div>
-    <div>
-      <UButton variant="ghost" icon="i-heroicons-pencil-square-20-solid"
-        @click="onNotifEdit" v-if="false"
-      />
+    <div v-if="!pushDate[1]">
+      <!--Button variant="ghost" icon="i-heroicons-pencil-square-20-solid"
+        @click="onNotifEdit"
+      /-->
       <UButton color="red" variant="ghost" icon="i-tabler-trash-x-filled" 
         @click.prevent="onNotifCancel" />
     </div>

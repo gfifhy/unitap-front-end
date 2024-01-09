@@ -1,3 +1,11 @@
+<script setup>
+
+definePageMeta({ 
+  middleware: ['signed-out'],
+})
+
+</script>
+
 <template><div id="map">
  
 <section id="actions">

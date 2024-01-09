@@ -29,7 +29,7 @@ const allUsers = ref([{
 }])
 
 const emit = defineEmits(['onClose'])
-const props = defineProps<{ isOpen: any }>()
+const props = defineProps<{ isOpen: any, selection: String }>()
 const prop_target = computed(() => props.isOpen); 
 
 const loading = ref(true)
@@ -53,7 +53,11 @@ const selected = ref([allUsers.value[1]])
 const select = row => {
   const index = selected.value.findIndex((item) => item.id === row.id)
   if (index === -1) {
-    selected.value.push(row)
+    if (props.selection == 'onlyOne') {
+      emit('onClose', row)
+    } else {
+      selected.value.push(row)
+    }
   } else {
     selected.value.splice(index, 1)
   }
@@ -89,12 +93,14 @@ onMounted(async () => {
       <UInput v-model="q" placeholder="Search..." />
       <ButtonTooltip text="Select All" 
         color="gray" variant="ghost" icon="i-tabler-select-all"
-        @click="emit('onClose', ['all'])"/>
+        @click="emit('onClose', ['all'])"
+        v-if="!(selection == 'notAll' || selection == 'onlyOne')" />
     </div>
     <div>
       <ButtonTooltip text="Confirm Selection" 
         color="gray" variant="ghost" icon="i-heroicons-check-20-solid"
-        @click="emit('onClose', selected)"/>
+        @click="emit('onClose', selected)"
+        v-if="!(selection == 'onlyOne')" />
       
     </div>
   </div>

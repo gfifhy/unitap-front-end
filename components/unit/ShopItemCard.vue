@@ -1,6 +1,6 @@
 <script>
 export default {
-  props: ['name','desc','price','img']
+  props: ['name','desc','price','img', 'stock']
 };
 </script>
 
@@ -11,7 +11,7 @@ export default {
     <NuxtImg id='img' :src="img" :title="price +' '+ name"/>
 
     <template #footer>
-      <span id='name'>{{ name }}</span>
+      <span id='name'>{{ name }} <span class="opacity-20">{{ stock }} left</span></span>
       <span id='price'>₱{{ price }}</span>
     </template>
 

@@ -45,19 +45,23 @@ onMounted(() => {
 
     <ButtonTooltip text="Shop"
       variant="outline" icon="i-heroicons-building-storefront-20-solid"
-      @click="navigateTo(role === 'store' ? '/myshop' : '/shop')" v-if="role === 'store' || role === 'student'" />
+      @click="navigateTo(role === 'store' ? '/myshop' : '/shop')"
+      v-if="role === 'store' || role === 'student'" />
 
     <ButtonTooltip text="Admin Panel"
       variant="outline" icon="i-tabler-shield-checkered-filled"
-      @click="navigateTo('/admin')" v-if="role === 'admin'"/>
+      @click="navigateTo('/admin')"
+      v-if="role === 'admin'" />
 
-    <ButtonTooltip text="Security Guard Panel"
+    <!--ButtonTooltip text="Security Guard Panel"
       variant="outline" icon="i-tabler-user-shield"
-      @click="navigateTo('/guard')" v-if="role === 'security-guard'"/>
+      @click="navigateTo('/guard')"
+      v-if="role === 'security-guard'" /-->
 
-    <ButtonTooltip text="Send"
+    <ButtonTooltip text="Top Up"
       variant="solid" icon="i-heroicons-paper-airplane"
-      @click="navigateTo('/transact')" />
+      @click="navigateTo('/transact')"
+      v-if="role == 'student' || role == 'admin'" />
 
   </section>
 
