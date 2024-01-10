@@ -1,0 +1,322 @@
+/**
+ * Font
+ * -------------------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+
+:root {
+  --c-primary: #5bbb71;
+  --c-secondary: #fbbf24;
+  --c-tertiary: #1cd2f4;
+  --c-quaternary: #0047f6;
+  --c-quinary: #2980b9;
+  --c-senary: unset;
+  --c-octonary: unset;
+  --c-nonary: unset;
+
+  --typeface-ui: 'Lexend Deca', sans-serif;
+  --typeface-text: 'Lexend Deca', sans-serif;
+  --typeface-para: 'Lexend Deca', sans-serif;
+}
+
+.dark:root {
+  --c-quaternary: #8F91F3;
+  --foreground-l: #000c/*#0008*/;
+  --foreground-r: #000e/*#000b*/;
+  /*--d00: transparent; // darkness 0 */
+  --d10: #0001;
+  --d30: #0003;
+  --d40: #0004;
+  --d50: #0005;
+  --d60: #0006;
+  --d80: #0008;
+  --da0: #000a;
+  /*--l00: transparent; // luminance 0 */
+  --l08: #ffffff08; 
+  --l10: #fff1; 
+  --l20: #fff2; 
+  --l30: #fff3; 
+  --l40: #fff4;
+  --l50: #fff5;
+  --l60: #fff6;
+  --l80: #fff8;
+  --la0: #fffa;
+}
+
+.light:root {
+  --foreground-l: #fffd/*#fff8*/;
+  --foreground-r: #ffff/*#fffb*/;
+  --d10: #fff1;
+  --d30: #fff3;
+  --d40: #fff4;
+  --d50: #fff5;
+  --d60: #fff6;
+  --d80: #fff8;
+  --da0: #fffa;
+  --l08: #00000008; 
+  --l10: #0001;
+  --l20: #0002;
+  --l30: #0003;
+  --l40: #0004;
+  --l50: #0005;
+  --l60: #0006;
+  --l80: #0008;
+  --la0: #000a;
+}
+
+@media only screen and (min-width: 1011px) { /* desktop (> 813 w) */
+  :root {
+    --app-dir: row;
+    --topnav-h: 4.2em;
+    --topnav-p: 2.1em;
+    --sidenav-dir: column;
+    --sidenav-h: 100vh;
+    --sidenav-w: 56px;
+    --login-form-w: 690px;
+    --login-img-mh: 75vh;
+    --brand-side: none;
+    --article-p: 3em;
+    --sz-h1: 4.5rem;
+    --article-split-dir: row;
+    --article-aside-p: 2.5rem;
+  }
+}
+
+@media only screen and (max-width: 1010px) { /* tablets (< 812 w) */
+  :root {
+    --app-dir: column;
+    --topnav-h: 3em;
+    --sidenav-dir: row;
+    --sidenav-h: 4em;
+    --login-layout: column;
+    --login-form-w: 620px;
+    --login-img-mh: 260px;
+    --brand-top: none;
+    --login-p: 3em;
+    --article-p: 1.7em;
+    --sz-h1: 4rem;
+    --article-split-dir: column;
+    --article-aside-p: 0;
+  }
+
+}
+
+@media only screen and (max-width: 660px) { /* phones (< 660 w) */
+  :root {
+    --login-form-w: 100%;
+    --login-img-mh: 120px;
+    --login-p: 1em;
+    --sz-h1: 2.7rem;
+  }
+}
+
+/**
+ * Main
+ * -------------------------------------------------------------------------- */
+
+html {
+  font-family: var(--typeface-ui), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+main {
+
+  @apply flex flex-col w-full overflow-auto
+
+}
+
+#app {
+
+  @apply flex h-screen w-screen overflow-hidden;
+  
+  flex-direction: var(--app-dir);
+
+} 
+
+hr {
+  @apply h-[5px] my-[0.5em] border-t;
+  border-top-color: var(--l20);
+}
+
+h1 {
+
+  @apply py-2 my-2 text-[length:var(--sz-h1)] leading-none;
+
+  > .grade {
+
+    background: linear-gradient(40deg, 
+      var(--c-primary) 30%, 
+      var(--c-secondary) 60%,
+      var(--c-tertiary)
+    );
+
+    @apply bg-clip-text text-transparent font-bold;
+    text-fill-color: transparent;
+
+  }
+
+} 
+
+h2,h3,h4 { @apply flex items-center py-2 my-2 }
+h2 { @apply text-4xl } h3 { @apply text-2xl } h4 { @apply text-lg }
+
+article {
+
+  &:not([id]) {
+    @apply max-w-4xl
+  }
+
+  &[id] {
+    @apply px-[var(--article-p)] antialiased;
+    -webkit-text-size-adjust: 100%;
+    font-synthesis: style;
+    text-rendering: optimizeLegibility;
+    font-family: var(--typeface-text);
+    
+    ul {
+      font-family: var(--typeface-para);
+      padding-left: 40px !important;
+      list-style: disc !important;
+      + p {
+        @apply py-2 my-2;
+      }
+    }
+    hr {
+      @apply h-[5px] my-[0.5em] py-[0.5em] border-b;
+      border-top: unset;
+      border-bottom-color: var(--l20);
+    }
+  }
+
+  p {
+    
+    @apply ml-[-2em] pl-[2em] text-lg;
+    font-family: var(--typeface-para);
+    
+    &::before{
+      @apply ml-[2em];
+      content: '';
+    }
+
+  }
+  
+}
+
+
+/**
+ * Layout Overrides
+ * -------------------------------------------------------------------------- */
+
+div#double[id="double"] {
+  @apply flex;
+  flex-direction: var(--login-layout);
+
+  > aside {
+    width: var(--login-form-w);
+  }
+}
+
+.sbs {
+  @apply flex flex-row justify-evenly items-center gap-x-2
+}
+
+#avatar,
+.avatar img {
+  @apply object-cover
+}
+
+
+.paragraphnopad p::before {
+  margin-left: 0;
+}
+
+/**
+ * Elements
+ * -------------------------------------------------------------------------- */
+
+form.user {
+
+  > footer {
+    @apply flex justify-between p-3;
+    > button:last-child {
+      width: 140px;
+    }
+  }
+  > div {
+    @apply mt-2 mb-2;
+  }
+
+  &[disabled]:not([disabled="false"]) {
+    input, textarea, button {
+      pointer-events: none;
+      opacity: .4;
+
+    }
+  }
+}
+
+.ctxmenu { /* context menu */
+  @apply flex-col flex p-1 !important;
+  button {
+    @apply w-[150px] h-11 justify-start !important;
+  }
+}
+
+input[type=file] { /* file picker button */
+  &::file-selector-button {
+    @apply border-transparent dark:bg-primary-950 bg-primary-100
+           text-primary cursor-pointer px-2 py-1 rounded-[0.2em]
+    ;
+    
+    &:hover {
+      @apply dark:bg-primary-900 bg-primary-500 text-gray-100
+    }
+
+  }
+}
+
+
+
+#actions {
+  
+  @apply flex items-center justify-between;
+  
+  div {
+
+    @apply flex items-center px-1;
+    
+    > h3 {
+      @apply px-3;
+    }
+    
+    > h4 {
+      @apply px-3;
+    }
+  }
+
+}
+
+.notifEntry.announce {
+  @apply border-2 border-solid dark:border-primary-700 border-primary-600
+}
+.notifEntry.warn {
+  @apply border-2 border-solid dark:border-rose-900 border-rose-600
+}
+
+.dark #notifications {
+  --foreground: #000a;
+}
+.light #notifications {
+  --foreground: #fffa;
+}
+
+
+/**
+ * Animation
+ * -------------------------------------------------------------------------- */
+
+@keyframes colored {
+    0%{background-position:43% 0%}
+    50%{background-position:58% 100%}
+    100%{background-position:43% 0%}
+}
+
