@@ -1,8 +1,14 @@
+<script setup>
+
+const $cfg = useAppConfig()
+
+</script>
+
 <template>
   <ButtonTooltip text="Dashboard" id="dashboard"
   variant="ghost" icon="i-heroicons-rectangle-group-20-solid" 
   @click="navigateTo('/login')" v-if="useAuthStore().isLoggedIn && useRoute().path !== '/'" />
-  <NuxtLink to="/"><img src="/unitap_f.svg" alt="Unitap logo"></NuxtLink>
+  <NuxtLink to="/"><img :src="$cfg.api.head + '/storage/logo'" alt="Unitap logo"></NuxtLink>
 
 </template>
 

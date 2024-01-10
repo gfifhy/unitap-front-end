@@ -12,6 +12,8 @@
       @click="navigateTo('admin/manage')" />
     <UButton variant="outline" label="CMS" icon="i-tabler-brackets-contain-end"
       @click="navigateTo('admin/cms')" />
+    <UButton variant="outline" label="Push Notifications" icon="i-tabler-stack-push"
+      @click="navigateTo('admin/notifications')" />
     <UButton variant="outline" label="User Analytics" icon="i-tabler-report"
       @click="navigateTo('admin/analytics')" />
     <!--UButton label="System" icon="i-tabler-robot"

@@ -6,6 +6,8 @@ definePageMeta({
   middleware: 'signed-in',
 })
 
+const $cfg = useAppConfig()
+
 </script>
 
 
@@ -14,7 +16,7 @@ definePageMeta({
 <div id="double">
 
   <section>
-    <NuxtImg src="/sex.jpg" />
+    <NuxtImg :src="$cfg.api.head + '/storage/login'" />
   </section>
 
   <aside>
