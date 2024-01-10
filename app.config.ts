@@ -1,5 +1,5 @@
 const apiProtocol = 'https://'
-const apiHost = 'api.unitap.dev/'
+const apiHost = 'api.unitap.tech/api'
 const appProtocol = 'https://'
 const appHost = 'unitap.dev/'
 
