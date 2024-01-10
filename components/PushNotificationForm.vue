@@ -160,27 +160,12 @@ onMounted(async () => {
 
     <UButton label="New" icon="i-tabler-file-plus"
       @click="openModal(0)"/>
-
-    <UPopover mode="hover">
-
-      <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
-        @click="" />
-
-      <template #panel>
-        <div class="ctxmenu">
-          
-          <UButton variant="ghost" icon="i-heroicons-beaker-solid"
-            label="Test" 
-            @click="" />
-
-        </div>
-      </template>
-
-    </UPopover>
+      
   </div>
 </div>
 
-<div id="interface">
+<div id="interface" class="space-y-3 p-4">
+
   <template v-for="i in notifList" v-if="notifList">
 
     <NotificationEntry

@@ -1,7 +1,7 @@
 <script setup>
 
 definePageMeta({ 
-  middleware: ['signed-out', 'guard-panel'],
+  middleware: ['signed-out', 'guard-panel', 'admin-panel'],
 })
 
 const loading = ref(true)
@@ -115,7 +115,8 @@ const history = [
         @click="" v-if="false" />
       <UButton variant="solid" label="Top Up"
         icon="i-heroicons-paper-airplane-20-solid"
-        @click="navigateTo('/transact')" />
+        @click="navigateTo('/transact')"
+        v-if="role == 'admin'" />
     </div>
 
   </section>

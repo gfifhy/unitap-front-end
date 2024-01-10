@@ -1,6 +1,26 @@
+<script setup>
+
+const $cfg = useAppConfig()
+
+const text = ref({
+  head: null,
+  tail: null
+})
+
+onMounted(async () => {
+
+  const customtext = await useCMSStore().getLogoText()
+  if (customtext) {
+    text.value = JSON.parse(customtext)
+  } 
+
+})
+
+</script>
+
 <template>
   <div class='brand'>
-    <span>Uni</span><span>Tap</span>
+    <span>{{ text.head ?? 'Uni' }}</span><span>{{ text.tail ?? 'Tap' }}</span>
   </div>
 </template>
 

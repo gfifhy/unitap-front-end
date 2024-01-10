@@ -17,9 +17,9 @@
   <section id='articles' v-if="false">
     <ArticlesEditForm />
   </section>
-
-  <section id='notifications'>
-    <PushNotificationForm />
+  
+  <section id='Pictures'>
+    <SitePicturesForm />
   </section>
 
 </div>

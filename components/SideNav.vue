@@ -58,10 +58,14 @@ onMounted(() => {
       @click="navigateTo('/guard')"
       v-if="role === 'security-guard'" /-->
 
+    <ButtonTooltip text="Heat Map"
+      variant="outline" icon="i-tabler-map-2"
+      @click="navigateTo('/map')" />
+
     <ButtonTooltip text="Top Up"
       variant="solid" icon="i-heroicons-paper-airplane"
       @click="navigateTo('/transact')"
-      v-if="role == 'student' || role == 'admin'" />
+      v-if="role == 'admin'" />
 
   </section>
 

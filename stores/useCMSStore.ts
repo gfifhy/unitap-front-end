@@ -3,10 +3,15 @@ import { defineStore } from "pinia"
 export const useCMSStore = defineStore('cms', () => {
 
   const landing = ref(null)
+  const logoText = ref(null)
 
   const notifications = ref(null)
   const myNotifications = ref(null)
 
+  const getLogoText = async () => {
+    if (!logoText.value) logoText.value = await fetchLogoText()
+    return logoText.value
+  }
   const getLanding = async isAdmin => {
     if (!landing.value) {
       const { res, err } = await fetchLanding(isAdmin)
@@ -73,6 +78,22 @@ export const useCMSStore = defineStore('cms', () => {
     return { res, err }
   }
 
+  async function fetchLogoText() {
+    await useFetch('http://0.0.0.0') // shit workaround for first fetch err
+    const { res, err } = await doRequest('api/site/logotext')
+    return res
+  }
+
+
+  async function setSitePicture(val) {
+    await useFetch('http://0.0.0.0') // shit workaround for first fetch err
+    const { res, err } = await doRequest('api/site/pictures', {
+      method: 'POST',
+      body: convertForm(val, 0)
+    })
+    return { res, err }
+  }
+
   return { 
     getLanding,
     editLanding,
@@ -80,7 +101,9 @@ export const useCMSStore = defineStore('cms', () => {
     getMyNotifications,
     addNotification,
     deleteNotification,
-    markNotification
+    markNotification,
+    getLogoText,
+    setSitePicture
   }
 
 })
