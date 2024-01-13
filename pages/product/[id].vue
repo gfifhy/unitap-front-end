@@ -6,7 +6,27 @@ definePageMeta({
   middleware: 'signed-out',
 })
 
+const columns = [{
+  key: 'item',
+  label: 'Item'
+}, {
+  key: 'price',
+  label: 'Price',
+  class: 'text-right'
+}]
+
+const items = ref([{
+  item: 'Lindsay Walton',
+  price: '1',
+
+}, {
+  item: 2,
+  price: 'Courtney Henry',
+}])
+
+const shop = useProductStore()
 const loading = ref(true)
+const confirmModal = ref(false)
 
 const product = ref({
   product_name: 'Black Hat G',
@@ -17,16 +37,74 @@ const product = ref({
 })
 
 const f = ref({
-  productID: useRoute().params.id,
+  product_id: useRoute().params.id,
   quantity: 1,
 })
 
+const confirmation = () => {
+
+  const totalCost = parseInt(product.value.price) * parseInt(f.value.quantity)
+
+  items.value = [{
+    item: { value: product.value.product_name, class: 'italic' },
+    price: { value: `₱${product.value.price} x ${f.value.quantity}`, class: 'text-right' },
+  }, {
+    item: { value: "Total", class: "font-bold" },
+    price: { value: '₱'+totalCost, class: "!text-blue-500 text-right" },
+    class: 'bg-blue-500/10'
+  }, {
+    item: { value: " " },
+    price:{ value: " " },
+  }, {
+    item: { value: "Wallet", class: 'dark:!text-white !text-black' },
+    price: ' ',
+    class: '!border-transparent'
+  }, {
+    item: { value: "Balance" },
+    price: { value: '- ₱' + totalCost, class: "!text-rose-500 text-right" },
+  }]
+
+  confirmModal.value = true
+
+}
+const limitInput = () => {
+  if (f.value.quantity != "") {
+    if (parseInt(f.value.quantity) < 1) {
+      f.value.quantity = "1";
+    }
+    if (parseInt(f.value.quantity) > parseInt(product.value.stock)) {
+      f.value.quantity = product.value.stock;
+    }
+  }
+}
+
 async function buy() {
-  //await useProductStore().buyProduct(f.value.productID)
+
+  const toast = useToast()
+
+  const { res, err } = await shop.orderProduct(f.value)
+
+  if (err) {
+    toast.add({
+      icon: "i-heroicons-exclamation-circle-20-solid",
+      title: 'Operation failed!',
+      description: err.message.join('; '),
+      color: 'red'
+    })
+  } else {
+    toast.add({
+      icon: "i-heroicons-check-circle-20-solid",
+      title: "Order sent!",
+      description: `Ordered ${product.value.product_name}`
+    })
+    useAuthStore().identity.balance = res.balance
+    navigateTo('/history')
+  }
+
 }
 
 onMounted(async () => {
-  product.value = await useProductStore().fetchProduct(f.value.productID)
+  product.value = await shop.fetchProduct(f.value.product_id)
   loading.value = false
 })
 
@@ -38,26 +116,6 @@ onMounted(async () => {
 
   <div>
     <h3>Product</h3>
-  </div>
-
-  <div class="buttons">
-    <UPopover mode="hover">
-
-      <UButton variant="soft" icon="i-heroicons-ellipsis-vertical-20-solid" 
-        @click="" />
-
-      <template #panel>
-        <div class="ctxmenu">
-          
-          <UButton variant="ghost" icon="i-heroicons-beaker-solid"
-            label="Test" 
-            @click="" />
-
-        </div>
-      </template>
-
-    </UPopover>
-
   </div>
 
 </section>
@@ -74,7 +132,7 @@ onMounted(async () => {
 
       <h2>{{ product?.product_name }}</h2>
       <div id='price'>
-        <UIcon name="i-tabler-currency-peso"/> {{ product?.price }}
+        <UIcon name="i-tabler-currency-peso"/> {{ product?.price * f.quantity }}
       </div>
 
       <UDivider />
@@ -82,7 +140,7 @@ onMounted(async () => {
       <UForm class="user">
         <FormInput placeholder="1" 
           :hint="product?.stock + ' items left'" icon="i-tabler-brand-x"
-          label="Quantity" type="number" name="quantity" min="1"
+          label="Quantity" type="number" name="quantity" min="1" @input="limitInput"
           v-model="f.quantity"
         />
 
@@ -95,7 +153,7 @@ onMounted(async () => {
           <span v-else></span>
           <UButton 
             label="Buy" icon="i-tabler-shopping-bag"
-            @click="buy" :loading="loading" :disabled="loading"
+            @click="confirmation" :loading="loading" :disabled="loading"
           />
         </footer>
       </UForm>
@@ -117,6 +175,37 @@ onMounted(async () => {
   </div>
 
 </section>
+
+
+<template v-if="confirmModal">
+  <UModal v-model="confirmModal">
+    <UCard :ui="{ ring: '', header: { base: 'flex items-center justify-between' }, footer: { base: 'flex justify-center' }, divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+      <template #header>
+
+        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+          Confirm transaction
+        </h3>
+        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="confirmModal = false" />
+
+      </template>
+
+      <UTable :rows="items" :columns="columns">
+        <template #price-data="{ row }">
+          {{ row.price.value }}
+        </template>
+        <template #item-data="{ row }">
+          {{ row.item.value }}
+        </template>
+      </UTable>
+
+      <template #footer>
+        
+        <UButton label="Confirm" @click="buy" />
+
+      </template>
+    </UCard>
+  </UModal>
+</template>
 
 </div></template>
 

@@ -1,36 +1,53 @@
 <script setup>
 
 definePageMeta({ 
-  middleware: ['signed-out'],
+  middleware: ['signed-out', 'store'],
 })
 
-const transfers = ref([])
+const product = useProductStore()
 
-const orders = ref(null)
+const orders = ref([])
 
-const role = ref('admin')
+async function refreshList() {
+  orders.value = await product.getStoreOrders()
+}
+
+async function fulfill(val) {
+
+  const { res, err } = await product.setOrderAsFulfilled(val)
+
+  const toast = useToast()
+  if (err) {
+    toast.add({
+      icon: "i-heroicons-exclamation-circle-20-solid",
+      title: 'Operation failed!',
+      description: err.message.join('; '),
+      color: 'red'
+    })
+  } else {
+    toast.add({
+      icon: "i-heroicons-check-circle-20-solid",
+      title: `Succefully set ${res[0]+' '+res[1]}'s order as fulfilled.`,
+    })
+  }
+
+}
 
 onMounted(async () => {
 
-  role.value = useAuthStore().user.role.slug
-
-  transfers.value = await useWalletStore().getTransfers(role.value)
-
-  if (role.value === 'student') {
-    orders.value = await useProductStore().getUserOrders()
-  }
+  refreshList()
 
 })
 
 </script>
 
 
-<template><div id='history'>
+<template><div id='orders'>
 
 <section id="actions">
 
   <div>
-    <h3>History</h3>
+    <h3>User Orders</h3>
   </div>
 
   <div class="buttons">
@@ -49,49 +66,36 @@ onMounted(async () => {
 <div id="double">
 
 <section class="max-w-3xl mx-auto px-4">
-  <h4>Transfers</h4>
-  <UCard class="transfers" v-for="i in transfers">
-    <div class="item">
-      <section>
-        <div>
-          <UAvatar id="avatar" size="sm" :src="i.avatar"/>
-          <UIcon id='icon' :name="i.type === 'send' ? 'i-tabler-arrow-big-left' : 'i-tabler-arrow-big-right-filled'" />
-        </div>
-        <div>
-          <section><span>Payment {{ i.type === 'send' ? 'to' : 'from' }} <b>{{ i.agent }}</b></span></section>
-          <section>{{ relativeTime(i.date)[0] }}</section>
-        </div>
-      </section>
-      <section>
-        ₱{{ i.amount }}
-      </section>
-    </div>
-  </UCard>
-</section>
-
-
-<section class="max-w-3xl mx-auto px-4" v-if="orders && role === 'student'">
-  <h4>Orders</h4>
   <UCard class="orders" v-for="i in orders">
-    <div class="item">
+    <div class="item flex-col md:flex-row">
+
       <section>
         <div>
-          <UAvatar size="sm" :src="i.seller.store_logo"/>
-          <UIcon id='icon' :name="'i-heroicons-banknotes-20-solid'" />
+          <UAvatar size="sm" :src="i.buyer.user_image"/>
+          <UIcon id='icon' :class="i.status == 'pending' ? 'text-orange-500' : 'text-blue-500'" :name="'i-tabler-arrow-big-right-lines'" />
         </div>
         <div>
           <section class="flex items-center gap-x-2">
-            Ordered
-              <NuxtLink class="inline-block max-w-[100pt] underline truncate" :to="'/product/' + i.product.id">
-                {{ i.product.name }}
-              </NuxtLink> x{{ i.product.quantity }}
+            <NuxtLink class="inline-block max-w-[100pt] underline truncate" :to="'/product/' + i.product.id">
+              {{ i.product.name }}
+            </NuxtLink> x{{ i.product.quantity }}
           </section>
           <section>{{ relativeTime(i.date)[0] }}, {{ i.status }}</section>
         </div>
       </section>
-      <section>
-        ₱{{ i.product.price * i.product.quantity }}
+
+      <section class="flex gap-x-3 pt-4 md:pt-0 min-w-[279px]">
+        <div>
+          {{ i.buyer.first_name+' '+i.buyer.last_name }}
+          <span class="pl-2 text-gray-700 dark:text-gray-400">₱{{ i.product.price * i.product.quantity }}</span>
+        </div>
+        <div v-if="i.status == 'pending'">
+          <UButton icon='i-tabler-input-check' label="Fulfill" 
+            color="gray" variant='outline' :ui="{ rounded: 'rounded-full' }"
+            @click="fulfill(i.id)" />
+        </div>
       </section>
+
     </div>
   </UCard>
 </section>
@@ -122,8 +126,7 @@ onMounted(async () => {
 
 }
 
-:deep(.orders),
-:deep(.transfers) {
+:deep(.orders){
   @apply mb-4;
 
   > div {

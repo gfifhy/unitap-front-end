@@ -4,7 +4,7 @@ export const useUsersStore = defineStore('users', () => {
 
   const allUsers = ref(null)
 
-  const reset = () => {
+  function $reset() {
     allUsers.value = null
   }
 
@@ -45,7 +45,7 @@ export const useUsersStore = defineStore('users', () => {
     getAllUsers,
     addUser,
     editUser,
-    reset,
+    $reset,
   }
 
 })

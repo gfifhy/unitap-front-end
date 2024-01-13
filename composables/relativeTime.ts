@@ -29,24 +29,24 @@ const timeDifference = (previous) => {
 
     if (elapsed < msPerMinute) {
          const t = Math.round(elapsed/1000)
-         return [t + ' seconds ago', t]
+         return [t + ` second${t === 1 ? '' : 's'} ago`, t]
     }
 
     else if (elapsed < msPerHour) {
          const t = Math.round(elapsed/msPerMinute)
-         return [t + ' minutes ago', t]
+         return [t + ` minute${t === 1 ? '' : 's'} ago`, t]
     }
 
     else if (elapsed < msPerDay ) {
          const t = Math.round(elapsed/msPerHour)
-         return [t + ' hours ago', t]
+         return ['~' + t + ` hour${t === 1 ? '' : 's'} ago`, t]
     }
 
     else if (elapsed < msPerMonth) {
         const t = Math.round(elapsed/msPerDay)
-        return ['approximately ' + t + ' days ago', t]
+        return ['~' + t + ' days ago', t]
     }
-
+/*
     else if (elapsed < msPerYear) {
         const t = Math.round(elapsed/msPerMonth)
         return ['approximately ' + t + ' months ago', t]
@@ -55,5 +55,9 @@ const timeDifference = (previous) => {
     else {
         const t = Math.round(elapsed/msPerYear)
         return ['approximately ' + t + ' years ago', t]
+    }*/
+
+    else {
+        return ['', -1]
     }
 }

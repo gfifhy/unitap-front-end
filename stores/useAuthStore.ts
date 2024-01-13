@@ -19,6 +19,11 @@ export const useAuthStore = defineStore('auth', () => {
   const identity = ref(null)
   const isLoggedIn = computed(() => !!user.value)
 
+  function $reset() {
+    user.value = null
+    identity.value = null
+  }
+
   async function fetchUser() {
     
     const { res } = await doRequest("api/profile")
@@ -111,6 +116,7 @@ export const useAuthStore = defineStore('auth', () => {
 */
 
   return { 
+    $reset,
     user, identity, isLoggedIn, 
     fetchUser,
     /*register,*/ login, logout,

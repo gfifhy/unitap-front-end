@@ -310,6 +310,18 @@ input[type=file] { /* file picker button */
 }
 
 
+#legend {
+  @apply p-3 flex flex-col items-end;
+
+  > span {
+    @apply flex items-center gap-x-2;
+    > i {
+      @apply i-tabler-square-filled
+    }
+  }
+}
+
+
 /**
  * Animation
  * -------------------------------------------------------------------------- */
