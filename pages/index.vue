@@ -117,7 +117,7 @@ onMounted(async () => {
       </section>
 
       <template v-if="gloss">
-        <Chart :datasets="gloss.datasets" :grid="gloss.grid" :labels="gloss.labels" />
+        <Chart :datasets="gloss.datasets" :grid="gloss.grid" :labels="gloss.labels" unit="₱" />
         <div id="legend">
           <span>Orders<i class="text-primary-300" /></span>
           <span>Transfers<i class="text-primary-500" /></span>

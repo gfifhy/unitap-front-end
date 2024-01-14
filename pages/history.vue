@@ -35,7 +35,7 @@ onMounted(async () => {
     <h3>History</h3>
   </div>
 
-  <div class="buttons">
+  <!--div class="buttons">
     <UButton variant="soft" label="Export to PDF"
       icon="i-heroicons-arrow-down-on-square-stack-20-solid"
       @click=""/>
@@ -44,7 +44,7 @@ onMounted(async () => {
       icon="i-heroicons-magnifying-glass-20-solid" size="md"
       :trailing="false"
     />
-  </div>
+  </div-->
 
 </section>
 

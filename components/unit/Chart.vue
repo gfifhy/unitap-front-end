@@ -44,6 +44,7 @@ export interface Props {
   grid?: Object
   labels?: Object
   loading?: Boolean
+  unit?: String
 }
 
 const props = withDefaults(defineProps<Props>(),{
@@ -107,7 +108,7 @@ const props = withDefaults(defineProps<Props>(),{
         <div class="tooltip-data">
           <template v-for="(i, k) in tooltipData.data">
             <UBadge 
-              color="gray" variant="solid" :label="i"
+              color="gray" variant="solid" :label="(unit ?? '' ) + i"
               :class="`tooltip-data-item tooltip-data-item--${k+1}`"
             />
           </template>
