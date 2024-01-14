@@ -79,3 +79,36 @@ export const useNDEFStore = defineStore('ndef', () => {
   }
 
 })
+
+
+/* component.vue
+const busyNDEF = ref(false)
+const isScanning = ref(false)
+
+async function startNFCScan() {
+
+  const uNDEF = useNDEFStore()
+
+  if (!uNDEF.start()) return;
+
+  isScanning.value = true
+
+  uNDEF.ndef.addEventListener("reading", async ({ message, serialNumber }) => {
+
+    busyNDEF.value = true
+
+    const [user_id, nfc_id] = message.records.map((record) => [
+      (new TextDecoder()).decode(record.data),
+      serialNumber,
+    ]).flat()
+
+    await uNDEF.ndef.stop()
+    
+    busyNDEF.value = false
+    isScanning.value = false
+
+    return [user_id, nfc_id]
+
+  });
+
+}*/

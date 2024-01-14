@@ -133,7 +133,7 @@ onMounted(async () => {
   <section id='items'>
     <ShopItemCard_SK v-for="i in 5" :key="i" v-if="loading"/>
     <template v-else v-for="i in products">
-      <ShopItemCard :name="i.product_name" :price="i.price" :img="i.image"
+      <ShopItemCard :name="i.product_name" :price="i.price" :img="i.image" :stock="i.stock"
         @click="navigateTo('/product/' + i.id)"
       />
     </template>

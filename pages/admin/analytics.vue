@@ -1,5 +1,11 @@
 <script setup lang="ts">
 
+useHead({ titleTemplate: 'Analytics - UniTap' })
+
+definePageMeta({ 
+  middleware: ['signed-out', 'admin'],
+})
+
 const analytics = useAnalyticsStore()
 const loading = ref(true)
 
@@ -58,10 +64,13 @@ onMounted(async () => {
       <div>
         <h4>Student Violations</h4>
       </div>
-      <div class="buttons">
+      <div class="buttons gap-x-3">
         <UButton variant="soft" label="Switch view"
           icon="i-tabler-filter-filled"
           @click="setViolationTypes" />
+        <UButton variant="solid" label="Export to PDF"
+          icon="i-heroicons-arrow-down-on-square-stack-20-solid"
+          @click="navigateTo('/raw', { open: { target: '_blank' } })"/>
       </div>
     </section>
 

@@ -1,6 +1,6 @@
 <script setup>
 
-useHead({ titleTemplate: 'Management - UniTap' })
+useHead({ titleTemplate: 'User Management - UniTap' })
 
 definePageMeta({ 
   middleware: 'admin',

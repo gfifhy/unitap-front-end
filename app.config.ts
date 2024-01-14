@@ -1,7 +1,7 @@
 const apiProtocol = 'https://'
 const apiHost = 'api.unitap.tech/'
 const appProtocol = 'https://'
-const appHost = 'unitap.dev/'
+const appHost = 'unitap.tech/'
 
 export default defineAppConfig({
   api: {

@@ -1,3 +1,13 @@
+<script setup>
+
+useHead({ titleTemplate: 'CMS Panel - UniTap' })
+
+definePageMeta({ 
+  middleware: ['signed-out', 'admin'],
+})
+
+</script>
+
 <template><div id='cms'>
 
 <section id='landing'>

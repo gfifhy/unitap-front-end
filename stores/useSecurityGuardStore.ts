@@ -6,6 +6,12 @@ export const useSecurityGuardStore = defineStore('security-guard', () => {
   const userViolations = ref(null)
   const locations = ref(null)
 
+  function $reset() {
+    violations.value = null
+    userViolations.value = null
+    locations.value = null
+  }
+
   const getUserViolations = async (id) => {
     if (!userViolations.value) userViolations.value = await fetchUserViolations(id)
     return userViolations.value
@@ -64,6 +70,7 @@ export const useSecurityGuardStore = defineStore('security-guard', () => {
   }
 
   return { 
+    $reset,
     getLocations,
     getViolations,
     getUserViolations,

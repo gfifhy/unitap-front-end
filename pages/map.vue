@@ -1,5 +1,7 @@
 <script setup>
 
+useHead({ titleTemplate: 'Heat Map - UniTap' })
+
 definePageMeta({ 
   middleware: ['signed-out'],
 })

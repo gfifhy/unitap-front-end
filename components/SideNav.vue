@@ -17,7 +17,12 @@ const role = useState('role', () => 'student')
 
 async function logout() {
   await account.logout()
-  useUsersStore().reset()
+  useUsersStore().$reset()
+  useAuthStore().$reset()
+  useSecurityGuardStore().$reset()
+  useProductStore().$reset()
+  useCMSStore().$reset()
+  useAnalyticsStore().$reset()
   toast.add({
     icon: 'i-heroicons-shield-check-solid',
     title: 'Successfully logged out!'
@@ -51,7 +56,8 @@ onMounted(() => {
     <ButtonTooltip text="Admin Panel"
       variant="outline" icon="i-tabler-shield-checkered-filled"
       @click="navigateTo('/admin')"
-      v-if="role === 'admin'" />
+      v-if="false && role === 'admin'" />
+
 
     <!--ButtonTooltip text="Security Guard Panel"
       variant="outline" icon="i-tabler-user-shield"
@@ -66,6 +72,11 @@ onMounted(() => {
       variant="solid" icon="i-heroicons-paper-airplane"
       @click="navigateTo('/transact')"
       v-if="role == 'admin'" />
+
+    <ButtonTooltip text="Orders"
+      variant="solid" icon="i-tabler-stack-forward"
+      @click="navigateTo('/store/orders')"
+      v-if="role === 'store'" />
 
   </section>
 

@@ -8,6 +8,11 @@ export const useCMSStore = defineStore('cms', () => {
   const notifications = ref(null)
   const myNotifications = ref(null)
 
+  function $reset() {
+    notifications.value = null
+    myNotifications.value = null
+  }
+
   const getLogoText = async () => {
     if (!logoText.value) logoText.value = await fetchLogoText()
     return logoText.value
@@ -95,6 +100,7 @@ export const useCMSStore = defineStore('cms', () => {
   }
 
   return { 
+    $reset,
     getLanding,
     editLanding,
     getNotifications,

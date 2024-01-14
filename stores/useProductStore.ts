@@ -15,6 +15,12 @@ export const useProductStore = defineStore('products', () => {
   const storeProducts = ref(null)
   const stores = ref(null)
 
+  function $reset() {
+    myProducts.value = null
+    storeProducts.value = null
+    stores.value = null
+  }
+
   const getMyProducts = async () => {
     if (!myProducts.value) { 
       myProducts.value = await fetchStoreProduct()
@@ -75,7 +81,36 @@ export const useProductStore = defineStore('products', () => {
     return { res, err }
   }
 
+  async function orderProduct(val, role = 'student') {
+    const { res, err } = await doRequest(`api/${role}/order-product`, {
+      method: "POST",
+      body: val
+    })
+    return { res, err }
+  }
+
+  async function getUserOrders(role = 'student') {
+    await useFetch('http://0.0.0.0') // shit workaround for first fetch err
+    const { res, err } = await doRequest(`api/${role}/orders`)
+    return res
+  }
+
+  async function getStoreOrders() {
+    await useFetch('http://0.0.0.0') // shit workaround for first fetch err
+    const { res, err } = await doRequest('api/store/orders')
+    return res
+  }
+
+  async function setOrderAsFulfilled(val) {
+    const { res, err } = await doRequest('api/store/order/fulfill', {
+      method: "POST",
+      body: { order_id: val }
+    })
+    return { res, err }
+  }
+
   return { 
+    $reset,
     getMyProducts,
     getStoreProducts,
     getStores,
@@ -84,6 +119,10 @@ export const useProductStore = defineStore('products', () => {
     fetchStoreProduct,
     addProduct,
     editProduct,
+    orderProduct,
+    getUserOrders,
+    getStoreOrders,
+    setOrderAsFulfilled,
   }
 
 })

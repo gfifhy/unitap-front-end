@@ -30,7 +30,7 @@ const tap = ref({ data: '', test: '' })
 
 const onTab = async (v = tabIdx.value) => {
   if (v === 1) {
-    f.value.user_id = await startNFCScan()
+    await startNFCScan()
   }
 }
 
@@ -58,34 +58,61 @@ const setTargets = v => {
 
 }
 
-const busyNDEF = ref(false)
+let ndef = null
 const isScanning = ref(false)
 
 async function startNFCScan() {
 
-  const uNDEF = useNDEFStore()
+  const toastErrorNDEF = desc => {
+    toast.add({
+      icon: 'i-tabler-exclamation-circle',
+      title: 'NFC card reading error.',
+      color: 'orange',
+      description: desc
+    })
+  }
 
-  if (!uNDEF.start()) return;
+  if (!ndef) {
+    try {
+      ndef = new NDEFReader()
+    } catch (e) { 
+      console.error(e)
+      toastErrorNDEF('No NDEFReader support.')
+      return
+    }
+  } else { await ndef.stop() }
 
   isScanning.value = true
 
-  uNDEF.ndef.addEventListener("reading", async ({ message, serialNumber }) => {
+  try {
 
-    busyNDEF.value = true
+    await ndef.scan();
 
-    const [user_id, nfc_id] = message.records.map((record) => [
-      (new TextDecoder()).decode(record.data),
-      serialNumber,
-    ]).flat()
+    ndef.addEventListener("readingerror", () => {
+      console.error('NDEFReader: readingerror')
+      toastErrorNDEF()
+    });
 
-    await uNDEF.ndef.stop()
-    
-    busyNDEF.value = false
+    ndef.addEventListener("reading", async ({ message, serialNumber }) => {
+
+      const [user_id, nfc_id] = message.records.map((record) => [
+        (new TextDecoder()).decode(record.data),
+        serialNumber,
+      ]).flat()
+
+      const user = await useUsersStore().fetchUser(user_id || nfc_id)
+      setTargets({...user})
+
+      await ndef.stop()
+
+    });
+
+  } catch (e) { console.error(e); toastErrorNDEF(e) } finally {
+
+    await ndef.stop()
     isScanning.value = false
 
-    return [user_id, nfc_id]
-
-  });
+  }
 
 }
 

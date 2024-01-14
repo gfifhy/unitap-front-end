@@ -4,7 +4,7 @@ export const useUsersStore = defineStore('users', () => {
 
   const allUsers = ref(null)
 
-  const reset = () => {
+  function $reset() {
     allUsers.value = null
   }
 
@@ -21,6 +21,12 @@ export const useUsersStore = defineStore('users', () => {
     await useFetch('http://0.0.0.0') // shit workaround for first fetch err
     const { res } = await doRequest(`api/${role}/users`)
     return res.data
+  }
+
+  async function fetchUser(id) {
+    await useFetch('http://0.0.0.0') // shit workaround for first fetch err
+    const { res } = await doRequest(`api/admin/users/${id}`)
+    return res
   }
 
   async function addUser(id, isStaff: Boolean) {
@@ -42,10 +48,11 @@ export const useUsersStore = defineStore('users', () => {
 
   return { 
     fetchUsers,
+    fetchUser,
     getAllUsers,
     addUser,
     editUser,
-    reset,
+    $reset,
   }
 
 })
