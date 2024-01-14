@@ -23,7 +23,7 @@ const onNotifEdit = () => {
 
 <template>
 <div class="md:flex md:gap-x-3 md:justify-between p-4 overflow-hidden rounded-lg divide-y divide-gray-200 dark:divide-gray-800 ring-1 ring-gray-200 dark:ring-gray-800 shadow bg-white dark:bg-gray-900 bg-center bg-cover"
-  :style="{backgroundImage: cover ? `linear-gradient(0deg, #000a, #000a), url(${useAppConfig().api.head + cover})` : false }">
+  :style="{backgroundImage: cover ? `linear-gradient(0deg, var(--foreground), var(--foreground)), url(${useAppConfig().api.head + cover})` : false }">
   <section class="flex gap-x-3 items-center pb-4 md:pb-0">
     <div class="flex items-center gap-x-3">
       <UAvatar id="avatar" size="xl" :src="avatar" v-if="avatar" />

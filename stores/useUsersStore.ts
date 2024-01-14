@@ -23,6 +23,12 @@ export const useUsersStore = defineStore('users', () => {
     return res.data
   }
 
+  async function fetchUser(id) {
+    await useFetch('http://0.0.0.0') // shit workaround for first fetch err
+    const { res } = await doRequest(`api/admin/users/${id}`)
+    return res
+  }
+
   async function addUser(id, isStaff: Boolean) {
     const { res, err } = await doRequest(`api/admin/${isStaff ? 'staff' : 'student'}`, {
       method: "POST",
@@ -42,6 +48,7 @@ export const useUsersStore = defineStore('users', () => {
 
   return { 
     fetchUsers,
+    fetchUser,
     getAllUsers,
     addUser,
     editUser,
