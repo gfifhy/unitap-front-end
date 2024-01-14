@@ -115,13 +115,13 @@ const props = withDefaults(defineProps<Props>(),{
       </div>
     </div>
   </div>
-  <div v-else>
-    <span class="text-primary-500 block py-20" v-if="labels.xLabels[0]">
-      <span class="text-white">{{ labels.xLabels[0] }}: </span>
+  <div v-else class="border-2 border-gray-500 rounded-lg m-2 p-2 text-center max-w-[200px] mx-auto">
+    <span class="text-primary-500 block py-0" v-if="labels.xLabels[0]">
+      <span class="text-black dark:text-white">{{ labels.xLabels[0] }}: </span>
       <br>
       {{ datasets[0].data[0] }} people
     </span>
-    <span class="text-gray-500 flex flex-col items-center py-20" v-else>
+    <span class="text-gray-500 flex flex-col items-center border-2 rounded-lg m-2 p-2 max-w-[200px] mx-auto" v-else>
       <i class="i-tabler-question-circle h-14 w-14" />
       <span>No record</span>
     </span>

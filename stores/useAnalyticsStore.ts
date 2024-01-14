@@ -4,6 +4,10 @@ export const useAnalyticsStore = defineStore('analytics', () => {
 
   const gloss = ref(null)
 
+  function $reset() {
+    gloss.value = null
+  }
+
   const getGloss = async () => {
     if (!gloss.value) gloss.value = await fetchGloss()
     return gloss.value
@@ -24,6 +28,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   }
 
   return { 
+    $reset,
     getGloss,
     fetchViolations,
   }

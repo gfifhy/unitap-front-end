@@ -30,7 +30,7 @@ onMounted(async () => {
   recents.value = await useWalletStore().getRecentTransactions(role.value)
 
   const res = await useAnalyticsStore().getGloss()
-  console.log(res)
+
   gloss.value = {
     datasets: buildGraphDataSets([res.orders, res.transactions]),
     grid: {

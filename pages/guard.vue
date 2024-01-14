@@ -1,5 +1,11 @@
 <script setup>
-  
+
+useHead({ titleTemplate: 'Guard Panel - UniTap' })
+
+definePageMeta({ 
+  middleware: ['signed-out', 'guard-panel'],
+})
+
 const guard = useSecurityGuardStore()
 const toast = useToast()
 const loading = ref(true)

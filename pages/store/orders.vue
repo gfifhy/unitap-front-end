@@ -1,5 +1,7 @@
 <script setup>
 
+useHead({ titleTemplate: 'Store Orders - UniTap' })
+
 definePageMeta({ 
   middleware: ['signed-out', 'store'],
 })

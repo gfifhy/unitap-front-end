@@ -22,6 +22,7 @@ async function logout() {
   useSecurityGuardStore().$reset()
   useProductStore().$reset()
   useCMSStore().$reset()
+  useAnalyticsStore().$reset()
   toast.add({
     icon: 'i-heroicons-shield-check-solid',
     title: 'Successfully logged out!'

@@ -1,5 +1,7 @@
 <script setup>
 
+useHead({ titleTemplate: 'History - UniTap' })
+
 definePageMeta({ 
   middleware: ['signed-out'],
 })
