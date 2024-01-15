@@ -2,6 +2,7 @@ const apiProtocol = 'https://'
 const apiHost = 'api.unitap.tech/'
 const appProtocol = 'https://'
 const appHost = 'unitap.tech/'
+const sajfagkjkaljg = 'sajakgsag';
 
 export default defineAppConfig({
   api: {
